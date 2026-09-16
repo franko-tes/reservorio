@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficha · EternalBlue / MS17-010</title>
+<link rel="stylesheet" href="../../estilo.css">
+</head>
+<body>
+<main class="ficha">
+
+  <header class="cabecera">
+    <div>
+      <h1>EternalBlue / MS17-010</h1>
+      <div class="subtitulo">La vulnerabilidad que hizo posible WannaCry</div>
+    </div>
+    <div class="meta">
+      01.1 · vulnerabilidades<br>
+      mono = string literal, se escribe exacto
+    </div>
+  </header>
+
+  <section class="banda-clave">
+    <div class="etiqueta">Si te acordás de una sola cosa</div>
+    <div class="frase">Pre-auth + kernel + wormable. Esos tres juntos son lo que convierte un bug en una pandemia.</div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Identidad</span>
+    </div>
+    <div class="pares">
+      <div class="nombre">CVE-2017-0144</div><div class="rol">la vulnerabilidad (+ 0143, 0145, 0146, 0148)</div>
+      <div class="nombre">MS17-010</div><div class="rol">el parche de Microsoft</div>
+      <div class="nombre incorrecto">EternalBlue</div><div class="rol">el exploit, filtrado de la NSA</div>
+      <div class="nombre incorrecto">DoublePulsar</div><div class="rol">el implante que queda en el kernel</div>
+      <div class="nombre destacado">WannaCry</div><div class="rol">el ransomware — solo uno de los que entró</div>
+      <div class="nombre">SMBv1 · 445/TCP</div><div class="rol">protocolo y puerto vulnerables (139 por NetBIOS)</div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Mecanismo</span>
+    </div>
+    <p class="parrafo">Error de cálculo de tamaño en <span class="lit">srv.sys</span> al convertir atributos extendidos de SMB. Se reserva un buffer más chico que los datos que van a entrar, y el sobrante se escribe fuera de límites en el pool del kernel.</p>
+    <p class="aparte">No es una contraseña débil ni un usuario que hizo clic. Es aritmética mal hecha.</p>
+    <div class="tres-up">
+      <div class="celda"><b>PRE-AUTENTICACIÓN</b><span>no necesita credenciales</span></div>
+      <div class="celda"><b>KERNEL</b><span class="lit">NT AUTHORITY\SYSTEM</span></div>
+      <div class="celda"><b>WORMABLE</b><span>cero interacción del usuario</span></div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Secuencia</span>
+    </div>
+    <div class="cadena">
+      <div class="paso"><b>Escaneo</b><span class="lit">445/TCP</span></div>
+      <div class="flecha">→</div>
+      <div class="paso incorrecto"><b>EternalBlue</b><span>explotación</span></div>
+      <div class="flecha">→</div>
+      <div class="paso incorrecto"><b>DoublePulsar</b><span>implante en kernel</span></div>
+      <div class="flecha">→</div>
+      <div class="paso destacado"><b>WannaCry</b><span>cifra la máquina</span></div>
+      <div class="flecha">→</div>
+      <div class="paso"><b>Vuelve a escanear</b><span>desde la víctima</span></div>
+    </div>
+    <div class="nota-loop">↻ el último paso reinicia el primero — por eso se propagó solo</div>
+    <p class="aparte">EternalBlue es la puerta, WannaCry es lo que entró. Podía haber entrado cualquier otra cosa — y entró (NotPetya, Adylkuzz).</p>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Dato ancla</span>
+    </div>
+    <div class="ancla-num">59 días</div>
+    <div class="ancla-sub">El parche ya existía cuando el ataque golpeó.</div>
+    <div class="barra"></div>
+    <div class="hitos">
+      <div class="hito"><b>14 mar 2017</b><span>Microsoft publica MS17-010</span></div>
+      <div class="hito"><b>14 abr 2017</b><span>Shadow Brokers filtra EternalBlue</span></div>
+      <div class="hito"><b>12 may 2017</b><span>WannaCry · ~200.000 equipos · 150 países</span></div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Qué hago yo</span>
+    </div>
+    <div class="dos-col">
+      <div>
+        <div class="col-tit">MITIGAR</div>
+        <ul class="lista">
+          <li>Aplicar el parche <span class="lit">MS17-010</span></li>
+          <li>Deshabilitar <span class="lit">SMBv1</span> — igual deberías, parche o no</li>
+          <li>Bloquear 445/139 en el perímetro <span class="destacar">y entre segmentos internos</span></li>
+          <li>Segmentación de red</li>
+          <li>Backups offline</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-tit">DETECTAR</div>
+        <ul class="lista">
+          <li>Tráfico SMB este-oeste anómalo</li>
+          <li>Un host hablando con <span class="destacar">50+ destinos</span> en pocos minutos</li>
+          <li>Firma IDS <span class="lit">ET EXPLOIT ETERNALBLUE</span></li>
+          <li>Archivos <span class="lit">.wnry</span> / <span class="lit">.wncry</span></li>
+          <li>Ejecución de <span class="lit">vssadmin delete shadows</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="trampas">
+    <div class="bloque-cab"><span class="bloque-tit">Trampas</span>
+    </div>
+    <ul class="lista">
+      <li><b>"Era un phishing."</b> No hubo vector de email en la propagación — entró por SMB.</li>
+      <li><b>"No expongo 445 a internet, estoy bien."</b> Un solo host comprometido adentro te barre la red interna.</li>
+      <li><b>"Era un problema de XP."</b> El grueso del daño fue en Windows 7 sin parchear.</li>
+      <li><b>"El killswitch lo frenó."</b> Frenó esa variante. No es una mitigación.</li>
+    </ul>
+  </section>
+
+  <div class="pie">
+    <span>MITRE ATT&amp;CK · T1210 · T1021.002 · T1486 · T1490</span>
+    <span><a href="../index.html">← índice</a> · versión técnica</span>
+  </div>
+
+</main>
+</body>
+</html>

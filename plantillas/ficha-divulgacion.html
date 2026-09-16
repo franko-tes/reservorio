@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!--
+  PLANTILLA · ficha-divulgacion
+  ==========================================================================
+  Para explicarle un tema a alguien que no lo conoce.
+  Se copia a publicado/AREA/NN.N-nombre-divulgacion.html y se rellena desde
+  el .txt correspondiente.
+
+  NO es la ficha técnica escrita más fácil: es otro contenido, con otros
+  bloques y otro orden. Nunca se deriva una de la otra.
+
+  Reglas al rellenar:
+    · El <body> lleva class="divulgacion"
+    · Se evitan los tecnicismos; si uno es imprescindible, va al glosario
+    · Un bloque sin contenido real en el .txt se ELIMINA, no se deja vacío
+    · El orden de los bloques no se altera
+    · Ante cualquier duda, se consulta antes de improvisar
+  ==========================================================================
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TITULO</title>
+<link rel="stylesheet" href="../../estilo.css">
+</head>
+<body class="divulgacion">
+<main class="ficha">
+
+  <!-- ===== encabezado · campos TITULO y SUBTITULO del .txt ===== -->
+  <header class="cabecera">
+    <div>
+      <h1>TITULO</h1>
+      <div class="subtitulo">SUBTITULO</div>
+      <!-- si el .txt no trae SUBTITULO, se borra la línea de arriba -->
+    </div>
+    <div class="meta">
+      NN.N · AREA<br>
+      sin conocimientos previos
+    </div>
+  </header>
+
+  <!-- ===== [BANDA CLAVE] ===== -->
+  <section class="banda-clave">
+    <div class="etiqueta">Si te acordás de una sola cosa</div>
+    <div class="frase">
+      <!-- una frase, comprensible sin saber nada del tema -->
+    </div>
+  </section>
+
+  <!-- ===== [QUE ES] · .parrafo + .tres-up ===== -->
+  <!-- .tres-up es opcional: sirve para cifras de contexto,          -->
+  <!-- usando <span class="cifra"> en lugar de <b>                   -->
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Qué es</span>
+    </div>
+    <p class="parrafo"></p>
+    <div class="tres-up">
+      <div class="celda"><span class="cifra"></span><span></span></div>
+      <div class="celda"><span class="cifra"></span><span></span></div>
+      <div class="celda"><span class="cifra"></span><span></span></div>
+    </div>
+  </section>
+
+  <!-- ===== [COMO FUNCIONA] · .parrafo + .analogia ===== -->
+  <!-- la analogía es opcional, pero si va, lleva SIEMPRE su .aviso  -->
+  <!-- aclarando que explica por qué importa, no cómo funciona       -->
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Cómo funciona</span>
+    </div>
+    <p class="parrafo"></p>
+    <div class="analogia">
+      <p></p>
+      <div class="traduccion"></div>
+      <div class="aviso"></div>
+    </div>
+    <p class="aparte"></p>
+  </section>
+
+  <!-- ===== [EN LA PRACTICA] · .cadena ===== -->
+  <!-- máximo 5 pasos, en lenguaje llano                             -->
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">En la práctica</span>
+    </div>
+    <div class="cadena">
+      <div class="paso"><b></b><span></span></div>
+      <div class="flecha">→</div>
+      <div class="paso"><b></b><span></span></div>
+    </div>
+    <div class="nota-loop"></div>
+    <p class="aparte"></p>
+  </section>
+
+  <!-- ===== [POR QUE IMPORTA] · .ancla-num + .barra + .hitos ===== -->
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Por qué importa</span>
+    </div>
+    <div class="ancla-num"></div>
+    <div class="ancla-sub"></div>
+    <div class="barra"></div>
+    <div class="hitos">
+      <div class="hito"><b></b><span></span></div>
+      <div class="hito"><b></b><span></span></div>
+      <div class="hito"><b></b><span></span></div>
+    </div>
+    <p class="aparte"></p>
+  </section>
+
+  <!-- ===== [QUE HACER] · .dos-col ===== -->
+  <!-- los títulos de columna los define el .txt                     -->
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Qué hacer</span>
+    </div>
+    <div class="dos-col">
+      <div>
+        <div class="col-tit">COLUMNA IZQUIERDA</div>
+        <ul class="lista">
+          <li></li>
+          <li></li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-tit">COLUMNA DERECHA</div>
+        <ul class="lista">
+          <li></li>
+          <li></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== [GLOSARIO] · .pares.ancho ===== -->
+  <!-- término y definición en lenguaje llano, no en jerga           -->
+  <section class="bloque">
+    <div class="bloque-cab"><span class="bloque-tit">Glosario</span>
+    </div>
+    <div class="pares ancho">
+      <div class="nombre"></div><div class="rol"></div>
+      <div class="nombre"></div><div class="rol"></div>
+    </div>
+    <p class="aparte"></p>
+  </section>
+
+  <!-- ===== pie ===== -->
+  <!-- izquierda: leyenda fija del formato. Si el .txt trae          -->
+  <!-- REFERENCIAS, se agrega después de la leyenda separado por ·   -->
+  <div class="pie">
+    <span>Material de divulgación · no reemplaza el análisis técnico</span>
+    <span><a href="../index.html">← índice</a> · versión divulgación</span>
+  </div>
+
+</main>
+</body>
+</html>
