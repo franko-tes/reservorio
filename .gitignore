@@ -1,0 +1,21 @@
+# Archivos de sistema
+.directory
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Copias y temporales de editores
+*~
+*.swp
+*.swo
+*.bak
+*.tmp
+.vscode/
+.idea/
+
+# Salidas de exportación
+# Las capturas y PDFs se generan cuando hacen falta; no se versionan.
+*.png
+*.jpg
+*.pdf
+!fuentes/*.png
