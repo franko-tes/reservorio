@@ -358,8 +358,10 @@ explican.
    deforman el texto, y un dato mal escrito en material de estudio es peor que no
    tener el material. Si se agregan ilustraciones, se generan sin texto y las
    etiquetas se ponen en HTML encima.
-9. **Si no entra en una página, se recorta el contenido.** No se achica la tipografía
-   ni se agrega scroll. Qué recortar lo decide el autor, no el agente.
+9. **Si no entra en una página, se recorta el contenido.** Una ficha es una página
+   web: un documento continuo que se lee con scroll, no algo que tenga que entrar en
+   una pantalla — pero tampoco un texto largo. No se achica la tipografía ni se
+   comprime el espaciado. Qué recortar lo decide el autor, no el agente.
 10. **Ante cualquier duda, se consulta.** Un marcador que no coincide, un bloque que
     no encaja, un componente que no existe: se pregunta. No se interpreta ni se
     improvisa.
