@@ -32,6 +32,10 @@ tema, no completar lo que falte, no decidir qué debería decir una ficha.
 El contexto completo — para qué existe, cómo está organizado, qué formatos hay — está
 en `README.md`. Este archivo asume que ya se leyó.
 
+`FORMATOS.md` es la guía para escribir los `.txt`. No es material de trabajo del
+agente: se usa afuera del proyecto, al volcar un tema estudiado. Se lo menciona acá
+porque hay cambios que obligan a actualizarlo (punto 9).
+
 ---
 
 ## 2. Stack
@@ -518,11 +522,11 @@ instrucciones desactualizado es peor que no tenerlo: el agente lo va a seguir ig
 
 | Si cambia… | Actualizar |
 |---|---|
-| Se agrega un formato | `plantillas/`, punto 5, punto 6, `README.md` 2.1.2 |
+| Se agrega un formato | `plantillas/`, punto 5, punto 6, `README.md` 2.1.2, `FORMATOS.md` 2 y su plantilla |
 | Se agrega o quita un bloque de un formato | La plantilla, puntos 5 y 6, `README.md` 2.1.2 |
 | Se agrega un componente de CSS | `estilo.css` (sección nueva al final), punto 8 |
-| Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5 |
-| Se agrega un campo al encabezado | Las plantillas, `README.md` 2.1.4 |
+| Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5, `FORMATOS.md` 4.3 |
+| Se agrega un campo al encabezado | Las plantillas, `README.md` 2.1.4, `FORMATOS.md` 4.1 |
 | Cambia una regla | Punto 4, `README.md` punto 4 |
 | Se agrega un área | Sólo crear la carpeta en `contenidos/` y en `publicado/` |
 

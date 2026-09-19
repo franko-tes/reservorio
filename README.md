@@ -236,6 +236,7 @@ plantilla no contempla se consulta.
 reservorio/
 ├── README.md
 ├── AGENTS.md                              instrucciones para agentes de IA
+├── FORMATOS.md                            guía para escribir el contenido
 ├── estilo.css                             el diseño, uno solo para todo
 │
 ├── fuentes/                               tipografías alojadas localmente
@@ -374,9 +375,10 @@ explican.
 ## 5. Cómo se agrega un tema
 
 1. **Estudiar el tema.** Fuera de este proyecto, donde sea.
-2. **Escribir el `.txt`.** Con el encabezado y los bloques del formato elegido
-   (ver 2.1.2 y 2.1.4). Puede escribirse a mano o pedírselo a la misma IA con la que
-   se estudió el tema, que es la que tiene el contexto completo.
+2. **Escribir el `.txt`.** `FORMATOS.md` tiene todo lo necesario: qué formatos hay,
+   cómo elegir, las marcas y una plantilla comentada de cada uno. Está pensado para
+   llevárselo a la conversación donde se estudió el tema y pedirle a esa IA que vuelque
+   el contenido, que es la que tiene el contexto completo.
 3. **Guardarlo** en `contenidos/area/NN.N-nombre.txt`, siguiendo la numeración de 3.3.
    Si el área no existe todavía, se crea.
 4. **Pedirle al agente que lo construya**, indicando qué archivo y qué formato.
