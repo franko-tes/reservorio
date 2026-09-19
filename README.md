@@ -353,7 +353,9 @@ explican.
 6. **El orden de los bloques no se altera dentro de un mismo formato.** Es lo que hace
    que la posición signifique algo. → 2.1
 7. **Todo string literal va con `.lit`.** CVEs, rutas, comandos, puertos, nombres de
-   archivo: cualquier cosa que se escriba tal cual en una terminal.
+   archivo: cualquier cosa que se escriba tal cual en una terminal. La excepción son
+   los componentes que ya son monoespaciados por sí mismos, donde marcarlo sería
+   redundante.
 8. **Nunca se generan datos técnicos con IA de imágenes.** Los modelos de imagen
    deforman el texto, y un dato mal escrito en material de estudio es peor que no
    tener el material. Si se agregan ilustraciones, se generan sin texto y las

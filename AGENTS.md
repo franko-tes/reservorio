@@ -239,6 +239,20 @@ un buscador o en un campo de configuración?*
 **El criterio lo fija el `.txt`, no el agente.** Si algo viene entre backticks, va con
 `.lit` aunque parezca que no corresponde. Si no viene marcado, no se agrega.
 
+**Excepción: componentes que ya son monoespaciados.** `.lit` marca un fragmento
+literal dentro de contenido que no lo es. Cuando el componente ya aplica monoespaciada
+al elemento completo, envolverlo sería redundante y no se hace.
+
+Hoy el único caso es `.pares .nombre`, que el CSS ya renderiza en mono y negrita:
+
+```
+.txt    `CVE-2017-0144` | la vulnerabilidad
+html    <div class="nombre">CVE-2017-0144</div>
+```
+
+En cambio, dentro de una `.lista`, un `.parrafo` o una `.celda` — donde el texto va en
+la tipografía de cuerpo — el `.lit` sí es necesario.
+
 Sí corresponde señalar una inconsistencia: el mismo término marcado en un lugar y sin
 marcar en otro dentro del mismo archivo.
 
@@ -407,7 +421,7 @@ formato es trabajo del autor.
 
 | En el `.txt` | En el HTML |
 |---|---|
-| `` `texto` `` | `<span class="lit">texto</span>` |
+| `` `texto` `` | `<span class="lit">texto</span>`, salvo en componentes ya monoespaciados — ver regla 7 |
 | `*texto*` | `<span class="destacar">texto</span>` |
 | `!destacado` al final del elemento | clase `destacado` en ese elemento |
 | `!incorrecto` al final del elemento | clase `incorrecto` en ese elemento |
