@@ -253,6 +253,19 @@ html    <div class="nombre">CVE-2017-0144</div>
 En cambio, dentro de una `.lista`, un `.parrafo` o una `.celda` — donde el texto va en
 la tipografía de cuerpo — el `.lit` sí es necesario.
 
+**El `.lit` va adentro, nunca reemplaza.** Cuando todo el contenido de un elemento de
+la plantilla es literal, el `<span class="lit">` se anida dentro de ese elemento, sin
+sustituirlo. El elemento de la plantilla lleva sus propios estilos — color, tamaño,
+márgenes — y reemplazarlo los pierde.
+
+```
+.txt    Escaneo | `445/TCP`
+html    <div class="paso"><b>Escaneo</b><span><span class="lit">445/TCP</span></span></div>
+```
+
+Pasa en el segundo elemento de `.paso` y de `.celda`: ese `<span>` es parte del
+componente, no un contenedor genérico.
+
 Sí corresponde señalar una inconsistencia: el mismo término marcado en un lugar y sin
 marcar en otro dentro del mismo archivo.
 
