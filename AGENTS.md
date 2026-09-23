@@ -327,6 +327,7 @@ Casos concretos en que corresponde frenar y preguntar.
 
 - Contenido que no encaja con ningún componente del CSS
 - Un bloque que necesita una variante que no existe
+- Un `.tres-up` con más de tres celdas, o un `.hitos` que no tenga exactamente tres entradas
 - La ficha se estira más de lo razonable
 
 **En el proyecto:**
@@ -534,7 +535,7 @@ Si hay diferencia entre esta tabla y el archivo, **manda el archivo**.
 |---|---|---|---|
 | `.banda-clave` | 06 | Franja superior, con `.etiqueta` y `.frase` | — |
 | `.pares` | 08 | Término → definición, en dos columnas | `.ancho` para términos en texto normal |
-| `.tres-up` + `.celda` | 09 | Tres datos en fila | `.cifra` dentro de `.celda` para números grandes |
+| `.tres-up` + `.celda` | 09 | Hasta tres datos en fila; con 1 o 2 celdas se reparte el ancho entre las que haya | `.cifra` dentro de `.celda` para números grandes |
 | `.cadena` + `.paso` | 10 | Secuencia horizontal, con `.flecha` entre pasos | `.paso.destacado`, `.paso.incorrecto` |
 | `.nota-loop` | 10 | Nota al pie de una secuencia que se repite | — |
 | `.ancla-num` + `.ancla-sub` | 11 | Dato memorable, en grande | — |
