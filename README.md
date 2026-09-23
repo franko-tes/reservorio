@@ -163,8 +163,9 @@ Cada variante tiene **su propio archivo** en `contenidos/`:
 
 ```
 contenidos/
-├── 001-eternalblue.txt              → TIPO: ficha-tecnica
-└── 001-eternalblue-divulgacion.txt  → TIPO: ficha-divulgacion
+└── vulnerabilidades/
+    ├── 01.1-eternalblue.txt              → TIPO: ficha-tecnica
+    └── 01.2-eternalblue-divulgacion.txt  → TIPO: ficha-divulgacion
 ```
 
 La versión de divulgación **no es la técnica escrita más fácil**. Cambia el orden,
