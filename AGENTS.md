@@ -321,6 +321,7 @@ Casos concretos en que corresponde frenar y preguntar.
 - Falta un campo obligatorio del encabezado
 - Un `TIPO:` que no corresponde a ninguna plantilla existente
 - Una `!marca` en medio de una oración
+- `!destacado` o `!incorrecto` sobre algo que no sea el nombre de un par ni un paso
 - Datos que se contradicen dentro del mismo archivo
 
 **Al construir:**
@@ -450,6 +451,9 @@ formato o una variante es trabajo del autor.
 Las marcas de apertura y cierre no se conservan en la salida, salvo el `↻`, que es parte
 visible de la nota.
 
+`!destacado` e `!incorrecto` solo tienen estilo sobre el `.nombre` de un `.pares` y sobre
+un `.paso`. Sobre cualquier otro elemento se consulta.
+
 ### 6.4 Lo que no es un bloque
 
 Además de los bloques, la ficha tiene partes que salen de otras fuentes, y algunos
@@ -534,7 +538,7 @@ Si hay diferencia entre esta tabla y el archivo, **manda el archivo**.
 | Clase | Sección | Qué es | Modificadores |
 |---|---|---|---|
 | `.banda-clave` | 06 | Franja superior, con `.etiqueta` y `.frase` | — |
-| `.pares` | 08 | Término → definición, en dos columnas | `.ancho` para términos en texto normal |
+| `.pares` | 08 | Término → definición, en dos columnas | `.ancho` para términos en texto normal; `.nombre.destacado` y `.nombre.incorrecto` |
 | `.tres-up` + `.celda` | 09 | Hasta tres datos en fila; con 1 o 2 celdas se reparte el ancho entre las que haya | `.cifra` dentro de `.celda` para números grandes |
 | `.cadena` + `.paso` | 10 | Secuencia horizontal, con `.flecha` entre pasos | `.paso.destacado`, `.paso.incorrecto` |
 | `.nota-loop` | 10 | Nota al pie de una secuencia que se repite | — |

@@ -222,9 +222,10 @@ variantes.
 
 Dos aclaraciones que evitan confusiones:
 
-- **`*asteriscos*` es para fragmentos; `!marca` es para elementos completos.** Una
-  `!marca` en medio de una oración no tiene dónde terminar: si aparece así, es un
-  error del `.txt` y se consulta antes de construir.
+- **`*asteriscos*` es para fragmentos; `!marca` es para elementos completos.** Hoy se
+  usan sobre el nombre de un par (`[IDENTIDAD]`) y sobre un paso (`[SECUENCIA]`,
+  `[EN LA PRACTICA]`). Una `!marca` en medio de una oración no tiene dónde terminar: si
+  aparece así, es un error del `.txt` y se consulta antes de construir.
 - **Las marcas no llevan color propio.** `!destacado` e `!incorrecto` nombran la
   función, no el tono. Si la paleta cambia, el `.txt` no se toca.
 

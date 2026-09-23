@@ -113,7 +113,9 @@ Van en el orden que indica la plantilla. Un bloque sin contenido real se omite e
 Dos aclaraciones:
 
 - `*asteriscos*` marca **fragmentos** dentro de una oración. `!destacado` e
-  `!incorrecto` marcan **elementos completos**, y van al final del elemento.
+  `!incorrecto` marcan **elementos completos**, y van al final del elemento. Hoy se usan
+  sobre el nombre de un par (`[IDENTIDAD]`) y sobre un paso (`[SECUENCIA]`,
+  `[EN LA PRACTICA]`).
 - Una línea sola en MAYÚSCULAS, sin corchetes, abre una subsección dentro de un bloque.
   Se usa para los títulos de columna y para las partes de la analogía.
 
