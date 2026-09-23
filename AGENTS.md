@@ -190,8 +190,8 @@ Si el `.txt` no trae un bloque, la sección entera se elimina del HTML. No queda
 `<section>` vacío, ni con un título y nada adentro.
 
 Aplica también a las partes opcionales dentro de un bloque. La plantilla trae
-`.tres-up`, `.barra`, `.hitos`, `.nota-loop` y `.analogia`, y todas son condicionales:
-si el `.txt` no las alimenta, se borran del HTML.
+`.tres-up`, `.barra`, `.hitos`, `.nota-loop`, `.analogia` y `.aparte`, y todas son
+condicionales: si el `.txt` no las alimenta, se borran del HTML.
 
 Los bloques **no se numeran**, ni en la salida ni en las plantillas. La ficha muestra
 sólo el título: quien la lee no necesita saber qué posición ocupa en el esqueleto, y una
@@ -425,11 +425,11 @@ formato o una variante es trabajo del autor.
 |---|---|
 | `[BANDA CLAVE]` | igual que en técnica |
 | `[QUE ES]` | `.parrafo` + `.tres-up` con `.celda` y `.cifra` |
-| `[COMO FUNCIONA]` | `.parrafo` + `.analogia` con `.traduccion` y `.aviso` |
+| `[COMO FUNCIONA]` | `.parrafo` + `.analogia` con `.traduccion` y `.aviso` + `.aparte` |
 | `[EN LA PRACTICA]` | igual que `[SECUENCIA]` |
-| `[POR QUE IMPORTA]` | igual que `[DATO ANCLA]` |
+| `[POR QUE IMPORTA]` | igual que `[DATO ANCLA]` + `.aparte` |
 | `[QUE HACER]` | igual que `[QUE HAGO YO]` |
-| `[GLOSARIO]` | `.pares.ancho` |
+| `[GLOSARIO]` | `.pares.ancho` + `.aparte` |
 
 ### 6.3 De marca a HTML
 
