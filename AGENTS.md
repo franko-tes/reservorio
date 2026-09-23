@@ -462,6 +462,7 @@ bloques se leen por posición.
 | Parte | Origen |
 |---|---|
 | `<h1>` | Campo `TITULO` |
+| `<title>` | Campo `TITULO`, el mismo texto que el `<h1>`, sin agregarle nada |
 | `.subtitulo` | Campo `SUBTITULO`; si no viene, se borra la línea |
 | `.meta` | Número del archivo (`NN.N`) + nombre de la carpeta del área: `01.1 · vulnerabilidades` |
 | `.etiqueta` de `.banda-clave` | Texto fijo de la plantilla |

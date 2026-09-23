@@ -187,7 +187,7 @@ REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 | Campo | Obligatorio | Para qué |
 |---|---|---|
 | `TIPO` | sí | Elige la plantilla, valida los bloques y define la clase del `<body>` |
-| `TITULO` | sí | Va en el `<h1>` y en la tarjeta del índice |
+| `TITULO` | sí | Va en el `<h1>`, en el `<title>` y en la tarjeta del índice |
 | `SUBTITULO` | no | Línea de contexto bajo el título. Si falta, no se muestra |
 | `CLAVES` | sí | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo |
 | `REFERENCIAS` | no | Va al pie. TTPs de MITRE, CVEs, RFCs, páginas de `man`: dónde seguir |
