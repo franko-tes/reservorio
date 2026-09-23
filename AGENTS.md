@@ -193,10 +193,9 @@ Aplica también a las partes opcionales dentro de un bloque. La plantilla trae
 `.tres-up`, `.barra`, `.hitos`, `.nota-loop` y `.analogia`, y todas son condicionales:
 si el `.txt` no las alimenta, se borran del HTML.
 
-Los bloques **no se numeran en la salida**. En las plantillas y en este archivo se
-numeran como referencia interna, pero la ficha muestra sólo el título: quien la lee no
-necesita saber qué posición ocupa en el esqueleto, y una ficha a la que le falta un
-bloque mostraría un salto que parece un error.
+Los bloques **no se numeran**, ni en la salida ni en las plantillas. La ficha muestra
+sólo el título: quien la lee no necesita saber qué posición ocupa en el esqueleto, y una
+ficha a la que le falta un bloque mostraría un salto de numeración que parece un error.
 
 ### Regla 6 — El orden de los bloques no se altera
 
