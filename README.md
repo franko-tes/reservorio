@@ -94,8 +94,8 @@ Tres cosas la definen:
 - **Es corta a propósito.** Si un tema no entra, no se agranda la ficha: se recorta
   el contenido o se parte en dos temas.
 - **La posición de los bloques es información.** Después de varias fichas, la
-  ubicación funciona como índice mental — "lo verde de la derecha es siempre qué hago
-  con esto" — y se encuentra algo sin leer la ficha entera.
+  ubicación funciona como índice mental — "lo que está en dos columnas es siempre qué
+  hago con esto" — y se encuentra algo sin leer la ficha entera.
 - **El esqueleto no depende del tema.** Los bloques no preguntan sobre redes ni sobre
   seguridad: preguntan cómo se llama, por qué pasa, en qué orden, cuál es el gancho y
   qué se hace con eso. Eso sirve para cualquier tema técnico.
