@@ -114,6 +114,11 @@ No todos los temas necesitan versión de divulgación. La mayoría tiene solo la
 Cada variante tiene su propia lista. Los marcadores se escriben **en mayúsculas y sin
 acentos**, y el `TIPO:` del archivo determina contra cuál lista se valida.
 
+La regla de no usar acentos vale sólo para lo que el agente tiene que **reconocer**:
+los marcadores entre corchetes y las subsecciones. El contenido visible se escribe
+como corresponde en castellano, aunque vaya en mayúsculas — `PRE-AUTENTICACIÓN` con
+tilde, porque se lee en la ficha y no hay nada que hacer coincidir.
+
 **`ficha-tecnica`**
 
 | Marcador | Qué contiene |

@@ -89,6 +89,10 @@ Cada bloque se abre con su nombre entre corchetes, **en mayúsculas y sin acento
 [MECANISMO]
 ```
 
+Eso vale para los marcadores y las subsecciones, que son las etiquetas del formato. El
+**contenido se escribe con acentos normales**, aunque vaya en mayúsculas: lo que se lee
+en la ficha es castellano y se escribe como tal.
+
 Van en el orden que indica la plantilla. Un bloque sin contenido real se omite entero.
 
 ### 4.3 Las marcas

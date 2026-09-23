@@ -20,7 +20,7 @@ Error de cálculo de tamaño en `srv.sys` al convertir atributos extendidos de S
 
 > No es una contraseña débil ni un usuario que hizo clic. Es aritmética mal hecha.
 
-- PRE-AUTENTICACION | no necesita credenciales
+- PRE-AUTENTICACIÓN | no necesita credenciales
 - KERNEL | `NT AUTHORITY\SYSTEM`
 - WORMABLE | cero interacción del usuario
 
