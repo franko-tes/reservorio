@@ -38,7 +38,7 @@ instrucciones de trabajo para agentes de IA están en `AGENTS.md`.
 6. [Ver y exportar](#6-ver-y-exportar)
    - 6.1 [Abrir](#61-abrir)
    - 6.2 [Exportar a imagen](#62-exportar-a-imagen)
-   - 6.3 [Exportar a PDF](#63-exportar-a-pdf)
+   - 6.3 [Exportar a PDF e imprimir](#63-exportar-a-pdf-e-imprimir)
    - 6.4 [Tipografías](#64-tipografías)
 7. [Evolución](#7-evolución)
    - 7.1 [Cuando algo no encaja](#71-cuando-algo-no-encaja)
