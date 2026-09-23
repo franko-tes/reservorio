@@ -173,8 +173,7 @@ y dos listas de marcadores.
 
 #### 2.1.4 Encabezado del `.txt`
 
-Cada archivo abre con un encabezado de cuatro campos, uno por línea, antes del primer
-bloque:
+Cada archivo abre con un encabezado, un campo por línea, antes del primer bloque:
 
 ```
 TIPO: ficha-tecnica
