@@ -238,9 +238,9 @@ un buscador o en un campo de configuración?*
 **El criterio lo fija el `.txt`, no el agente.** Si algo viene entre backticks, va con
 `.lit` aunque parezca que no corresponde. Si no viene marcado, no se agrega.
 
-**Excepción: componentes que ya son monoespaciados.** `.lit` marca un fragmento
+**Excepción: componentes que ya se ven como literal.** `.lit` marca un fragmento
 literal dentro de contenido que no lo es. Cuando el componente ya aplica monoespaciada
-al elemento completo, envolverlo sería redundante y no se hace.
+y negrita al elemento completo, envolverlo sería redundante y no se hace.
 
 Hoy el único caso es `.pares .nombre`, que el CSS ya renderiza en mono y negrita:
 
@@ -249,8 +249,10 @@ Hoy el único caso es `.pares .nombre`, que el CSS ya renderiza en mono y negrit
 html    <div class="nombre">CVE-2017-0144</div>
 ```
 
-En cambio, dentro de una `.lista`, un `.parrafo` o una `.celda` — donde el texto va en
-la tipografía de cuerpo — el `.lit` sí es necesario.
+En cambio, el `.lit` sí es necesario dentro de una `.lista`, un `.parrafo` o una
+`.celda` — donde el texto va en la tipografía de cuerpo —, en `.pares.ancho .nombre` (el
+glosario), que también va en tipografía de cuerpo, y en `.nota-loop` y `.pie`, que son
+monoespaciados pero sin negrita.
 
 **El `.lit` va adentro, nunca reemplaza.** Cuando todo el contenido de un elemento de
 la plantilla es literal, el `<span class="lit">` se anida dentro de ese elemento, sin
@@ -435,7 +437,7 @@ formato o una variante es trabajo del autor.
 
 | En el `.txt` | En el HTML |
 |---|---|
-| `` `texto` `` | `<span class="lit">texto</span>`, salvo en componentes ya monoespaciados — ver regla 7 |
+| `` `texto` `` | `<span class="lit">texto</span>`, salvo en componentes que ya se ven como literal — ver regla 7 |
 | `*texto*` | `<span class="destacar">texto</span>` |
 | `!destacado` al final del elemento | clase `destacado` en ese elemento |
 | `!incorrecto` al final del elemento | clase `incorrecto` en ese elemento |
