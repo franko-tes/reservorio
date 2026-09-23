@@ -103,7 +103,7 @@ modifica cuando el autor lo pide o lo aprueba.
 | `contenidos/**/*.txt` | Sólo si el autor lo pide explícitamente |
 | `plantillas/*.html` | Sólo con aprobación previa |
 | `estilo.css` | Sólo con aprobación previa |
-| `README.md`, `AGENTS.md` | Cuando cambia algo del sistema, avisando qué actualizó |
+| `README.md`, `AGENTS.md`, `FORMATOS.md` | Cuando cambia algo del sistema, avisando qué actualizó |
 | `fuentes/` | Sólo si el autor lo pide explícitamente |
 
 Una instrucción directa del autor habilita cualquier cambio: si pide revisar y
@@ -552,12 +552,15 @@ instrucciones desactualizado es peor que no tenerlo: el agente lo va a seguir ig
 |---|---|
 | Se agrega una variante | `plantillas/`, punto 5, punto 6, `README.md` 2.1.1 y 2.1.2, `FORMATOS.md` 2 y su plantilla |
 | Se agrega un formato | `plantillas/`, punto 5, punto 6, `README.md` punto 2 (sección nueva con sus bloques), `FORMATOS.md` 2 y su plantilla, y `estilo.css` + punto 8 si trae componentes |
-| Se agrega o quita un bloque de una variante | La plantilla, puntos 5 y 6, `README.md` 2.1.2 |
-| Se agrega un componente de CSS | `estilo.css` (sección nueva al final), punto 8 |
+| Se agrega o quita un bloque de una variante | La plantilla, puntos 5 y 6, `README.md` 2.1.2, `FORMATOS.md` 5 o 6 (la plantilla de esa variante) |
+| Se agrega un componente de CSS | `estilo.css` (sección nueva al final), punto 8, y `README.md` 3.4 si cambia el criterio |
 | Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5, `FORMATOS.md` 4.3 |
 | Se agrega un campo al encabezado | Las plantillas, `README.md` 2.1.4, `FORMATOS.md` 4.1 |
 | Cambia una regla | Punto 4, `README.md` punto 4 |
 | Se agrega un área | Sólo crear la carpeta en `contenidos/` y en `publicado/` |
+
+Esta tabla tiene una copia en `README.md` 7.3, para quien lee el proyecto sin abrir este
+archivo. Cuando cambia una, cambia la otra.
 
 Cuando el agente hace un cambio que toca alguna de estas filas, **actualiza la
 documentación en la misma tarea** y avisa qué archivos tocó. No queda para después.

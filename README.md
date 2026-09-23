@@ -486,10 +486,12 @@ qué se rompe y qué hay que rehacer.
 
 | Si se agrega o cambia… | Actualizar |
 |---|---|
-| Un formato | `plantillas/`, valores válidos de `TIPO:`, punto 2 (sección nueva con sus bloques), `estilo.css` si trae componentes, `AGENTS.md` |
-| Una variante | `plantillas/`, valores válidos de `TIPO:`, la sección de su formato (para la ficha, 2.1.1 y 2.1.2), `AGENTS.md` |
-| Un bloque de una variante | La plantilla, 2.1.2, `AGENTS.md` |
+| Un formato | `plantillas/`, valores válidos de `TIPO:`, punto 2 (sección nueva con sus bloques), `estilo.css` si trae componentes, `FORMATOS.md` 2 y su plantilla, `AGENTS.md` |
+| Una variante | `plantillas/`, valores válidos de `TIPO:`, la sección de su formato (para la ficha, 2.1.1 y 2.1.2), `FORMATOS.md` 2 y su plantilla, `AGENTS.md` |
+| Un bloque de una variante | La plantilla, 2.1.2, `FORMATOS.md` 5 o 6, `AGENTS.md` |
 | Un componente de CSS | `estilo.css`, 3.4 si cambia el criterio, `AGENTS.md` |
+| Una marca del `.txt` | 2.1.5, `FORMATOS.md` 4.3, `AGENTS.md` |
+| Un campo del encabezado | Las plantillas, 2.1.4, `FORMATOS.md` 4.1, `AGENTS.md` |
 | Una regla de trabajo | Punto 4, `AGENTS.md` |
 | Un área | Solo crear la carpeta, en `contenidos/` y en `publicado/` |
 
