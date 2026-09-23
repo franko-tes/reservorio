@@ -10,7 +10,7 @@ Instrucciones de trabajo para agentes de IA que operen sobre este repositorio.
 2. [Stack](#2-stack) — 2.1 [Recomendar sí, modificar no](#21-recomendar-sí-modificar-no)
 3. [Qué hace y qué no hace el agente](#3-qué-hace-y-qué-no-hace-el-agente) — 3.1 [Alcance por archivo](#31-alcance-por-archivo)
 4. [Las once reglas, en detalle](#4-las-once-reglas-en-detalle)
-5. [Formatos disponibles](#5-formatos-disponibles)
+5. [Plantillas disponibles](#5-plantillas-disponibles)
 6. [De bloque a HTML](#6-de-bloque-a-html)
 7. [El índice](#7-el-índice)
 8. [Vocabulario de CSS](#8-vocabulario-de-css)
@@ -202,17 +202,17 @@ bloque mostraría un salto que parece un error.
 
 Los bloques van en el orden de la plantilla, no en el orden en que aparecen en el
 `.txt`. Si un `.txt` trae `[TRAMPAS]` antes de `[QUE HAGO YO]`, la ficha igual los pone
-al revés: el orden lo define el formato, no el archivo de contenido.
+al revés: el orden lo define la plantilla, no el archivo de contenido.
 
 **Y se señala.** Un `.txt` con los bloques desordenados suele ser síntoma de otra cosa
-— que se escribió sin la plantilla a la vista, o que se copió de otro formato.
+— que se escribió sin la plantilla a la vista, o que se copió de otra variante.
 
 Nunca se reordena para que quede mejor. Aunque en un tema particular tenga más sentido
 poner la secuencia antes que el mecanismo, el orden es fijo: esa estabilidad es lo que
 hace que la posición funcione como índice mental entre fichas.
 
 Si el orden fijo realmente no sirve para un tema, eso no se resuelve reordenando esa
-ficha. Se consulta, y la salida puede ser un formato nuevo.
+ficha. Se consulta, y la salida puede ser una variante nueva, o un formato nuevo.
 
 ### Regla 7 — Todo string literal va con `.lit`
 
@@ -367,9 +367,10 @@ elimina por su cuenta ni lo reemplaza: puede ser deliberado y ficticio.
 
 ---
 
-## 5. Formatos disponibles
+## 5. Plantillas disponibles
 
-Un formato se define por tres piezas que tienen que existir juntas:
+Cada `TIPO:` válido (formato, o formato y variante) se define por tres piezas que
+tienen que existir juntas:
 
 | Pieza | Dónde | Para qué |
 |---|---|---|
@@ -377,7 +378,8 @@ Un formato se define por tres piezas que tienen que existir juntas:
 | Valor de `TIPO:` | Declarado en el `.txt` | Selecciona la plantilla |
 | Lista de bloques | `README.md` 2.1.2 | Qué se valida |
 
-Hoy hay dos.
+Hoy hay un formato, la ficha, con dos variantes. La definición de cada término está
+en `README.md` punto 2.
 
 ### 5.1 `ficha-tecnica`
 
@@ -398,9 +400,9 @@ Hoy hay dos.
 
 ### 5.3 Un `TIPO:` que no existe
 
-Si el `.txt` declara un formato sin plantilla, **no se construye nada**. El agente no
+Si el `.txt` declara un `TIPO:` sin plantilla, **no se construye nada**. El agente no
 improvisa una estructura ni adapta la plantilla más parecida. Avisa y espera: crear un
-formato es trabajo del autor.
+formato o una variante es trabajo del autor.
 
 ---
 
@@ -462,7 +464,7 @@ Dos niveles: una `<section class="area">` por área, con su `.area-tit`, y adent
 | Elemento | Origen |
 |---|---|
 | `href` | Ruta relativa a la ficha, desde `publicado/` |
-| `.num` | Número del archivo + formato: `01.1 · ficha técnica` |
+| `.num` | Número del archivo + formato y variante: `01.1 · ficha técnica` |
 | `<h2>` | Campo `TITULO` del `.txt` |
 | `.clave` | Contenido de `[BANDA CLAVE]`, completo |
 | `.tags` | Tres o cuatro términos tomados de `CLAVES` |
@@ -549,8 +551,9 @@ instrucciones desactualizado es peor que no tenerlo: el agente lo va a seguir ig
 
 | Si cambia… | Actualizar |
 |---|---|
-| Se agrega un formato | `plantillas/`, punto 5, punto 6, `README.md` 2.1.2, `FORMATOS.md` 2 y su plantilla |
-| Se agrega o quita un bloque de un formato | La plantilla, puntos 5 y 6, `README.md` 2.1.2 |
+| Se agrega una variante | `plantillas/`, punto 5, punto 6, `README.md` 2.1.1 y 2.1.2, `FORMATOS.md` 2 y su plantilla |
+| Se agrega un formato | `plantillas/`, punto 5, punto 6, `README.md` punto 2 (sección nueva con sus bloques), `FORMATOS.md` 2 y su plantilla, y `estilo.css` + punto 8 si trae componentes |
+| Se agrega o quita un bloque de una variante | La plantilla, puntos 5 y 6, `README.md` 2.1.2 |
 | Se agrega un componente de CSS | `estilo.css` (sección nueva al final), punto 8 |
 | Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5, `FORMATOS.md` 4.3 |
 | Se agrega un campo al encabezado | Las plantillas, `README.md` 2.1.4, `FORMATOS.md` 4.1 |

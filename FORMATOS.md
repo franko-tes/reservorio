@@ -13,8 +13,8 @@ resto del proyecto.
 El reservorio guarda material de estudio sobre temas técnicos. Cada tema se escribe en
 un archivo de texto plano con una estructura fija, y de ahí se construye la página.
 
-El trabajo acá es uno solo: **volcar lo estudiado en la estructura del formato
-elegido**. La página se genera después, en otro momento y en otro lugar.
+El trabajo acá es uno solo: **volcar lo estudiado en la estructura de la plantilla
+elegida**. La página se genera después, en otro momento y en otro lugar.
 
 Dos cosas importantes sobre el contenido:
 
@@ -27,12 +27,14 @@ Dos cosas importantes sobre el contenido:
 
 ## 2. Los formatos
 
-| Formato | Para qué sirve | Quién lo lee |
+Hoy hay un formato, la **ficha**, con dos variantes:
+
+| Variante (valor de `TIPO:`) | Para qué sirve | Quién lo lee |
 |---|---|---|
 | `ficha-tecnica` | Ayuda-memoria de una página. Condensa un tema en bloques fijos para recordarlo rápido meses después | Quien ya estudió el tema |
 | `ficha-divulgacion` | Explicación del mismo tema sin conocimientos previos | Alguien ajeno al tema |
 
-Los dos son **fichas**: material corto, de una página, pensado para leerse de una
+Las dos son **fichas**: material corto, de una página, pensado para leerse de una
 sentada. No sirven para desarrollos largos.
 
 ---
@@ -43,7 +45,7 @@ sentada. No sirven para desarrollos largos.
 
 - Yo, para repasar → `ficha-tecnica`
 - Otra persona que no conoce el tema → `ficha-divulgacion`
-- Los dos → dos archivos separados, uno de cada formato
+- Los dos → dos archivos separados, uno de cada variante
 
 **¿El tema entra en una ficha?**
 
@@ -75,7 +77,7 @@ REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 
 | Campo | Obligatorio | Qué va |
 |---|---|---|
-| `TIPO` | sí | `ficha-tecnica` o `ficha-divulgacion` |
+| `TIPO` | sí | El formato y la variante, separados por guión: `ficha-tecnica` o `ficha-divulgacion` |
 | `TITULO` | sí | El nombre del tema |
 | `SUBTITULO` | no | Una línea de contexto |
 | `CLAVES` | sí | Términos por los que se buscaría este tema más adelante |
@@ -262,5 +264,5 @@ Término | qué es
 El archivo se guarda como `.txt` y se entrega tal cual. La conversión a página se hace
 después, en el repositorio.
 
-Si algo del tema no encaja en ninguno de los dos formatos, conviene decirlo en vez de
-forzarlo: puede ser señal de que hace falta un formato nuevo.
+Si algo del tema no encaja en ninguna de las dos fichas, conviene decirlo en vez de
+forzarlo: puede ser señal de que hace falta una variante o un formato nuevo.

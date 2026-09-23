@@ -75,6 +75,15 @@ De ahí salen tres criterios que valen para cualquier formato:
 
 ## 2. Formatos
 
+Un **formato** es una familia de documento: hoy la ficha, y mañana quizás un
+apunte o una lista de definiciones. Cada formato tiene su propia estructura.
+Algunos tienen **variantes**: versiones del mismo formato que comparten el
+esqueleto pero cambian el orden y los bloques (la ficha tiene la técnica y la
+de divulgación).
+
+El campo `TIPO:` de cada `.txt` indica qué plantilla usar: el formato y, si
+lo tiene, la variante (`ficha-tecnica`).
+
 ### 2.1 Ficha
 
 Una ficha es **una sola página** que condensa un tema en bloques fijos. No reemplaza
@@ -183,8 +192,10 @@ REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 | `CLAVES` | sí | Términos de búsqueda. Ver más abajo |
 | `REFERENCIAS` | no | Va al pie. TTPs de MITRE, CVEs, RFCs, páginas de `man`: dónde seguir |
 
-El valor de `TIPO:` nombra **el formato y la variante**, separados por guión. Así, al
-agregarse formatos nuevos, el mismo campo sigue sirviendo sin ambigüedad.
+El valor de `TIPO:` nombra **el formato y, si tiene variantes, la variante**,
+separados por guión (`ficha-tecnica`). Un formato sin variantes se nombra solo por
+su formato. Así, al agregarse formatos nuevos, el mismo campo sigue sirviendo sin
+ambigüedad.
 
 No hay campo de área: **la carpeta ya lo dice**. Duplicarlo crearía dos fuentes de
 verdad que pueden contradecirse si el archivo se mueve.
@@ -298,7 +309,7 @@ temas futuros es ruido.
 - El **primer número es el tema**, y arranca en `01` dentro de cada área.
 - El **segundo es la pieza**, en orden de creación. No tiene significado fijo: qué es
   cada una lo dice el sufijo del nombre (`-divulgacion`, `-apunte`).
-- El formato base va sin sufijo.
+- La pieza base (hoy, la ficha técnica) va sin sufijo.
 
 No hay numeración global ni contador de archivos en los nombres: un número que lleve
 la cuenta se rompe apenas se borra o se inserta algo en el medio.
@@ -355,7 +366,7 @@ explican.
    está en el `.txt`, no entra en la salida.
 5. **Los bloques vacíos se omiten, no se rellenan.** Vale más una ficha de cinco
    bloques honestos que una de siete con dos inventados. → 2.1.2
-6. **El orden de los bloques no se altera dentro de un mismo formato.** Es lo que hace
+6. **El orden de los bloques no se altera dentro de una misma variante.** Es lo que hace
    que la posición signifique algo. → 2.1
 7. **Todo string literal va con `.lit`.** CVEs, rutas, comandos, puertos, nombres de
    archivo: cualquier cosa que se escriba tal cual en una terminal. La excepción son
@@ -390,7 +401,8 @@ explican.
    el contenido, que es la que tiene el contexto completo.
 3. **Guardarlo** en `contenidos/area/NN.N-nombre.txt`, siguiendo la numeración de 3.3.
    Si el área no existe todavía, se crea.
-4. **Pedirle al agente que lo construya**, indicando qué archivo y qué formato.
+4. **Pedirle al agente que lo construya**, indicando qué archivo (el `TIPO:` ya dice
+   qué plantilla usar).
 5. **Revisar el resultado** en el navegador y, si algo no cierra, corregir el `.txt` y
    reconstruir. Nunca el `.html`.
 
@@ -473,8 +485,9 @@ qué se rompe y qué hay que rehacer.
 
 | Si se agrega o cambia… | Actualizar |
 |---|---|
-| Un formato | `plantillas/`, valores válidos de `TIPO:`, punto 2, `AGENTS.md` |
-| Un bloque de un formato | La plantilla, 2.1.2, `AGENTS.md` |
+| Un formato | `plantillas/`, valores válidos de `TIPO:`, punto 2 (sección nueva con sus bloques), `estilo.css` si trae componentes, `AGENTS.md` |
+| Una variante | `plantillas/`, valores válidos de `TIPO:`, la sección de su formato (para la ficha, 2.1.1 y 2.1.2), `AGENTS.md` |
+| Un bloque de una variante | La plantilla, 2.1.2, `AGENTS.md` |
 | Un componente de CSS | `estilo.css`, 3.4 si cambia el criterio, `AGENTS.md` |
 | Una regla de trabajo | Punto 4, `AGENTS.md` |
 | Un área | Solo crear la carpeta, en `contenidos/` y en `publicado/` |
