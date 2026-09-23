@@ -440,11 +440,12 @@ formato o una variante es trabajo del autor.
 | `!destacado` al final del elemento | clase `destacado` en ese elemento |
 | `!incorrecto` al final del elemento | clase `incorrecto` en ese elemento |
 | `>` al inicio de línea | `<p class="aparte">` |
-| `↻` al inicio de línea | `<div class="nota-loop">` |
+| `↻` al inicio de línea | `<div class="nota-loop">`; el `↻` se conserva en el texto |
 | `\|` | separa los dos `<div>` de un par, o `<b>` de `<span>` |
 | `-` al inicio de línea | `<li>` de `.lista`, o una `.celda` de `.tres-up` |
 
-Las marcas de apertura y cierre no se conservan en la salida.
+Las marcas de apertura y cierre no se conservan en la salida, salvo el `↻`, que es parte
+visible de la nota.
 
 ### 6.4 Lo que no es un bloque
 
