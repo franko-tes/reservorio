@@ -446,6 +446,32 @@ formato o una variante es trabajo del autor.
 
 Las marcas de apertura y cierre no se conservan en la salida.
 
+### 6.4 Lo que no es un bloque
+
+Además de los bloques, la ficha tiene partes que salen de otras fuentes, y algunos
+bloques se leen por posición.
+
+| Parte | Origen |
+|---|---|
+| `<h1>` | Campo `TITULO` |
+| `.subtitulo` | Campo `SUBTITULO`; si no viene, se borra la línea |
+| `.meta` | Número del archivo (`NN.N`) + nombre de la carpeta del área: `01.1 · vulnerabilidades` |
+| `.etiqueta` de `.banda-clave` | Texto fijo de la plantilla |
+| `.pie`, izquierda | Campo `REFERENCIAS`; si no viene, el `<span>` queda vacío |
+| `.pie`, derecha | Texto fijo de la plantilla: enlace al índice y nombre de la variante |
+
+**Lecturas por posición**
+
+- `[DATO ANCLA]` y `[POR QUE IMPORTA]`: la primera línea va en `.ancla-num`, la segunda
+  en `.ancla-sub`, y cada línea `fecha | qué pasó` es un `.hito` (`<b>` la fecha,
+  `<span>` lo que pasó).
+- `[TRAMPAS]`: en cada `"mito" | corrección`, el mito va en `<b>` con sus comillas, tal
+  como viene en el `.txt`, y la corrección va como texto suelto a continuación, sin
+  `<span>`.
+
+**Caracteres especiales.** `&`, `<` y `>` del contenido se escriben como entidades
+HTML (`&amp;`, `&lt;`, `&gt;`).
+
 ---
 
 ## 7. El índice
