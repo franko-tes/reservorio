@@ -189,7 +189,7 @@ REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 | `TIPO` | sí | Elige la plantilla, valida los bloques y define la clase del `<body>` |
 | `TITULO` | sí | Va en el `<h1>` y en la tarjeta del índice |
 | `SUBTITULO` | no | Línea de contexto bajo el título. Si falta, no se muestra |
-| `CLAVES` | sí | Términos de búsqueda. Ver más abajo |
+| `CLAVES` | sí | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo |
 | `REFERENCIAS` | no | Va al pie. TTPs de MITRE, CVEs, RFCs, páginas de `man`: dónde seguir |
 
 El valor de `TIPO:` nombra **el formato y, si tiene variantes, la variante**,
@@ -200,9 +200,10 @@ ambigüedad.
 No hay campo de área: **la carpeta ya lo dice**. Duplicarlo crearía dos fuentes de
 verdad que pueden contradecirse si el archivo se mueve.
 
-`CLAVES` hoy no se usa en ninguna parte visible. Se completa igual, porque el buscador
-que viene más adelante va a leer de ahí, y completar cuarenta archivos a mano después
-es mucho peor que escribir una línea ahora.
+Cada término de `CLAVES` se muestra como tag en la tarjeta del índice, en el orden en
+que está escrito. Por eso conviene que sean pocos: los imprescindibles. El buscador que
+viene más adelante también va a leer de ahí, y completar cuarenta archivos a mano
+después es mucho peor que escribir una línea ahora.
 
 #### 2.1.5 Marcas del contenido
 

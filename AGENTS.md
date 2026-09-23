@@ -467,7 +467,7 @@ Dos niveles: una `<section class="area">` por área, con su `.area-tit`, y adent
 | `.num` | Número del archivo + formato y variante: `01.1 · ficha técnica` |
 | `<h2>` | Campo `TITULO` del `.txt` |
 | `.clave` | Contenido de `[BANDA CLAVE]`, completo |
-| `.tags` | Tres o cuatro términos tomados de `CLAVES` |
+| `.tags` | Todos los términos de `CLAVES`, en el orden en que están escritos |
 
 ### 7.3 Reglas del índice
 

@@ -80,7 +80,7 @@ REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 | `TIPO` | sí | El formato y la variante, separados por guión: `ficha-tecnica` o `ficha-divulgacion` |
 | `TITULO` | sí | El nombre del tema |
 | `SUBTITULO` | no | Una línea de contexto |
-| `CLAVES` | sí | Términos por los que se buscaría este tema más adelante |
+| `CLAVES` | sí | Términos por los que se buscaría este tema. Cada uno se muestra como tag en el índice: conviene que sean pocos, los imprescindibles |
 | `REFERENCIAS` | no | Dónde seguir: TTPs, CVEs, RFCs, páginas de manual |
 
 ### 4.2 Los bloques
