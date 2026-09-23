@@ -491,7 +491,7 @@ qué se rompe y qué hay que rehacer.
 | Un bloque de una variante | La plantilla, 2.1.2, `FORMATOS.md` 5 o 6, `AGENTS.md` |
 | Un componente de CSS | `estilo.css`, 3.4 si cambia el criterio, `AGENTS.md` |
 | Una marca del `.txt` | 2.1.5, `FORMATOS.md` 4.3, `AGENTS.md` |
-| Un campo del encabezado | Las plantillas, 2.1.4, `FORMATOS.md` 4.1, `AGENTS.md` |
+| Un campo del encabezado | Las plantillas, 2.1.4, `FORMATOS.md` 4.1, `AGENTS.md` 6.4 |
 | Una regla de trabajo | Punto 4, `AGENTS.md` |
 | Un área | Solo crear la carpeta, en `contenidos/` y en `publicado/` |
 

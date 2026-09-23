@@ -581,7 +581,7 @@ instrucciones desactualizado es peor que no tenerlo: el agente lo va a seguir ig
 | Se agrega o quita un bloque de una variante | La plantilla, puntos 5 y 6, `README.md` 2.1.2, `FORMATOS.md` 5 o 6 (la plantilla de esa variante) |
 | Se agrega un componente de CSS | `estilo.css` (sección nueva al final), punto 8, y `README.md` 3.4 si cambia el criterio |
 | Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5, `FORMATOS.md` 4.3 |
-| Se agrega un campo al encabezado | Las plantillas, `README.md` 2.1.4, `FORMATOS.md` 4.1 |
+| Se agrega un campo al encabezado | Las plantillas, punto 6.4, `README.md` 2.1.4, `FORMATOS.md` 4.1 |
 | Cambia una regla | Punto 4, `README.md` punto 4 |
 | Se agrega un área | Sólo crear la carpeta en `contenidos/` y en `publicado/` |
 
