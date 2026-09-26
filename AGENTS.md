@@ -464,7 +464,7 @@ bloques se leen por posición.
 | `<h1>` | Campo `TITULO` |
 | `<title>` | Campo `TITULO`, el mismo texto que el `<h1>`, sin agregarle nada |
 | `.subtitulo` | Campo `SUBTITULO`; si no viene, se borra la línea |
-| `.meta` | Número del archivo (`NN.N`) + nombre de la carpeta del área: `01.1 · vulnerabilidades` |
+| `.meta` | Número del archivo (`NN.N`) + nombre de la carpeta del área, con la primera letra en mayúscula: `01.1 · Vulnerabilidades` |
 | `.etiqueta` de `.banda-clave` | Texto fijo de la plantilla |
 | `.pie`, izquierda | Campo `REFERENCIAS`; si no viene, el `<span>` queda vacío |
 | `.pie`, derecha | Texto fijo de la plantilla: enlace al índice y nombre de la variante |
