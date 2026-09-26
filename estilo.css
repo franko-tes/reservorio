@@ -411,8 +411,6 @@ body.divulgacion .pares .rol{font-size:var(--t-md)}
 .tarjeta h2{font-size:20px; font-weight:500; margin:6px 0 10px}
 .tarjeta .clave{font-size:14px; color:var(--fg-2); line-height:1.5}
 .tarjeta .tags{margin-top:var(--e-3); display:flex; gap:var(--e-2); flex-wrap:wrap}
-.tarjeta.vacia{border-style:dashed; opacity:.5}
-.tarjeta.vacia h2{color:var(--fg-3)}
 
 
 /* ---------- 18 · responsivo ---------- */
