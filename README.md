@@ -289,6 +289,9 @@ Para cambiar algo se edita el `.txt` y se reconstruye el `.html`. **Los archivos
 `publicado/` no se editan a mano**: si se editan, las dos versiones dejan de coincidir
 y se pierde cuál es la buena.
 
+`publicado/index.html` es la excepción: junta datos de todas las fichas y se actualiza
+tarjeta por tarjeta, no se regenera desde un solo `.txt`.
+
 ### 3.2 Áreas
 
 Los temas se agrupan por área, y la misma división se repite en `contenidos/` y en

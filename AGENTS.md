@@ -110,8 +110,9 @@ Una instrucción directa del autor habilita cualquier cambio: si pide revisar y
 reescribir el proyecto entero, eso entra dentro del alcance. Lo que nunca corresponde
 es tomar esas decisiones sin que se hayan pedido.
 
-Los `.html` de `publicado/` son **salida regenerable**: se reconstruyen desde el `.txt`
-cuantas veces haga falta. Nunca son la fuente de verdad.
+Los `.html` de `publicado/`, salvo `index.html` (regla 1), son **salida regenerable**:
+se reconstruyen desde el `.txt` cuantas veces haga falta. Nunca son la fuente de
+verdad.
 
 ---
 
@@ -132,6 +133,12 @@ regeneración pisa la corrección sin avisar.
 
 Si el autor pide editar un `.html` directamente, corresponde señalar esa consecuencia
 antes de hacerlo.
+
+**Excepción: `publicado/index.html`.** No sale de un solo `.txt`, porque junta datos de
+todos. No se regenera entero: se agrega o actualiza la tarjeta de la ficha que cambió,
+copiando sus datos del `.txt` (7.2). Si cambia `TITULO`, `[BANDA CLAVE]` o `CLAVES` de
+un `.txt`, su tarjeta se actualiza en la misma tarea. Cuando exista el generador de
+índice (punto 2), esta excepción desaparece.
 
 ### Regla 2 — Un solo `estilo.css`
 
