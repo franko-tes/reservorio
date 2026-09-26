@@ -10,9 +10,9 @@ Pre-auth + kernel + wormable. Esos tres juntos son lo que convierte un bug en un
 [IDENTIDAD]
 `CVE-2017-0144` | la vulnerabilidad (+ 0143, 0145, 0146, 0148)
 `MS17-010` | el parche de Microsoft
-`EternalBlue` !incorrecto | el exploit, filtrado de la NSA
-`DoublePulsar` !incorrecto | el implante que queda en el kernel
-`WannaCry` !destacado | el ransomware — solo uno de los que entró
+EternalBlue !incorrecto | el exploit, filtrado de la NSA
+DoublePulsar !incorrecto | el implante que queda en el kernel
+WannaCry !destacado | el ransomware — solo uno de los que entró
 `SMBv1 · 445/TCP` | protocolo y puerto vulnerables (139 por NetBIOS)
 
 [MECANISMO]

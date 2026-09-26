@@ -225,7 +225,8 @@ html   <span class="lit">CVE-2017-0144</span>
 Los backticks no se conservan en la salida.
 
 **Qué cuenta como literal.** La prueba: *¿esto se escribe tal cual en una terminal, en
-un buscador o en un campo de configuración?*
+un buscador o en un campo de configuración, o aparece exactamente así en la salida de
+una herramienta real — un escaneo, un log?*
 
 | Sí | No |
 |---|---|

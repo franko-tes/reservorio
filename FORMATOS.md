@@ -106,8 +106,8 @@ Van en el orden que indica la plantilla. Un bloque sin contenido real se omite e
 | `\|` | Separa término de definición | `` `MS17-010` \| el parche `` |
 | `-` | Ítem de una lista | `- Backups offline` |
 | `>` | Comentario al margen | `> Es aritmética mal hecha.` |
-| `!destacado` | Marca un elemento entero como relevante | `` `WannaCry` !destacado \| el ransomware `` |
-| `!incorrecto` | Marca un elemento entero como ofensivo o erróneo | `` `EternalBlue` !incorrecto \| el exploit `` |
+| `!destacado` | Marca un elemento entero como relevante | `WannaCry !destacado \| el ransomware` |
+| `!incorrecto` | Marca un elemento entero como ofensivo o erróneo | `EternalBlue !incorrecto \| el exploit` |
 | `↻` | Nota al pie de una secuencia que se repite | `↻ el último paso reinicia el primero` |
 
 Dos aclaraciones:
@@ -115,7 +115,8 @@ Dos aclaraciones:
 - `*asteriscos*` marca **fragmentos** dentro de una oración. `!destacado` e
   `!incorrecto` marcan **elementos completos**, y van al final del elemento. Hoy se usan
   sobre el nombre de un par (`[IDENTIDAD]`) y sobre un paso (`[SECUENCIA]`,
-  `[EN LA PRACTICA]`).
+  `[EN LA PRACTICA]`). Un nombre de herramienta como `WannaCry` o `EternalBlue` no lleva
+  backticks: no es un literal (ver regla 7 de `AGENTS.md`), solo la marca de énfasis.
 - Una línea sola en MAYÚSCULAS, sin corchetes, abre una subsección dentro de un bloque.
   Se usa para los títulos de columna y para las partes de la analogía.
 
