@@ -335,7 +335,7 @@ Casos concretos en que corresponde frenar y preguntar.
 **Al construir:**
 
 - Contenido que no encaja con ningún componente del CSS
-- Un bloque que necesita una variante que no existe
+- Un bloque que necesita un modificador de componente que no existe
 - Un `.tres-up` con más de tres celdas, o un `.hitos` que no tenga exactamente tres entradas
 - La ficha se estira más de lo razonable
 
