@@ -217,7 +217,7 @@ variantes.
 | `\|` | Separa término de definición, o título de descripción | `` `MS17-010` \| el parche `` |
 | `-` | Ítem de una lista | `- Backups offline` |
 | `>` | Comentario al margen, en tono aparte | `> Es aritmética mal hecha.` |
-| `!destacado` `!incorrecto` | Marca **un elemento entero** | `` `EternalBlue` !incorrecto \| el exploit `` |
+| `!destacado` `!incorrecto` | Marca **un elemento entero** | `EternalBlue !incorrecto \| el exploit` |
 | `↻` | Nota de bucle, al pie de una secuencia | `↻ el último paso reinicia el primero` |
 
 Dos aclaraciones que evitan confusiones:
@@ -371,7 +371,8 @@ explican.
 6. **El orden de los bloques no se altera dentro de una misma variante.** Es lo que hace
    que la posición signifique algo. → 2.1
 7. **Todo string literal va con `.lit`.** CVEs, rutas, comandos, puertos, nombres de
-   archivo: cualquier cosa que se escriba tal cual en una terminal. La excepción son
+   archivo: cualquier cosa que se escriba tal cual en una terminal, o que aparezca
+   exactamente así en la salida de una herramienta real. La excepción son
    los componentes que ya se ven como un literal (monoespaciados y en negrita), donde
    marcarlo sería redundante.
 8. **Nunca se generan datos técnicos con IA de imágenes.** Los modelos de imagen
