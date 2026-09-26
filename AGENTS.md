@@ -508,8 +508,6 @@ Dos niveles: una `<section class="area">` por área, con su `.area-tit`, y adent
 - Si el área todavía no tiene sección, se crea
 - La tarjeta va al final de su área, respetando el orden numérico
 - El conteo de la cabecera se actualiza: áreas, temas y fichas
-- Las tarjetas `.vacia` son temas pendientes anotados por el autor: no se tocan ni se
-  eliminan salvo pedido explícito
 
 ---
 
@@ -568,7 +566,6 @@ Si hay diferencia entre esta tabla y el archivo, **manda el archivo**.
 | `.area` + `.area-tit` | 17 | Agrupación por área |
 | `.rejilla` | 17 | Grilla de tarjetas |
 | `.tarjeta` | 17 | Tarjeta de una ficha, con `.num`, `h2`, `.clave` y `.tags` |
-| `.tarjeta.vacia` | 17 | Tema pendiente, en punteado |
 
 ### 8.5 Lo que no se toca al construir
 
