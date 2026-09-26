@@ -110,9 +110,9 @@ Tres cosas la definen:
 Ambas usan el mismo CSS. Lo que cambia es el contenido y, sobre todo, **el orden y el
 nombre de los bloques**.
 
-- La técnica abre con **Identidad** (los nombres), porque para quien ya estudió el
+- La técnica sigue con **Identidad** (los nombres), porque para quien ya estudió el
   tema, los nombres son el mejor gancho.
-- La de divulgación abre con **Qué es** y manda los nombres al final como
+- La de divulgación sigue con **Qué es** y manda los nombres al final como
   **Glosario**, porque para quien no sabe nada, un nombre sin contexto no engancha con
   nada.
 
