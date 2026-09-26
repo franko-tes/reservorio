@@ -1,7 +1,7 @@
 TIPO: ficha-divulgacion
 TITULO: WannaCry, explicado
 SUBTITULO: Qué pasó en mayo de 2017 y por qué sigue importando
-CLAVES: wannacry, ransomware, secuestro de archivos, actualizaciones, hospitales, 2017
+CLAVES: wannacry, ransomware, secuestro de archivos
 
 [BANDA CLAVE]
 La reparación ya existía 59 días antes del ataque. Nadie la aplicó a tiempo.

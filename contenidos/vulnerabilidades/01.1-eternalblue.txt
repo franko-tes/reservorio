@@ -1,7 +1,7 @@
 TIPO: ficha-tecnica
 TITULO: EternalBlue / MS17-010
 SUBTITULO: La vulnerabilidad que hizo posible WannaCry
-CLAVES: smb, smbv1, 445, wannacry, ransomware, kernel, wormable, shadow brokers, doublepulsar
+CLAVES: smbv1, wannacry, ransomware, kernel, wormable
 REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 
 [BANDA CLAVE]
