@@ -478,3 +478,43 @@ body.divulgacion .pares .rol{font-size:var(--t-md)}
   .bloque,.banda-clave,.trampas,.tarjeta{break-inside:avoid}
   a{text-decoration:underline}
 }
+
+
+/* ---------- 20 · subtítulo interno ---------- */
+.subtit{
+  font-size:var(--t-sm);
+  font-weight:500;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:var(--fg-3);
+  margin-top:var(--e-4);
+  margin-bottom:var(--e-2);
+}
+
+/* ---------- 21 · árbol jerárquico ---------- */
+.arbol, .arbol ul{
+  list-style:none;
+  font-family:var(--mono);
+  font-size:14px;
+}
+.arbol{margin-top:var(--e-3)}
+.arbol ul{margin-left:14px; padding-left:14px; border-left:1px solid var(--line); margin-top:4px}
+.arbol li{padding:4px 0}
+.arbol .nodo{color:var(--fg)}
+.arbol .detalle{color:var(--fg-2); margin-left:8px; font-size:13px; font-family:var(--sans)}
+
+/* ---------- 22 · código multilínea ---------- */
+.codigo{
+  display:block;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:var(--e-3);
+  font-family:var(--mono);
+  font-size:13.5px;
+  line-height:1.6;
+  color:var(--fg);
+  white-space:pre-wrap;
+  overflow-wrap:break-word;
+  margin-top:var(--e-3);
+}
