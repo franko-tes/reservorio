@@ -24,8 +24,8 @@
     <div class="frase">Pre-auth + kernel + wormable. Esos tres juntos son lo que convierte un bug en una pandemia.</div>
   </section>
 
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Identidad</span>
+  <section class="bloque" aria-labelledby="bloque-identidad">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-identidad">Identidad</h2>
     </div>
     <div class="pares">
       <div class="nombre">CVE-2017-0144</div><div class="rol">la vulnerabilidad (+ 0143, 0145, 0146, 0148)</div>
@@ -37,8 +37,8 @@
     </div>
   </section>
 
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Mecanismo</span>
+  <section class="bloque" aria-labelledby="bloque-mecanismo">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-mecanismo">Mecanismo</h2>
     </div>
     <p class="parrafo">Error de cálculo de tamaño en <span class="lit">srv.sys</span> al convertir atributos extendidos de SMB. Se reserva un buffer más chico que los datos que van a entrar, y el sobrante se escribe fuera de límites en el pool del kernel.</p>
     <p class="aparte">No es una contraseña débil ni un usuario que hizo clic. Es aritmética mal hecha.</p>
@@ -49,26 +49,26 @@
     </div>
   </section>
 
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Secuencia</span>
+  <section class="bloque" aria-labelledby="bloque-secuencia">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-secuencia">Secuencia</h2>
     </div>
     <div class="cadena">
       <div class="paso"><b>Escaneo</b><span><span class="lit">445/TCP</span></span></div>
-      <div class="flecha">→</div>
+      <div class="flecha" aria-hidden="true">→</div>
       <div class="paso incorrecto"><b>EternalBlue</b><span>explotación</span></div>
-      <div class="flecha">→</div>
+      <div class="flecha" aria-hidden="true">→</div>
       <div class="paso incorrecto"><b>DoublePulsar</b><span>implante en kernel</span></div>
-      <div class="flecha">→</div>
+      <div class="flecha" aria-hidden="true">→</div>
       <div class="paso destacado"><b>WannaCry</b><span>cifra la máquina</span></div>
-      <div class="flecha">→</div>
+      <div class="flecha" aria-hidden="true">→</div>
       <div class="paso"><b>Vuelve a escanear</b><span>desde la víctima</span></div>
     </div>
-    <div class="nota-loop">↻ el último paso reinicia el primero — por eso se propagó solo</div>
+    <div class="nota-loop"><span aria-hidden="true">↻</span> el último paso reinicia el primero — por eso se propagó solo</div>
     <p class="aparte">EternalBlue es la puerta, WannaCry es lo que entró. Podía haber entrado cualquier otra cosa — y entró (NotPetya, Adylkuzz).</p>
   </section>
 
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Dato ancla</span>
+  <section class="bloque" aria-labelledby="bloque-dato-ancla">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-dato-ancla">Dato ancla</h2>
     </div>
     <div class="ancla-num">59 días</div>
     <div class="ancla-sub">El parche ya existía cuando el ataque golpeó.</div>
@@ -80,8 +80,8 @@
     </div>
   </section>
 
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Qué hago yo</span>
+  <section class="bloque" aria-labelledby="bloque-que-hago-yo">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-que-hago-yo">Qué hago yo</h2>
     </div>
     <div class="dos-col">
       <div>
@@ -107,21 +107,21 @@
     </div>
   </section>
 
-  <section class="trampas">
-    <div class="bloque-cab"><span class="bloque-tit">Trampas</span>
+  <section class="trampas" aria-labelledby="bloque-trampas">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-trampas">Trampas</h2>
     </div>
     <ul class="lista">
-      <li><b>"Era un phishing."</b> No hubo vector de email en la propagación — entró por SMB.</li>
-      <li><b>"No expongo 445 a internet, estoy bien."</b> Un solo host comprometido adentro te barre la red interna.</li>
-      <li><b>"Era un problema de XP."</b> El grueso del daño fue en Windows 7 sin parchear.</li>
-      <li><b>"El killswitch lo frenó."</b> Frenó esa variante. No es una mitigación.</li>
+      <li><strong>"Era un phishing."</strong> No hubo vector de email en la propagación — entró por SMB.</li>
+      <li><strong>"No expongo 445 a internet, estoy bien."</strong> Un solo host comprometido adentro te barre la red interna.</li>
+      <li><strong>"Era un problema de XP."</strong> El grueso del daño fue en Windows 7 sin parchear.</li>
+      <li><strong>"El killswitch lo frenó."</strong> Frenó esa variante. No es una mitigación.</li>
     </ul>
   </section>
 
-  <div class="pie">
+  <footer class="pie">
     <span>MITRE ATT&amp;CK · T1210 · T1021.002 · T1486 · T1490</span>
     <span><a href="../index.html">← índice</a> · versión técnica</span>
-  </div>
+  </footer>
 
 </main>
 </body>

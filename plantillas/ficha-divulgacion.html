@@ -50,8 +50,8 @@
   <!-- ===== [QUE ES] · .parrafo + .tres-up ===== -->
   <!-- .tres-up es opcional: sirve para cifras de contexto,          -->
   <!-- usando <span class="cifra"> en lugar de <b>                   -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Qué es</span>
+  <section class="bloque" aria-labelledby="bloque-que-es">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-que-es">Qué es</h2>
     </div>
     <p class="parrafo"></p>
     <div class="tres-up">
@@ -64,8 +64,8 @@
   <!-- ===== [COMO FUNCIONA] · .parrafo + .analogia ===== -->
   <!-- la analogía es opcional, pero si va, lleva SIEMPRE su .aviso  -->
   <!-- aclarando que explica por qué importa, no cómo funciona       -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Cómo funciona</span>
+  <section class="bloque" aria-labelledby="bloque-como-funciona">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-como-funciona">Cómo funciona</h2>
     </div>
     <p class="parrafo"></p>
     <div class="analogia">
@@ -78,12 +78,12 @@
 
   <!-- ===== [EN LA PRACTICA] · .cadena ===== -->
   <!-- máximo 5 pasos, en lenguaje llano                             -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">En la práctica</span>
+  <section class="bloque" aria-labelledby="bloque-en-la-practica">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-en-la-practica">En la práctica</h2>
     </div>
     <div class="cadena">
       <div class="paso"><b></b><span></span></div>
-      <div class="flecha">→</div>
+      <div class="flecha" aria-hidden="true">→</div>
       <div class="paso"><b></b><span></span></div>
     </div>
     <div class="nota-loop"></div>
@@ -91,8 +91,8 @@
   </section>
 
   <!-- ===== [POR QUE IMPORTA] · .ancla-num + .barra + .hitos ===== -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Por qué importa</span>
+  <section class="bloque" aria-labelledby="bloque-por-que-importa">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-por-que-importa">Por qué importa</h2>
     </div>
     <div class="ancla-num"></div>
     <div class="ancla-sub"></div>
@@ -107,8 +107,8 @@
 
   <!-- ===== [QUE HACER] · .dos-col ===== -->
   <!-- los títulos de columna los define el .txt                     -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Qué hacer</span>
+  <section class="bloque" aria-labelledby="bloque-que-hacer">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-que-hacer">Qué hacer</h2>
     </div>
     <div class="dos-col">
       <div>
@@ -130,8 +130,8 @@
 
   <!-- ===== [GLOSARIO] · .pares.ancho ===== -->
   <!-- término y definición en lenguaje llano, no en jerga           -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Glosario</span>
+  <section class="bloque" aria-labelledby="bloque-glosario">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-glosario">Glosario</h2>
     </div>
     <div class="pares ancho">
       <div class="nombre"></div><div class="rol"></div>
@@ -142,10 +142,10 @@
 
   <!-- ===== pie ===== -->
   <!-- izquierda: campo REFERENCIAS del .txt. Si no viene, va vacío  -->
-  <div class="pie">
+  <footer class="pie">
     <span></span>
     <span><a href="../index.html">← índice</a> · versión divulgación</span>
-  </div>
+  </footer>
 
 </main>
 </body>

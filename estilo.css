@@ -350,7 +350,7 @@ a{color:inherit; text-decoration:none}
 }
 .trampas .bloque-tit{color:var(--alerta)}
 .trampas .lista li{color:var(--fg-2); font-size:14px}
-.trampas .lista li b{color:var(--fg); font-weight:500}
+.trampas .lista li strong{color:var(--fg); font-weight:500}
 
 
 /* ---------- 15 · utilidades ---------- */

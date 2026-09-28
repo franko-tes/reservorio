@@ -46,8 +46,8 @@
   <!-- una fila por par "nombre | rol" del .txt                      -->
   <!-- .nombre.destacado y .nombre.incorrecto para marcar los que    -->
   <!-- el .txt señale; el resto va sin clase de color                -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Identidad</span>
+  <section class="bloque" aria-labelledby="bloque-identidad">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-identidad">Identidad</h2>
     </div>
     <div class="pares">
       <div class="nombre"></div><div class="rol"></div>
@@ -57,8 +57,8 @@
 
   <!-- ===== [MECANISMO] · .parrafo + .aparte + .tres-up ===== -->
   <!-- .tres-up es opcional: sólo si el .txt trae la lista con "-"   -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Mecanismo</span>
+  <section class="bloque" aria-labelledby="bloque-mecanismo">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-mecanismo">Mecanismo</h2>
     </div>
     <p class="parrafo"></p>
     <p class="aparte"></p>
@@ -73,12 +73,12 @@
   <!-- máximo 5 pasos, con .flecha entre cada uno                    -->
   <!-- .paso.destacado y .paso.incorrecto según lo marque el .txt    -->
   <!-- .nota-loop sólo si la secuencia se repite                     -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Secuencia</span>
+  <section class="bloque" aria-labelledby="bloque-secuencia">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-secuencia">Secuencia</h2>
     </div>
     <div class="cadena">
       <div class="paso"><b></b><span></span></div>
-      <div class="flecha">→</div>
+      <div class="flecha" aria-hidden="true">→</div>
       <div class="paso"><b></b><span></span></div>
     </div>
     <div class="nota-loop"></div>
@@ -88,8 +88,8 @@
   <!-- ===== [DATO ANCLA] · .ancla-num + .barra + .hitos ===== -->
   <!-- .barra y .hitos sólo si el .txt trae una línea de tiempo      -->
   <!-- .hitos espera exactamente 3 entradas                          -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Dato ancla</span>
+  <section class="bloque" aria-labelledby="bloque-dato-ancla">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-dato-ancla">Dato ancla</h2>
     </div>
     <div class="ancla-num"></div>
     <div class="ancla-sub"></div>
@@ -104,8 +104,8 @@
   <!-- ===== [QUE HAGO YO] · .dos-col ===== -->
   <!-- los títulos de columna los define el .txt: mitigar/detectar,  -->
   <!-- qué comando corro/qué reviso, etc. según el tema              -->
-  <section class="bloque">
-    <div class="bloque-cab"><span class="bloque-tit">Qué hago yo</span>
+  <section class="bloque" aria-labelledby="bloque-que-hago-yo">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-que-hago-yo">Qué hago yo</h2>
     </div>
     <div class="dos-col">
       <div>
@@ -127,21 +127,21 @@
 
   <!-- ===== [TRAMPAS] · .trampas ===== -->
   <!-- cada entrada: <b>el mito</b> seguido de la corrección         -->
-  <section class="trampas">
-    <div class="bloque-cab"><span class="bloque-tit">Trampas</span>
+  <section class="trampas" aria-labelledby="bloque-trampas">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-trampas">Trampas</h2>
     </div>
     <ul class="lista">
-      <li><b></b> </li>
-      <li><b></b> </li>
+      <li><strong></strong> </li>
+      <li><strong></strong> </li>
     </ul>
   </section>
 
   <!-- ===== pie ===== -->
   <!-- izquierda: campo REFERENCIAS del .txt. Si no viene, va vacío  -->
-  <div class="pie">
+  <footer class="pie">
     <span></span>
     <span><a href="../index.html">← índice</a> · versión técnica</span>
-  </div>
+  </footer>
 
 </main>
 </body>
