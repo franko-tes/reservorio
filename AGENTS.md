@@ -471,6 +471,8 @@ bloques se leen por posición.
 |---|---|
 | `<h1>` | Campo `TITULO` |
 | `<title>` | Campo `TITULO`, el mismo texto que el `<h1>`, sin agregarle nada |
+| `<meta name="description">` / `og:description` | Campo `SUBTITULO`; si no viene, `[BANDA CLAVE]` |
+| `og:title` | Campo `TITULO`, mismo valor que `<title>` |
 | `.subtitulo` | Campo `SUBTITULO`; si no viene, se borra la línea |
 | `.meta` | Número del archivo (`NN.N`) + nombre de la carpeta del área, con la primera letra en mayúscula: `01.1 · Vulnerabilidades` |
 | `.etiqueta` de `.banda-clave` | Texto fijo de la plantilla |
