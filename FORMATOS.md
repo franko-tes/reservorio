@@ -163,13 +163,16 @@ línea (2.6), que es para una palabra o frase suelta dentro del texto.
 ```
 [SECUENCIA]
 Paso | detalle
-Paso | detalle
+*Paso destacado* | detalle
+~Paso incorrecto~ | detalle
 
 ↻ una nota, si la secuencia se repite
 [/SECUENCIA]
 ```
-En qué orden pasan las cosas. La `↻` es opcional y va al final, solo si el proceso
-vuelve a empezar.
+En qué orden pasan las cosas. Si el nombre del paso (antes del `|`) va envuelto entero en
+`*...*` o `~...~`, se marca el recuadro completo con el borde de color, no solo el texto —
+mismas marcas que 2.7/2.8, pero aplicadas al campo entero en vez de a un fragmento. La `↻`
+es opcional y va al final, solo si el proceso vuelve a empezar.
 
 ### 2.16 Dato ancla
 
