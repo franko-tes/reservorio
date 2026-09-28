@@ -1,4 +1,4 @@
-# FORMATOS.md
+# PLANTILLAS.md
 
 Guía para volcar un tema estudiado a un archivo que el reservorio pueda recibir.
 
@@ -13,8 +13,8 @@ resto del proyecto.
 El reservorio guarda material de estudio sobre temas técnicos. Cada tema se escribe en
 un archivo de texto plano con una estructura fija, y de ahí se construye la página.
 
-El trabajo acá es uno solo: **volcar lo estudiado en la estructura de la plantilla
-elegida**. La página se genera después, en otro momento y en otro lugar.
+El trabajo acá es uno solo: **volcar lo estudiado en la estructura del modelo
+elegido**. La página se genera después, en otro momento y en otro lugar.
 
 Dos cosas importantes sobre el contenido:
 
@@ -25,9 +25,9 @@ Dos cosas importantes sobre el contenido:
 
 ---
 
-## 2. Los formatos
+## 2. Las plantillas
 
-Hoy hay un formato, la **ficha**, con dos variantes:
+Hoy hay una plantilla, la **ficha**, con dos variantes:
 
 | Variante (valor de `TIPO:`) | Para qué sirve | Quién lo lee |
 |---|---|---|
@@ -50,8 +50,8 @@ sentada. No sirven para desarrollos largos.
 **¿El tema entra en una ficha?**
 
 Una ficha condensa; no desarrolla. Si el tema necesita párrafos largos, ejemplos
-extendidos o varios niveles de detalle, no entra en este formato. En ese caso conviene
-avisarlo antes de escribir: hoy el reservorio no tiene un formato para eso.
+extendidos o varios niveles de detalle, no entra en esta plantilla. En ese caso conviene
+avisarlo antes de escribir: hoy el reservorio no tiene una plantilla para eso.
 
 **¿Un tema puede tener las dos fichas?**
 
@@ -77,7 +77,7 @@ REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 
 | Campo | Obligatorio | Qué va |
 |---|---|---|
-| `TIPO` | sí | El formato y la variante, separados por guión: `ficha-tecnica` o `ficha-divulgacion` |
+| `TIPO` | sí | La plantilla y la variante, separadas por guión: `ficha-tecnica` o `ficha-divulgacion` |
 | `TITULO` | sí | El nombre del tema |
 | `SUBTITULO` | no | Una línea de contexto |
 | `CLAVES` | sí | Términos por los que se buscaría este tema. Cada uno se muestra como tag en el índice: conviene que sean pocos, los imprescindibles |
@@ -91,11 +91,11 @@ Cada bloque se abre con su nombre entre corchetes, **en mayúsculas y sin acento
 [MECANISMO]
 ```
 
-Eso vale para los marcadores y las subsecciones, que son las etiquetas del formato. El
+Eso vale para los marcadores y las subsecciones, que son las etiquetas de la plantilla. El
 **contenido se escribe con acentos normales**, aunque vaya en mayúsculas: lo que se lee
 en la ficha es castellano y se escribe como tal.
 
-Van en el orden que indica la plantilla. Un bloque sin contenido real se omite entero.
+Van en el orden que indica el modelo. Un bloque sin contenido real se omite entero.
 
 ### 4.3 Las marcas
 
@@ -122,7 +122,7 @@ Dos aclaraciones:
 
 ---
 
-## 5. Plantilla · `ficha-tecnica`
+## 5. Modelo · `ficha-tecnica`
 
 ```
 TIPO: ficha-tecnica
@@ -188,7 +188,7 @@ Lo que se cree mal sobre el tema, y la corrección.
 
 ---
 
-## 6. Plantilla · `ficha-divulgacion`
+## 6. Modelo · `ficha-divulgacion`
 
 ```
 TIPO: ficha-divulgacion
@@ -268,4 +268,4 @@ El archivo se guarda como `.txt` y se entrega tal cual. La conversión a página
 después, en el repositorio.
 
 Si algo del tema no encaja en ninguna de las dos fichas, conviene decirlo en vez de
-forzarlo: puede ser señal de que hace falta una variante o un formato nuevo.
+forzarlo: puede ser señal de que hace falta una variante o una plantilla nueva.

@@ -3,7 +3,7 @@
 Material de estudio propio sobre temas técnicos: redes, Linux, contenedores,
 seguridad, protocolos, herramientas.
 
-Cada tema se documenta en el formato que mejor le sirva. Hoy existe uno:
+Cada tema se documenta en la plantilla que mejor le sirva. Hoy existe una:
 
 1. **Ficha**: una página con estructura fija, pensada como ayuda-memoria.
 
@@ -20,7 +20,7 @@ instrucciones de trabajo para agentes de IA están en `AGENTS.md`.
 ## Índice
 
 1. [Para qué sirve esto](#1-para-qué-sirve-esto)
-2. [Formatos](#2-formatos)
+2. [Plantillas](#2-plantillas)
    - 2.1 [Ficha](#21-ficha)
      - 2.1.1 [Dos variantes](#211-dos-variantes)
      - 2.1.2 [Bloques de cada variante](#212-bloques-de-cada-variante)
@@ -60,29 +60,35 @@ Este reservorio es el lugar donde ese material queda. Un tema estudiado se docum
 una vez, con la forma que le corresponda, y se puede volver a él cuantas veces sea
 necesario.
 
-De ahí salen tres criterios que valen para cualquier formato:
+De ahí salen tres criterios que valen para cualquier plantilla:
 
 - **El material asume que el tema ya se estudió.** No enseña desde cero: sirve para
   recuperar lo que se aprendió en otro momento.
-- **Cada formato tiene su propia estructura; la base visual es común.** Un apunte
+- **Cada plantilla tiene su propia estructura; la base visual es común.** Un apunte
   largo y una ficha no se organizan igual — no deberían — pero comparten colores,
-  tipografías y jerarquía. La hoja de estilos crece con cada formato nuevo: se
+  tipografías y jerarquía. La hoja de estilos crece con cada plantilla nueva: se
   agregan componentes, no se reemplazan los que ya existen.
 - **El contenido lo aporta quien estudió el tema.** Este proyecto documenta y
   construye; no investiga ni completa lo que falte.
 
 ---
 
-## 2. Formatos
+## 2. Plantillas
 
-Un **formato** es una familia de documento: hoy la ficha, y mañana quizás un
-apunte o una lista de definiciones. Cada formato tiene su propia estructura.
-Algunos tienen **variantes**: versiones del mismo formato que comparten el
-esqueleto pero cambian el orden y los bloques (la ficha tiene la técnica y la
+Una **plantilla** es una familia de documento: hoy la ficha, y mañana quizás un
+apunte o una lista de definiciones. Cada plantilla tiene su propia estructura.
+Algunas tienen **variantes**: versiones de la misma plantilla que comparten la
+estructura pero cambian el orden y los bloques (la ficha tiene la técnica y la
 de divulgación).
 
-El campo `TIPO:` de cada `.txt` indica qué plantilla usar: el formato y, si
-lo tiene, la variante (`ficha-tecnica`).
+Cada plantilla se arma con dos piezas: un **esqueleto** — el `.html` que se copia
+y rellena, en `esqueletos/` — y, para escribir el `.txt` de un tema nuevo, un
+**modelo** — el bloque de texto con marcadores vacíos que está en `PLANTILLAS.md`.
+Hay un esqueleto y un modelo por variante, o uno solo si la plantilla no tiene
+variantes.
+
+El campo `TIPO:` de cada `.txt` indica qué esqueleto usar: la plantilla y, si
+la tiene, la variante (`ficha-tecnica`).
 
 ### 2.1 Ficha
 
@@ -96,7 +102,7 @@ Tres cosas la definen:
 - **La posición de los bloques es información.** Después de varias fichas, la
   ubicación funciona como índice mental — "lo que está en dos columnas es siempre qué
   hago con esto" — y se encuentra algo sin leer la ficha entera.
-- **El esqueleto no depende del tema.** Los bloques no preguntan sobre redes ni sobre
+- **La estructura no depende del tema.** Los bloques no preguntan sobre redes ni sobre
   seguridad: preguntan cómo se llama, por qué pasa, en qué orden, cuál es el gancho y
   qué se hace con eso. Eso sirve para cualquier tema técnico.
 
@@ -169,7 +175,7 @@ contenidos/
 ```
 
 La versión de divulgación **no es la técnica escrita más fácil**. Cambia el orden,
-cambian los bloques y cambia el texto entero. Por eso son dos archivos, dos plantillas
+cambian los bloques y cambia el texto entero. Por eso son dos archivos, dos esqueletos
 y dos listas de marcadores.
 
 #### 2.1.4 Encabezado del `.txt`
@@ -186,16 +192,16 @@ REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
 
 | Campo | Obligatorio | Para qué |
 |---|---|---|
-| `TIPO` | sí | Elige la plantilla, valida los bloques y define la clase del `<body>` |
+| `TIPO` | sí | Elige el esqueleto, valida los bloques y define la clase del `<body>` |
 | `TITULO` | sí | Va en el `<h1>`, en el `<title>` y en la tarjeta del índice |
 | `SUBTITULO` | no | Línea de contexto bajo el título. Si falta, no se muestra |
 | `CLAVES` | sí | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo |
 | `REFERENCIAS` | no | Va al pie. TTPs de MITRE, CVEs, RFCs, páginas de `man`: dónde seguir |
 
-El valor de `TIPO:` nombra **el formato y, si tiene variantes, la variante**,
-separados por guión (`ficha-tecnica`). Un formato sin variantes se nombra solo por
-su formato. Así, al agregarse formatos nuevos, el mismo campo sigue sirviendo sin
-ambigüedad.
+El valor de `TIPO:` nombra **la plantilla y, si tiene variantes, la variante**,
+separadas por guión (`ficha-tecnica`). Una plantilla sin variantes se nombra solo por
+su propio nombre. Así, al agregarse plantillas nuevas, el mismo campo sigue sirviendo
+sin ambigüedad.
 
 No hay campo de área: **la carpeta ya lo dice**. Duplicarlo crearía dos fuentes de
 verdad que pueden contradecirse si el archivo se mueve.
@@ -241,10 +247,10 @@ DETECTAR
 - Tráfico SMB este-oeste anómalo
 ```
 
-Las subsecciones que espera cada bloque están fijadas por su plantilla: los títulos de
+Las subsecciones que espera cada bloque están fijadas por su esqueleto: los títulos de
 las dos columnas en `[QUE HAGO YO]` y `[QUE HACER]`, y las tres partes de la analogía
-(`ANALOGIA`, `TRADUCCION`, `AVISO`) en `[COMO FUNCIONA]`. Una subsección que la
-plantilla no contempla se consulta.
+(`ANALOGIA`, `TRADUCCION`, `AVISO`) en `[COMO FUNCIONA]`. Una subsección que el
+esqueleto no contempla se consulta.
 
 ---
 
@@ -254,7 +260,7 @@ plantilla no contempla se consulta.
 reservorio/
 ├── README.md
 ├── AGENTS.md                              instrucciones para agentes de IA
-├── FORMATOS.md                            guía para escribir el contenido
+├── PLANTILLAS.md                          guía para escribir el contenido
 ├── estilo.css                             el diseño, uno solo para todo
 │
 ├── fuentes/                               tipografías alojadas localmente
@@ -265,7 +271,7 @@ reservorio/
 │   ├── OFL-Inter.txt                      licencias, se distribuyen con la fuente
 │   └── OFL-JetBrainsMono.txt
 │
-├── plantillas/
+├── esqueletos/
 │   ├── ficha-tecnica.html
 │   └── ficha-divulgacion.html
 │
@@ -338,7 +344,7 @@ Por eso el mismo componente sirve en contextos distintos — `.pares` arma tanto
 bloque de identidad de una ficha técnica como el glosario de una de divulgación — y
 por eso cambiar los nombres de los bloques no obliga a tocar el CSS.
 
-Cuando un formato nuevo necesita una forma que no existe, se **agrega** una sección al
+Cuando una plantilla nueva necesita una forma que no existe, se **agrega** una sección al
 final del archivo. No se reemplazan las que ya están, porque romperían el material ya
 construido.
 
@@ -401,14 +407,14 @@ explican.
 ## 5. Cómo se agrega un tema
 
 1. **Estudiar el tema.** Fuera de este proyecto, donde sea.
-2. **Escribir el `.txt`.** `FORMATOS.md` tiene todo lo necesario: qué formatos hay,
-   cómo elegir, las marcas y una plantilla comentada de cada uno. Está pensado para
+2. **Escribir el `.txt`.** `PLANTILLAS.md` tiene todo lo necesario: qué plantillas hay,
+   cómo elegir, las marcas y un modelo comentado de cada variante. Está pensado para
    llevárselo a la conversación donde se estudió el tema y pedirle a esa IA que vuelque
    el contenido, que es la que tiene el contexto completo.
 3. **Guardarlo** en `contenidos/area/NN.N-nombre.txt`, siguiendo la numeración de 3.3.
    Si el área no existe todavía, se crea.
 4. **Pedirle al agente que lo construya**, indicando qué archivo (el `TIPO:` ya dice
-   qué plantilla usar).
+   qué esqueleto usar).
 5. **Revisar el resultado** en el navegador y, si algo no cierra, corregir el `.txt` y
    reconstruir. Nunca el `.html`.
 
@@ -463,18 +469,18 @@ un CVE o en un comando importa.
 
 ## 7. Evolución
 
-Todo lo anterior es **el estado actual**, no un diseño cerrado. Hoy hay un solo formato
-porque es el único que se necesitó hasta ahora; van a aparecer temas que pidan otros.
+Todo lo anterior es **el estado actual**, no un diseño cerrado. Hoy hay una sola plantilla
+porque es la única que se necesitó hasta ahora; van a aparecer temas que pidan otras.
 
-Los formatos, plantillas y componentes nuevos **los define el autor**. El agente no los
-propone por su cuenta ni los improvisa sobre la marcha.
+Las plantillas, los esqueletos y los componentes nuevos **los define el autor**. El
+agente no los propone por su cuenta ni los improvisa sobre la marcha.
 
 ### 7.1 Cuando algo no encaja
 
-Un tema puede traer contenido que la plantilla no contempla. Ahí el agente consulta, y
+Un tema puede traer contenido que el esqueleto no contempla. Ahí el agente consulta, y
 la respuesta va a ser una de estas tres:
 
-1. **Agregar un componente** a `estilo.css`, y a la plantilla si corresponde.
+1. **Agregar un componente** a `estilo.css`, y al esqueleto si corresponde.
 2. **Reutilizar uno existente** con otra etiqueta o en otro contexto.
 3. **Recortar el contenido** para que entre en lo que ya hay.
 
@@ -491,12 +497,12 @@ qué se rompe y qué hay que rehacer.
 
 | Si se agrega o cambia… | Actualizar |
 |---|---|
-| Un formato | `plantillas/`, valores válidos de `TIPO:`, punto 2 (sección nueva con sus bloques), `estilo.css` si trae componentes, `FORMATOS.md` 2 y su plantilla, `AGENTS.md` |
-| Una variante | `plantillas/`, valores válidos de `TIPO:`, la sección de su formato (para la ficha, 2.1.1 y 2.1.2), `FORMATOS.md` 2 y su plantilla, `AGENTS.md` |
-| Un bloque de una variante | La plantilla, 2.1.2, `FORMATOS.md` 5 o 6, `AGENTS.md` |
+| Una plantilla | `esqueletos/`, valores válidos de `TIPO:`, punto 2 (sección nueva con sus bloques), `estilo.css` si trae componentes, `PLANTILLAS.md` 2 y su modelo, `AGENTS.md` |
+| Una variante | `esqueletos/`, valores válidos de `TIPO:`, la sección de su plantilla (para la ficha, 2.1.1 y 2.1.2), `PLANTILLAS.md` 2 y su modelo, `AGENTS.md` |
+| Un bloque de una variante | El esqueleto, 2.1.2, `PLANTILLAS.md` 5 o 6, `AGENTS.md` |
 | Un componente de CSS | `estilo.css`, 3.4 si cambia el criterio, `AGENTS.md` |
-| Una marca del `.txt` | 2.1.5, `FORMATOS.md` 4.3, `AGENTS.md` |
-| Un campo del encabezado | Las plantillas, 2.1.4, `FORMATOS.md` 4.1, `AGENTS.md` 6.4 |
+| Una marca del `.txt` | 2.1.5, `PLANTILLAS.md` 4.3, `AGENTS.md` |
+| Un campo del encabezado | Los esqueletos, 2.1.4, `PLANTILLAS.md` 4.1, `AGENTS.md` 6.4 |
 | Una regla de trabajo | Punto 4, `AGENTS.md` |
 | Un área | Solo crear la carpeta, en `contenidos/` y en `publicado/` |
 

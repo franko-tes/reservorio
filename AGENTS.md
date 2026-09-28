@@ -24,15 +24,15 @@ Un reservorio de material de estudio sobre temas técnicos. Cada tema se documen
 una página HTML autónoma que comparte una hoja de estilos común.
 
 **El contenido no se genera acá.** Llega escrito, en archivos `.txt` dentro de
-`contenidos/`. Este proyecto los convierte en HTML usando plantillas.
+`contenidos/`. Este proyecto los convierte en HTML usando esqueletos.
 
 Eso define el trabajo del agente: **traducir contenido a estructura**. No investigar el
 tema, no completar lo que falte, no decidir qué debería decir una ficha.
 
-El contexto completo — para qué existe, cómo está organizado, qué formatos hay — está
+El contexto completo — para qué existe, cómo está organizado, qué plantillas hay — está
 en `README.md`. Este archivo asume que ya se leyó.
 
-`FORMATOS.md` es la guía para escribir los `.txt`. No es material de trabajo del
+`PLANTILLAS.md` es la guía para escribir los `.txt`. No es material de trabajo del
 agente: se usa afuera del proyecto, al volcar un tema estudiado. Se lo menciona acá
 porque hay cambios que obligan a actualizarlo (punto 9).
 
@@ -72,7 +72,7 @@ Esto vale para todo el proyecto, no sólo para el stack.
 
 ## 3. Qué hace y qué no hace el agente
 
-**Hace:** toma un `.txt` de `contenidos/`, lo traduce a HTML usando la plantilla que
+**Hace:** toma un `.txt` de `contenidos/`, lo traduce a HTML usando el esqueleto que
 corresponde según su `TIPO:`, guarda el resultado en `publicado/`, y agrega la tarjeta
 al índice.
 
@@ -83,7 +83,7 @@ al índice.
 - No escribe la versión de divulgación a partir de la técnica, ni al revés
 - No decide qué recortar si el contenido no entra
 - No agrega ni modifica componentes de `estilo.css`
-- No modifica las plantillas
+- No modifica los esqueletos
 - No incorpora tecnología nueva
 - No edita archivos de `contenidos/`
 
@@ -101,9 +101,9 @@ modifica cuando el autor lo pide o lo aprueba.
 | `publicado/**/*.html` | Libremente — es su salida |
 | `publicado/index.html` | Libremente — agrega la tarjeta del tema nuevo |
 | `contenidos/**/*.txt` | Sólo si el autor lo pide explícitamente |
-| `plantillas/*.html` | Sólo con aprobación previa |
+| `esqueletos/*.html` | Sólo con aprobación previa |
 | `estilo.css` | Sólo con aprobación previa |
-| `README.md`, `AGENTS.md`, `FORMATOS.md` | Cuando cambia algo del sistema, avisando qué actualizó |
+| `README.md`, `AGENTS.md`, `PLANTILLAS.md` | Cuando cambia algo del sistema, avisando qué actualizó |
 | `fuentes/` | Sólo si el autor lo pide explícitamente |
 
 Una instrucción directa del autor habilita cualquier cambio: si pide revisar y
@@ -147,7 +147,7 @@ con ninguno, se consulta: no se inventa una clase nueva ni se escriben estilos e
 HTML.
 
 Nunca: un `<style>` dentro de un `.html`, ni un atributo `style=` para resolver un caso
-particular, ni un segundo archivo `.css` para un formato nuevo. Todo el diseño vive en
+particular, ni un segundo archivo `.css` para una plantilla nueva. Todo el diseño vive en
 un solo archivo.
 
 Cuando se aprueba un componente nuevo, se agrega como sección numerada **al final** de
@@ -196,29 +196,29 @@ Lo ausente se nota y se busca; lo falso se memoriza.
 Si el `.txt` no trae un bloque, la sección entera se elimina del HTML. No queda un
 `<section>` vacío, ni con un título y nada adentro.
 
-Aplica también a las partes opcionales dentro de un bloque. La plantilla trae
+Aplica también a las partes opcionales dentro de un bloque. El esqueleto trae
 `.tres-up`, `.barra`, `.hitos`, `.nota-loop`, `.analogia` y `.aparte`, y todas son
 condicionales: si el `.txt` no las alimenta, se borran del HTML.
 
-Los bloques **no se numeran**, ni en la salida ni en las plantillas. La ficha muestra
-sólo el título: quien la lee no necesita saber qué posición ocupa en el esqueleto, y una
+Los bloques **no se numeran**, ni en la salida ni en los esqueletos. La ficha muestra
+sólo el título: quien la lee no necesita saber qué posición ocupa en la ficha, y una
 ficha a la que le falta un bloque mostraría un salto de numeración que parece un error.
 
 ### Regla 6 — El orden de los bloques no se altera
 
-Los bloques van en el orden de la plantilla, no en el orden en que aparecen en el
+Los bloques van en el orden del esqueleto, no en el orden en que aparecen en el
 `.txt`. Si un `.txt` trae `[TRAMPAS]` antes de `[QUE HAGO YO]`, la ficha igual los pone
-al revés: el orden lo define la plantilla, no el archivo de contenido.
+al revés: el orden lo define el esqueleto, no el archivo de contenido.
 
 **Y se señala.** Un `.txt` con los bloques desordenados suele ser síntoma de otra cosa
-— que se escribió sin la plantilla a la vista, o que se copió de otra variante.
+— que se escribió sin el modelo a la vista, o que se copió de otra variante.
 
 Nunca se reordena para que quede mejor. Aunque en un tema particular tenga más sentido
 poner la secuencia antes que el mecanismo, el orden es fijo: esa estabilidad es lo que
 hace que la posición funcione como índice mental entre fichas.
 
 Si el orden fijo realmente no sirve para un tema, eso no se resuelve reordenando esa
-ficha. Se consulta, y la salida puede ser una variante nueva, o un formato nuevo.
+ficha. Se consulta, y la salida puede ser una variante nueva, o una plantilla nueva.
 
 ### Regla 7 — Todo string literal va con `.lit`
 
@@ -262,9 +262,9 @@ En cambio, el `.lit` sí es necesario dentro de una `.lista`, un `.parrafo` o un
 glosario), que también va en tipografía de cuerpo, y en `.nota-loop` y `.pie`, que son
 monoespaciados pero sin negrita.
 
-**El `.lit` va adentro, nunca reemplaza.** Cuando todo el contenido de un elemento de
-la plantilla es literal, el `<span class="lit">` se anida dentro de ese elemento, sin
-sustituirlo. El elemento de la plantilla lleva sus propios estilos — color, tamaño,
+**El `.lit` va adentro, nunca reemplaza.** Cuando todo el contenido de un elemento del
+esqueleto es literal, el `<span class="lit">` se anida dentro de ese elemento, sin
+sustituirlo. El elemento del esqueleto lleva sus propios estilos — color, tamaño,
 márgenes — y reemplazarlo los pierde.
 
 ```
@@ -302,7 +302,7 @@ donde un modelo dibuje caracteres.
 
 Una ficha es **una sola página**: un documento continuo, que se lee de arriba a abajo
 con scroll. No tiene que entrar en una pantalla, pero tampoco puede volverse un texto
-largo — para eso hará falta otro formato.
+largo — para eso hará falta otra plantilla.
 
 Si el contenido se pasa de eso, es un problema de contenido, no de diseño.
 
@@ -323,11 +323,11 @@ Casos concretos en que corresponde frenar y preguntar.
 
 **En el `.txt`:**
 
-- Un marcador que no está en la lista del formato, o mal escrito
+- Un marcador que no está en la lista de la plantilla, o mal escrito
 - Un bloque presente que no corresponde a ese `TIPO:`
-- Una subsección en mayúsculas que la plantilla no contempla
+- Una subsección en mayúsculas que el esqueleto no contempla
 - Falta un campo obligatorio del encabezado
-- Un `TIPO:` que no corresponde a ninguna plantilla existente
+- Un `TIPO:` que no corresponde a ningún esqueleto existente
 - Una `!marca` en medio de una oración
 - `!destacado` o `!incorrecto` sobre algo que no sea el nombre de un par ni un paso
 - Datos que se contradicen dentro del mismo archivo
@@ -342,11 +342,11 @@ Casos concretos en que corresponde frenar y preguntar.
 **En el proyecto:**
 
 - Cualquier tecnología nueva
-- Cualquier cambio en plantillas, CSS o estructura de carpetas
+- Cualquier cambio en esqueletos, CSS o estructura de carpetas
 
 **Cómo se consulta:** con la pregunta concreta y las opciones, no con un "no puedo
-continuar". Por ejemplo: "El `.txt` trae `[REFERENCIAS]` como bloque, pero en este
-formato `REFERENCIAS` es un campo del encabezado. ¿Lo muevo al encabezado, o querés que
+continuar". Por ejemplo: "El `.txt` trae `[REFERENCIAS]` como bloque, pero en esta
+plantilla `REFERENCIAS` es un campo del encabezado. ¿Lo muevo al encabezado, o querés que
 sea un bloque nuevo?"
 
 Lo que nunca se hace: interpretar, adivinar la intención, o resolver por analogía con
@@ -380,21 +380,21 @@ elimina por su cuenta ni lo reemplaza: puede ser deliberado y ficticio.
 
 ## 5. Plantillas disponibles
 
-Cada `TIPO:` válido (formato, o formato y variante) se define por tres piezas que
+Cada `TIPO:` válido (plantilla, o plantilla y variante) se define por tres piezas que
 tienen que existir juntas:
 
 | Pieza | Dónde | Para qué |
 |---|---|---|
-| Plantilla HTML | `plantillas/NOMBRE.html` | La estructura de salida |
-| Valor de `TIPO:` | Declarado en el `.txt` | Selecciona la plantilla |
+| Esqueleto HTML | `esqueletos/NOMBRE.html` | La estructura de salida |
+| Valor de `TIPO:` | Declarado en el `.txt` | Selecciona el esqueleto |
 | Lista de bloques | `README.md` 2.1.2 | Qué se valida |
 
-Hoy hay un formato, la ficha, con dos variantes. La definición de cada término está
+Hoy hay una plantilla, la ficha, con dos variantes. La definición de cada término está
 en `README.md` punto 2.
 
 ### 5.1 `ficha-tecnica`
 
-- **Plantilla:** `plantillas/ficha-tecnica.html`
+- **Esqueleto:** `esqueletos/ficha-tecnica.html`
 - **Clase del `<body>`:** ninguna
 - **Bloques, en orden:** `[BANDA CLAVE]` · `[IDENTIDAD]` · `[MECANISMO]` ·
   `[SECUENCIA]` · `[DATO ANCLA]` · `[QUE HAGO YO]` · `[TRAMPAS]`
@@ -402,7 +402,7 @@ en `README.md` punto 2.
 
 ### 5.2 `ficha-divulgacion`
 
-- **Plantilla:** `plantillas/ficha-divulgacion.html`
+- **Esqueleto:** `esqueletos/ficha-divulgacion.html`
 - **Clase del `<body>`:** `divulgacion`
 - **Bloques, en orden:** `[BANDA CLAVE]` · `[QUE ES]` · `[COMO FUNCIONA]` ·
   `[EN LA PRACTICA]` · `[POR QUE IMPORTA]` · `[QUE HACER]` · `[GLOSARIO]`
@@ -411,9 +411,9 @@ en `README.md` punto 2.
 
 ### 5.3 Un `TIPO:` que no existe
 
-Si el `.txt` declara un `TIPO:` sin plantilla, **no se construye nada**. El agente no
-improvisa una estructura ni adapta la plantilla más parecida. Avisa y espera: crear un
-formato o una variante es trabajo del autor.
+Si el `.txt` declara un `TIPO:` sin esqueleto, **no se construye nada**. El agente no
+improvisa una estructura ni adapta el esqueleto más parecido. Avisa y espera: crear una
+plantilla o una variante es trabajo del autor.
 
 ---
 
@@ -475,9 +475,9 @@ bloques se leen por posición.
 | `og:title` | Campo `TITULO`, mismo valor que `<title>` |
 | `.subtitulo` | Campo `SUBTITULO`; si no viene, se borra la línea |
 | `.meta` | Número del archivo (`NN.N`) + nombre de la carpeta del área, con la primera letra en mayúscula: `01.1 · Vulnerabilidades` |
-| `.etiqueta` de `.banda-clave` | Texto fijo de la plantilla |
+| `.etiqueta` de `.banda-clave` | Texto fijo del esqueleto |
 | `.pie`, izquierda | Campo `REFERENCIAS`; si no viene, el `<span>` queda vacío |
-| `.pie`, derecha | Texto fijo de la plantilla: enlace al índice y nombre de la variante |
+| `.pie`, derecha | Texto fijo del esqueleto: enlace al índice y nombre de la variante |
 
 **Lecturas por posición**
 
@@ -508,7 +508,7 @@ Dos niveles: una `<section class="area">` por área, con su `.area-tit`, y adent
 | Elemento | Origen |
 |---|---|
 | `href` | Ruta relativa a la ficha, desde `publicado/` |
-| `.num` | Número del archivo + formato y variante: `01.1 · ficha técnica` |
+| `.num` | Número del archivo + plantilla y variante: `01.1 · ficha técnica` |
 | `<h2>` | Campo `TITULO` del `.txt` |
 | `.clave` | Contenido de `[BANDA CLAVE]`, completo |
 | `.tags` | Todos los términos de `CLAVES`, en el orden en que están escritos |
@@ -592,12 +592,12 @@ instrucciones desactualizado es peor que no tenerlo: el agente lo va a seguir ig
 
 | Si cambia… | Actualizar |
 |---|---|
-| Se agrega una variante | `plantillas/`, punto 5, punto 6, `README.md` 2.1.1 y 2.1.2, `FORMATOS.md` 2 y su plantilla |
-| Se agrega un formato | `plantillas/`, punto 5, punto 6, `README.md` punto 2 (sección nueva con sus bloques), `FORMATOS.md` 2 y su plantilla, y `estilo.css` + punto 8 si trae componentes |
-| Se agrega o quita un bloque de una variante | La plantilla, puntos 5 y 6, `README.md` 2.1.2, `FORMATOS.md` 5 o 6 (la plantilla de esa variante) |
+| Se agrega una variante | `esqueletos/`, punto 5, punto 6, `README.md` 2.1.1 y 2.1.2, `PLANTILLAS.md` 2 y su modelo |
+| Se agrega una plantilla | `esqueletos/`, punto 5, punto 6, `README.md` punto 2 (sección nueva con sus bloques), `PLANTILLAS.md` 2 y su modelo, y `estilo.css` + punto 8 si trae componentes |
+| Se agrega o quita un bloque de una variante | El esqueleto, puntos 5 y 6, `README.md` 2.1.2, `PLANTILLAS.md` 5 o 6 (el modelo de esa variante) |
 | Se agrega un componente de CSS | `estilo.css` (sección nueva al final), punto 8, y `README.md` 3.4 si cambia el criterio |
-| Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5, `FORMATOS.md` 4.3 |
-| Se agrega un campo al encabezado | Las plantillas, punto 6.4, `README.md` 2.1.4, `FORMATOS.md` 4.1 |
+| Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5, `PLANTILLAS.md` 4.3 |
+| Se agrega un campo al encabezado | Los esqueletos, punto 6.4, `README.md` 2.1.4, `PLANTILLAS.md` 4.1 |
 | Cambia una regla | Punto 4, `README.md` punto 4 |
 | Se agrega un área | Sólo crear la carpeta en `contenidos/` y en `publicado/` |
 
