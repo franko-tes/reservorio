@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Active Directory</title>
+<meta name="description" content="Servicio de directorio de Microsoft que centraliza identidades, autenticación y autorización de una organización.">
+<meta property="og:title" content="Active Directory">
+<meta property="og:description" content="Servicio de directorio de Microsoft que centraliza identidades, autenticación y autorización de una organización.">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../../estilo.css">
+</head>
+<body>
+<main class="ficha">
+
+  <header class="cabecera">
+    <div>
+      <h1>Active Directory</h1>
+      <div class="subtitulo">Introducción</div>
+    </div>
+    <div class="meta">01.1 · Active Directory</div>
+  </header>
+
+  <section class="bloque" aria-labelledby="bloque-que-es">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-que-es">Qué es</h2></div>
+    <p class="parrafo">Servicio de directorio de Microsoft (incluido en Windows Server) que centraliza la administración de identidades y recursos de una organización: usuarios, grupos, equipos, impresoras, políticas.</p>
+    <p class="parrafo">Toda esa información vive en una base de datos jerárquica (el directorio) que sirven los Domain Controllers.</p>
+  </section>
+
+  <section class="bloque" aria-labelledby="bloque-para-que-sirve">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-para-que-sirve">Para qué sirve</h2></div>
+    <ul class="lista">
+      <li>Autenticación: verificar quién es cada usuario (un solo login válido en todo el dominio)</li>
+      <li>Autorización: decidir a qué puede acceder (grupos, permisos, ACLs)</li>
+      <li>Administración centralizada: políticas (GPO), altas y bajas de cuentas, delegación de tareas</li>
+    </ul>
+  </section>
+
+  <section class="bloque" aria-labelledby="bloque-como-funciona">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-como-funciona">Cómo funciona</h2></div>
+    <div class="pares ancho">
+      <div class="nombre">Domain Controller (DC)</div><div class="rol">Servidor que corre AD y guarda la base (<span class="lit">NTDS.DIT</span>)</div>
+      <div class="nombre">LDAP</div><div class="rol">Protocolo para consultar y modificar el directorio (<span class="lit">389</span> / <span class="lit">636</span> con TLS)</div>
+      <div class="nombre">Kerberos</div><div class="rol">Autenticación principal, basada en tickets (<span class="lit">88</span>)</div>
+      <div class="nombre">NTLM</div><div class="rol">Autenticación legacy por challenge-response, cuando Kerberos no es posible</div>
+      <div class="nombre">DNS</div><div class="rol">Los clientes encuentran a los DCs por DNS. Sin DNS, AD no funciona</div>
+    </div>
+  </section>
+
+  <section class="bloque" aria-labelledby="bloque-estructura">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-estructura">Estructura</h2></div>
+    <p class="parrafo"><span class="lit">Forest &gt; Tree &gt; Domain &gt; OU (container) &gt; objetos (leaf)</span></p>
+    <div class="subtit">Ejemplo mental (TechCorp)</div>
+    <ul class="arbol">
+      <li><span class="nodo">Forest: techcorp.local</span>
+        <ul>
+          <li><span class="nodo">Domain: techcorp.local</span>
+            <ul>
+              <li><span class="nodo">OU Finance</span><span class="detalle">usuarios, equipos</span></li>
+              <li><span class="nodo">OU IT</span><span class="detalle">usuarios, equipos</span></li>
+              <li><span class="nodo">OU Domain Controllers</span><span class="detalle">DC01, DC02</span></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <section class="bloque" aria-labelledby="bloque-por-que-importa-en-seguridad">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-por-que-importa-en-seguridad">Por qué importa en seguridad</h2></div>
+    <ul class="lista">
+      <li><span class="destacar">Quien controla AD controla la empresa</span>: casi todo cuelga de ahí</li>
+      <li>Un DC comprometido o un <span class="lit">NTDS.DIT</span> extraído significa todas las credenciales del dominio</li>
+      <li>Por diseño, cualquier usuario autenticado puede leer gran parte del directorio, por eso la enumeración es una de las primeras cosas que hace un atacante</li>
+    </ul>
+  </section>
+
+  <section class="bloque" aria-labelledby="bloque-ad-on-premise-vs-entra-id">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-ad-on-premise-vs-entra-id">AD on-premise vs Entra ID</h2></div>
+    <div class="dos-col">
+      <div>
+        <div class="col-tit">PRIMERA COLUMNA</div>
+        <ul class="lista">
+          <li>AD (on-premise)</li>
+          <li>DCs propios</li>
+          <li>Kerberos, NTLM, LDAP</li>
+          <li>GPO y OUs clásicas</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-tit">SEGUNDA COLUMNA</div>
+        <ul class="lista">
+          <li>Entra ID (antes Azure AD)</li>
+          <li>Servicio de identidad en la nube</li>
+          <li>OAuth, OIDC, SAML</li>
+          <li>Sin GPO ni OUs clásicas</li>
+        </ul>
+      </div>
+    </div>
+    <p class="parrafo"><span class="incorrecto">Entra ID no es "AD en la nube"</span>: es un servicio de identidad distinto, aunque cumple un rol equivalente.</p>
+    <p class="aparte">Es común el modelo híbrido: AD on-premise sincronizado con Entra ID.</p>
+    <div class="banda-clave">
+      <div class="frase">AD es la base de datos de identidades más los servicios de autenticación y autorización sobre ella. Todo lo demás (GPO, trusts, FSMO, ACLs) se apoya en eso.</div>
+    </div>
+  </section>
+
+  <footer class="pie">
+    <span></span>
+    <span><a href="../index.html">← índice</a></span>
+  </footer>
+
+</main>
+</body>
+</html>
