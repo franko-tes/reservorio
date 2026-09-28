@@ -592,17 +592,14 @@ instrucciones desactualizado es peor que no tenerlo: el agente lo va a seguir ig
 
 | Si cambia… | Actualizar |
 |---|---|
-| Se agrega una variante | `esqueletos/`, punto 5, punto 6, `README.md` 2.1.1 y 2.1.2, `PLANTILLAS.md` 2 y su modelo |
-| Se agrega una plantilla | `esqueletos/`, punto 5, punto 6, `README.md` punto 2 (sección nueva con sus bloques), `PLANTILLAS.md` 2 y su modelo, y `estilo.css` + punto 8 si trae componentes |
+| Se agrega una plantilla | `esqueletos/`, valores válidos de `TIPO:` (punto 5), punto 6, `README.md` punto 2 (sección nueva con sus bloques), `PLANTILLAS.md` 2 y su modelo, y `estilo.css` + punto 8 si trae componentes |
+| Se agrega una variante | `esqueletos/`, valores válidos de `TIPO:` (punto 5), punto 6, `README.md` 2.1.1 y 2.1.2, `PLANTILLAS.md` 2 y su modelo |
 | Se agrega o quita un bloque de una variante | El esqueleto, puntos 5 y 6, `README.md` 2.1.2, `PLANTILLAS.md` 5 o 6 (el modelo de esa variante) |
 | Se agrega un componente de CSS | `estilo.css` (sección nueva al final), punto 8, y `README.md` 3.4 si cambia el criterio |
 | Se agrega o cambia una marca del `.txt` | Punto 6.3, `README.md` 2.1.5, `PLANTILLAS.md` 4.3 |
 | Se agrega un campo al encabezado | Los esqueletos, punto 6.4, `README.md` 2.1.4, `PLANTILLAS.md` 4.1 |
 | Cambia una regla | Punto 4, `README.md` punto 4 |
 | Se agrega un área | Sólo crear la carpeta en `contenidos/` y en `publicado/` |
-
-Esta tabla tiene una copia en `README.md` 7.3, para quien lee el proyecto sin abrir este
-archivo. Cuando cambia una, cambia la otra.
 
 Cuando el agente hace un cambio que toca alguna de estas filas, **actualiza la
 documentación en la misma tarea** y avisa qué archivos tocó. No queda para después.

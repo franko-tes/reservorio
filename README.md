@@ -495,17 +495,9 @@ qué se rompe y qué hay que rehacer.
 
 ### 7.3 Qué actualizar cuando algo cambia
 
-| Si se agrega o cambia… | Actualizar |
-|---|---|
-| Una plantilla | `esqueletos/`, valores válidos de `TIPO:`, punto 2 (sección nueva con sus bloques), `estilo.css` si trae componentes, `PLANTILLAS.md` 2 y su modelo, `AGENTS.md` |
-| Una variante | `esqueletos/`, valores válidos de `TIPO:`, la sección de su plantilla (para la ficha, 2.1.1 y 2.1.2), `PLANTILLAS.md` 2 y su modelo, `AGENTS.md` |
-| Un bloque de una variante | El esqueleto, 2.1.2, `PLANTILLAS.md` 5 o 6, `AGENTS.md` |
-| Un componente de CSS | `estilo.css`, 3.4 si cambia el criterio, `AGENTS.md` |
-| Una marca del `.txt` | 2.1.5, `PLANTILLAS.md` 4.3, `AGENTS.md` |
-| Un campo del encabezado | Los esqueletos, 2.1.4, `PLANTILLAS.md` 4.1, `AGENTS.md` 6.4 |
-| Una regla de trabajo | Punto 4, `AGENTS.md` |
-| Un área | Solo crear la carpeta, en `contenidos/` y en `publicado/` |
+Cuando algo del sistema cambia (una plantilla, una variante, un bloque, un componente
+de CSS, una marca del `.txt`, una regla de trabajo) hay que tocar más de un documento.
+La lista de qué actualizar en cada caso está en `AGENTS.md` punto 9.
 
-`AGENTS.md` aparece en casi todas las filas: **se actualiza siempre**. Un archivo de
-instrucciones desactualizado es peor que no tenerlo, porque el agente lo va a seguir
-igual.
+`AGENTS.md` se actualiza siempre: un archivo de instrucciones desactualizado es peor
+que no tenerlo, porque el agente lo va a seguir igual.
