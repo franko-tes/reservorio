@@ -429,7 +429,7 @@ formato o una variante es trabajo del autor.
 | `[SECUENCIA]` | `.cadena` con `.paso` y `.flecha` + `.nota-loop` + `.aparte` |
 | `[DATO ANCLA]` | `.ancla-num` + `.ancla-sub` + `.barra` + `.hitos` con `.hito` |
 | `[QUE HAGO YO]` | `.dos-col` con `.col-tit` + `.lista` |
-| `[TRAMPAS]` | `.trampas` con `.lista`; cada ítem `<b>mito</b> corrección` |
+| `[TRAMPAS]` | `.trampas` con `.lista`; cada ítem `<strong>mito</strong> corrección` |
 
 ### 6.2 `ficha-divulgacion`
 
@@ -452,7 +452,7 @@ formato o una variante es trabajo del autor.
 | `!destacado` al final del elemento | clase `destacado` en ese elemento |
 | `!incorrecto` al final del elemento | clase `incorrecto` en ese elemento |
 | `>` al inicio de línea | `<p class="aparte">` |
-| `↻` al inicio de línea | `<div class="nota-loop">`; el `↻` se conserva en el texto |
+| `↻` al inicio de línea | `<div class="nota-loop">`; el `↻` se conserva en el texto, envuelto en `<span aria-hidden="true">` |
 | `\|` | separa los dos `<div>` de un par, o `<b>` de `<span>` |
 | `-` al inicio de línea | `<li>` de `.lista`, o una `.celda` de `.tres-up` |
 
@@ -482,7 +482,7 @@ bloques se leen por posición.
 - `[DATO ANCLA]` y `[POR QUE IMPORTA]`: la primera línea va en `.ancla-num`, la segunda
   en `.ancla-sub`, y cada línea `fecha | qué pasó` es un `.hito` (`<b>` la fecha,
   `<span>` lo que pasó).
-- `[TRAMPAS]`: en cada `"mito" | corrección`, el mito va en `<b>` con sus comillas, tal
+- `[TRAMPAS]`: en cada `"mito" | corrección`, el mito va en `<strong>` con sus comillas, tal
   como viene en el `.txt`, y la corrección va como texto suelto a continuación, sin
   `<span>`.
 
