@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+  ESQUELETO ÚNICO — sistema de formatos libres
+  ==========================================================================
+  Reemplaza a los esqueletos ficha-tecnica/ficha-divulgacion. Ya no hay
+  estructura fija ni TIPO: este archivo muestra las piezas posibles del
+  catálogo (ver PLANTILLAS.md), cada una vacía y comentada.
+
+  Para construir una ficha real:
+    · Copiar este archivo completo a publicado/AREA/NN.N-nombre.html
+    · Borrar las piezas que no correspondan al tema (no se deja nada vacío)
+    · Llenar las que sí se usan, en el orden que pida el .txt
+    · Todo string literal (comando, ruta, puerto, CVE) va con <span class="lit">
+    · Ante cualquier duda, se consulta antes de improvisar
+  ==========================================================================
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TITULO</title>
+<meta name="description" content="RESUMEN">
+<meta property="og:title" content="TITULO">
+<meta property="og:description" content="RESUMEN">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../../estilo.css">
+</head>
+<body>
+<main class="ficha">
+
+  <!-- ===== encabezado · campos TITULO, SUBTITULO del .txt ===== -->
+  <header class="cabecera">
+    <div>
+      <h1>TITULO</h1>
+      <div class="subtitulo">SUBTITULO</div>
+      <!-- si el .txt no trae SUBTITULO, se borra la línea de arriba -->
+    </div>
+    <div class="meta">NN.N · AREA</div>
+  </header>
+
+  <!-- ===== 2.1 título de sección (## texto) ===== -->
+  <!-- todo lo que sigue hasta el próximo ## vive dentro de este bloque -->
+  <!-- el id sale del título real: minúsculas, sin tildes, espacios por  -->
+  <!-- guiones (ej. "## Mitigaciones" → id="bloque-mitigaciones").      -->
+  <!-- Reemplazar "ID" en aria-labelledby, en el id del <h2> y en su    -->
+  <!-- texto por ese slug.                                              -->
+  <section class="bloque" aria-labelledby="bloque-ID">
+    <div class="bloque-cab"><h2 class="bloque-tit" id="bloque-ID"></h2></div>
+
+    <!-- 2.2 subtítulo (### texto) -->
+    <div class="subtit"></div>
+
+    <!-- 2.3 párrafo (texto suelto) -->
+    <p class="parrafo"></p>
+
+    <!-- 2.4 lista (- ítem) -->
+    <ul class="lista">
+      <li></li>
+      <li></li>
+    </ul>
+
+    <!-- 2.5 término → definición (`término` | qué es) -->
+    <div class="pares ancho">
+      <div class="nombre"></div><div class="rol"></div>
+      <div class="nombre"></div><div class="rol"></div>
+    </div>
+
+    <!-- 2.6 literal en línea (`texto`) / 2.7 destacar (*texto*) / 2.8 incorrecto (~texto~) -->
+    <p class="parrafo">
+      <span class="lit"></span>
+      <span class="destacar"></span>
+      <span class="incorrecto"></span>
+    </p>
+
+    <!-- 2.9 comentario al margen (> texto) -->
+    <p class="aparte"></p>
+
+    <!-- 2.11 dos columnas (MAYÚSCULAS + lista, dos veces) -->
+    <div class="dos-col">
+      <div>
+        <div class="col-tit"></div>
+        <ul class="lista"><li></li><li></li></ul>
+      </div>
+      <div>
+        <div class="col-tit"></div>
+        <ul class="lista"><li></li><li></li></ul>
+      </div>
+    </div>
+
+    <!-- 2.12 cifras en fila (- cifra | descripción, hasta 3) -->
+    <div class="tres-up">
+      <div class="celda"><b></b><span></span></div>
+      <div class="celda"><b></b><span></span></div>
+      <div class="celda"><b></b><span></span></div>
+    </div>
+
+    <!-- 2.13 árbol jerárquico ([ARBOL]...[/ARBOL]) -->
+    <ul class="arbol">
+      <li><span class="nodo"></span>
+        <ul>
+          <li><span class="nodo"></span><span class="detalle"></span></li>
+        </ul>
+      </li>
+    </ul>
+
+    <!-- 2.14 código multilínea (```...```) -->
+    <pre class="codigo"></pre>
+
+    <!-- 2.10 banda / idea destacada (!! frase) — puede ir en cualquier punto, las veces que haga falta -->
+    <div class="banda-clave">
+      <div class="frase"></div>
+    </div>
+
+  </section>
+
+  <!-- ===== pie · campo REFERENCIAS del .txt ===== -->
+  <footer class="pie">
+    <span></span>
+    <span><a href="../index.html">← índice</a></span>
+  </footer>
+
+</main>
+</body>
+</html>
