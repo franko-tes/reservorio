@@ -72,7 +72,19 @@ Texto suelto, sin marca. Cada línea en blanco separa un párrafo del siguiente.
 `término` | qué es
 `otro término` | qué es
 ```
-Para un grupo de nombres que se confunden entre sí, o un glosario.
+Para un grupo de nombres que se confunden entre sí, o un glosario. Hay dos formas,
+y la elige el propio marcado:
+
+- **Con backticks en el término** (como en el ejemplo de arriba): queda en
+  monoespaciada, pensada para nombres cortos y técnicos — comandos, siglas, nombres
+  de proceso. Con esta forma no hace falta agregar además el literal en línea (2.6)
+  sobre el término: el componente ya lo muestra como tal.
+- **Sin backticks en el término**:
+  ```
+  término | qué es
+  otro término | qué es
+  ```
+  queda en tipografía normal, pensada para definiciones más largas o conceptuales.
 
 ### 2.6 Literal en línea
 
