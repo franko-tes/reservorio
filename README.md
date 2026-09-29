@@ -1,20 +1,16 @@
 # Reservorio de estudio
 
-Material de estudio propio sobre temas técnicos: redes, Linux, contenedores,
+Material de estudio propio sobre diversos temas: redes, Linux, contenedores,
 seguridad, protocolos, herramientas.
 
-Cada tema se documenta en la plantilla que mejor le sirva. Hoy existe una:
+Cada tema se documenta en un `.txt`, que se estructura combinando piezas de un
+catálogo previamente configurado (títulos, listas, términos, secuencias,
+árboles...).
 
-1. **Ficha**: una página armada con piezas de un catálogo abierto, pensada como
-   ayuda-memoria.
+Luego, todo se construye en HTML, comparte una única hoja de estilos, y se abre
+desde un índice común.
 
-Se irán agregando otras a medida que hagan falta.
-
-Todo se construye en HTML, comparte una única hoja de estilos, y se abre desde un
-índice común.
-
-Este archivo existe para dar contexto a cualquier persona que abra esta carpeta. Las
-instrucciones de trabajo para agentes de IA están en `AGENTS.md`.
+Las instrucciones de trabajo para agentes de IA están en `AGENTS.md`.
 
 ---
 
@@ -48,7 +44,7 @@ instrucciones de trabajo para agentes de IA están en `AGENTS.md`.
 
 ## 1. Para qué sirve esto
 
-El problema que resuelve no es *aprender* un tema, sino **volver a encontrarlo meses
+El problema que resuelve no es _aprender_ un tema, sino **volver a encontrarlo meses
 después**.
 
 Estudiar muchos temas en paralelo deja el conocimiento repartido en notas sueltas,
@@ -124,13 +120,13 @@ CLAVES: active directory, AD, domain controller, LDAP, Kerberos, NTLM, Entra ID
 REFERENCIAS:
 ```
 
-| Campo | Obligatorio | Para qué |
-|---|---|---|
-| `TITULO` | sí | Va en el `<h1>`, en el `<title>` y en la tarjeta del índice |
-| `SUBTITULO` | no | Línea de contexto bajo el título. Si falta, no se muestra |
-| `RESUMEN` | sí | Una frase que resume el tema. Se usa en la tarjeta del índice y en los metadatos de la página (`description`, `og:description`) — no es lo mismo que `SUBTITULO`, que es solo la línea visible bajo el título |
-| `CLAVES` | sí | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo |
-| `REFERENCIAS` | no | Va al pie. CVEs, TTPs de MITRE, RFCs, páginas de `man`: dónde seguir |
+| Campo         | Obligatorio | Para qué                                                                                                                                                                                                      |
+| ------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TITULO`      | sí          | Va en el `<h1>`, en el `<title>` y en la tarjeta del índice                                                                                                                                                   |
+| `SUBTITULO`   | no          | Línea de contexto bajo el título. Si falta, no se muestra                                                                                                                                                     |
+| `RESUMEN`     | sí          | Una frase que resume el tema. Se usa en la tarjeta del índice y en los metadatos de la página (`description`, `og:description`) — no es lo mismo que `SUBTITULO`, que es solo la línea visible bajo el título |
+| `CLAVES`      | sí          | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo                                                                                                                                           |
+| `REFERENCIAS` | no          | Va al pie. CVEs, TTPs de MITRE, RFCs, páginas de `man`: dónde seguir                                                                                                                                          |
 
 No hay campo de área: **la carpeta ya lo dice**. Duplicarlo crearía dos fuentes de
 verdad que pueden contradecirse si el archivo se mueve.
@@ -261,9 +257,9 @@ La lista completa de componentes, con qué pieza usa cada uno, está en `AGENTS.
 
 La profundidad es fija, así que el enlace también:
 
-| Archivo | Enlace |
-|---|---|
-| `publicado/index.html` | `../estilo.css` |
+| Archivo                        | Enlace             |
+| ------------------------------ | ------------------ |
+| `publicado/index.html`         | `../estilo.css`    |
 | `publicado/area/loquesea.html` | `../../estilo.css` |
 
 ---
