@@ -5,9 +5,10 @@ seguridad, protocolos, herramientas.
 
 Cada tema se documenta en la plantilla que mejor le sirva. Hoy existe una:
 
-1. **Ficha**: una página con estructura fija, pensada como ayuda-memoria.
+1. **Ficha**: una página armada con piezas de un catálogo abierto, pensada como
+   ayuda-memoria.
 
-Se irán agregando otros a medida que hagan falta.
+Se irán agregando otras a medida que hagan falta.
 
 Todo se construye en HTML, comparte una única hoja de estilos, y se abre desde un
 índice común.
@@ -22,11 +23,9 @@ instrucciones de trabajo para agentes de IA están en `AGENTS.md`.
 1. [Para qué sirve esto](#1-para-qué-sirve-esto)
 2. [Plantillas](#2-plantillas)
    - 2.1 [Ficha](#21-ficha)
-     - 2.1.1 [Dos variantes](#211-dos-variantes)
-     - 2.1.2 [Bloques de cada variante](#212-bloques-de-cada-variante)
-     - 2.1.3 [Son dos contenidos distintos, no uno traducido](#213-son-dos-contenidos-distintos-no-uno-traducido)
-     - 2.1.4 [Encabezado del `.txt`](#214-encabezado-del-txt)
-     - 2.1.5 [Marcas del contenido](#215-marcas-del-contenido)
+     - 2.1.1 [Un tema puede tener más de una ficha](#211-un-tema-puede-tener-más-de-una-ficha)
+     - 2.1.2 [Encabezado del `.txt`](#212-encabezado-del-txt)
+     - 2.1.3 [Marcas del `.txt`](#213-marcas-del-txt)
 3. [Archivos](#3-archivos)
    - 3.1 [El `.txt` manda](#31-el-txt-manda)
    - 3.2 [Áreas](#32-áreas)
@@ -76,181 +75,88 @@ De ahí salen tres criterios que valen para cualquier plantilla:
 ## 2. Plantillas
 
 Una **plantilla** es una familia de documento: hoy la ficha, y mañana quizás un
-apunte o una lista de definiciones. Cada plantilla tiene su propia estructura.
-Algunas tienen **variantes**: versiones de la misma plantilla que comparten la
-estructura pero cambian el orden y los bloques (la ficha tiene la técnica y la
-de divulgación).
+apunte o una lista de definiciones. Cada plantilla se arma con un **esqueleto** — el
+`.html` que se copia y rellena — y un catálogo de piezas disponibles, documentado en
+`FORMATOS.md`.
 
-Cada plantilla se arma con dos piezas: un **esqueleto** — el `.html` que se copia
-y rellena, en `esqueletos/` — y, para escribir el `.txt` de un tema nuevo, un
-**modelo** — el bloque de texto con marcadores vacíos que está en `PLANTILLAS.md`.
-Hay un esqueleto y un modelo por variante, o uno solo si la plantilla no tiene
-variantes.
-
-El campo `TIPO:` de cada `.txt` indica qué esqueleto usar: la plantilla y, si
-la tiene, la variante (`ficha-tecnica`).
+No hay `TIPO:` ni variantes fijas por archivo: un solo esqueleto (`esqueleto.html`)
+alcanza para cualquier tema de la plantilla, porque el catálogo es abierto y el orden
+de las piezas lo decide quien escribe, no una estructura predefinida.
 
 ### 2.1 Ficha
 
-Una ficha es **una sola página** que condensa un tema en bloques fijos. No reemplaza
-al material de estudio: sirve para volver a activarlo rápido.
+Una ficha es **una sola página** que condensa un tema. No reemplaza al material de
+estudio: sirve para volver a activarlo rápido.
 
 Tres cosas la definen:
 
-- **Es corta a propósito.** Si un tema no entra, no se agranda la ficha: se recorta
-  el contenido o se parte en dos temas.
-- **La posición de los bloques es información.** Después de varias fichas, la
-  ubicación funciona como índice mental — "lo que está en dos columnas es siempre qué
-  hago con esto" — y se encuentra algo sin leer la ficha entera.
-- **La estructura no depende del tema.** Los bloques no preguntan sobre redes ni sobre
-  seguridad: preguntan cómo se llama, por qué pasa, en qué orden, cuál es el gancho y
-  qué se hace con eso. Eso sirve para cualquier tema técnico.
+- **El orden y las piezas los decide quien escribe**, según lo que el tema pida. No
+  hay una estructura fija que se repita igual en todas las fichas — cada una arma su
+  propio catálogo de piezas, en el orden que tenga sentido para ese tema.
+- **El catálogo es genérico.** Las piezas (una lista, un término y su definición, una
+  secuencia de pasos, un árbol jerárquico...) no preguntan sobre un tema en
+  particular — sirven para cualquiera. Eso es lo que las hace reutilizables.
+- **Sigue siendo una sola página, de lectura continua.** El largo lo decide el
+  contenido, no un límite fijo — pero sigue siendo un documento que se lee de una
+  sentada con scroll, no algo que se reparte en varias páginas.
 
-#### 2.1.1 Dos variantes
+#### 2.1.1 Un tema puede tener más de una ficha
 
-| Variante | Para quién | `TIPO:` | Clase en `<body>` |
-|---|---|---|---|
-| **Técnica** | Repaso propio | `ficha-tecnica` | *(ninguna)* |
-| **Divulgación** | Alguien que no conoce el tema | `ficha-divulgacion` | `divulgacion` |
+Sigue siendo válido escribir dos fichas sobre el mismo tema con enfoques distintos —
+una técnica, para repasar, y otra para alguien que no conoce el tema. Pero ya no es
+un mecanismo del sistema: no hay un `TIPO:` que las distinga ni un esqueleto separado
+para cada una. Cada ficha es, simplemente, un `.txt` más, armado con las piezas del
+catálogo que su enfoque necesite.
 
-Ambas usan el mismo CSS. Lo que cambia es el contenido y, sobre todo, **el orden y el
-nombre de los bloques**.
+La de divulgación **no es la técnica escrita más fácil**: cambia el orden, cambian
+las piezas y cambia el texto entero. Si se escriben las dos, son dos archivos
+separados en `contenidos/`, cada uno pensado desde cero para su lector.
 
-- La técnica sigue con **Identidad** (los nombres), porque para quien ya estudió el
-  tema, los nombres son el mejor gancho.
-- La de divulgación sigue con **Qué es** y manda los nombres al final como
-  **Glosario**, porque para quien no sabe nada, un nombre sin contexto no engancha con
-  nada.
+#### 2.1.2 Encabezado del `.txt`
 
-No todos los temas necesitan versión de divulgación. La mayoría tiene solo la técnica.
-
-#### 2.1.2 Bloques de cada variante
-
-Cada variante tiene su propia lista. Los marcadores se escriben **en mayúsculas y sin
-acentos**, y el `TIPO:` del archivo determina contra cuál lista se valida.
-
-La regla de no usar acentos vale sólo para lo que el agente tiene que **reconocer**:
-los marcadores entre corchetes y las subsecciones. El contenido visible se escribe
-como corresponde en castellano, aunque vaya en mayúsculas — `PRE-AUTENTICACIÓN` con
-tilde, porque se lee en la ficha y no hay nada que hacer coincidir.
-
-**`ficha-tecnica`**
-
-| Marcador | Qué contiene |
-|---|---|
-| `[BANDA CLAVE]` | La frase que reconstruye todo el tema |
-| `[IDENTIDAD]` | Los nombres que se confunden entre sí |
-| `[MECANISMO]` | Por qué funciona |
-| `[SECUENCIA]` | En qué orden pasa |
-| `[DATO ANCLA]` | El número o hecho que se pega solo |
-| `[QUE HAGO YO]` | Lo operativo, en dos columnas |
-| `[TRAMPAS]` | Lo que se cree mal |
-
-**`ficha-divulgacion`**
-
-| Marcador | Qué contiene |
-|---|---|
-| `[BANDA CLAVE]` | La frase que resume todo |
-| `[QUE ES]` | De qué se trata, en contexto |
-| `[COMO FUNCIONA]` | El mecanismo, con analogía si hace falta |
-| `[EN LA PRACTICA]` | Cómo se ve, cómo opera, qué secuencia sigue |
-| `[POR QUE IMPORTA]` | Por qué le debería interesar a quien lee |
-| `[QUE HACER]` | Recomendaciones, decisiones, próximos pasos |
-| `[GLOSARIO]` | Los términos, al final |
-
-**Los bloques vacíos se omiten, no se rellenan.** No todos los temas llenan los siete:
-un tema conceptual puede no tener dato ancla, una comparación no tiene secuencia. Una
-ficha de cinco bloques honestos vale más que una de siete con dos inventados. Lo que
-se mantiene siempre es el **orden relativo** de los que sí están.
-
-#### 2.1.3 Son dos contenidos distintos, no uno traducido
-
-Cada variante tiene **su propio archivo** en `contenidos/`:
+Cada archivo abre con un encabezado, un campo por línea, antes del contenido:
 
 ```
-contenidos/
-└── vulnerabilidades/
-    ├── 01.1-eternalblue.txt              → TIPO: ficha-tecnica
-    └── 01.2-eternalblue-divulgacion.txt  → TIPO: ficha-divulgacion
-```
-
-La versión de divulgación **no es la técnica escrita más fácil**. Cambia el orden,
-cambian los bloques y cambia el texto entero. Por eso son dos archivos, dos esqueletos
-y dos listas de marcadores.
-
-#### 2.1.4 Encabezado del `.txt`
-
-Cada archivo abre con un encabezado, un campo por línea, antes del primer bloque:
-
-```
-TIPO: ficha-tecnica
-TITULO: EternalBlue / MS17-010
-SUBTITULO: La vulnerabilidad que hizo posible WannaCry
-CLAVES: smb, ransomware, wannacry, kernel, wormable
-REFERENCIAS: MITRE ATT&CK · T1210 · T1021.002 · T1486 · T1490
+TITULO: Active Directory
+SUBTITULO: Introducción
+RESUMEN: Servicio de directorio de Microsoft que centraliza identidades, autenticación y autorización de una organización.
+CLAVES: active directory, AD, domain controller, LDAP, Kerberos, NTLM, Entra ID
+REFERENCIAS:
 ```
 
 | Campo | Obligatorio | Para qué |
 |---|---|---|
-| `TIPO` | sí | Elige el esqueleto, valida los bloques y define la clase del `<body>` |
 | `TITULO` | sí | Va en el `<h1>`, en el `<title>` y en la tarjeta del índice |
 | `SUBTITULO` | no | Línea de contexto bajo el título. Si falta, no se muestra |
+| `RESUMEN` | sí | Una frase que resume el tema. Se usa en la tarjeta del índice y en los metadatos de la página (`description`, `og:description`) — no es lo mismo que `SUBTITULO`, que es solo la línea visible bajo el título |
 | `CLAVES` | sí | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo |
-| `REFERENCIAS` | no | Va al pie. TTPs de MITRE, CVEs, RFCs, páginas de `man`: dónde seguir |
-
-El valor de `TIPO:` nombra **la plantilla y, si tiene variantes, la variante**,
-separadas por guión (`ficha-tecnica`). Una plantilla sin variantes se nombra solo por
-su propio nombre. Así, al agregarse plantillas nuevas, el mismo campo sigue sirviendo
-sin ambigüedad.
+| `REFERENCIAS` | no | Va al pie. CVEs, TTPs de MITRE, RFCs, páginas de `man`: dónde seguir |
 
 No hay campo de área: **la carpeta ya lo dice**. Duplicarlo crearía dos fuentes de
 verdad que pueden contradecirse si el archivo se mueve.
 
 Cada término de `CLAVES` se muestra como tag en la tarjeta del índice, en el orden en
-que está escrito. Por eso conviene que sean pocos: los imprescindibles. El buscador que
-viene más adelante también va a leer de ahí, y completar cuarenta archivos a mano
+que está escrito. Por eso conviene que sean pocos: los imprescindibles. El buscador
+que viene más adelante también va a leer de ahí, y completar cuarenta archivos a mano
 después es mucho peor que escribir una línea ahora.
 
-#### 2.1.5 Marcas del contenido
+#### 2.1.3 Marcas del `.txt`
 
-Dentro de los bloques, el `.txt` usa un puñado de marcas. Son las mismas para las dos
-variantes.
+El catálogo completo de piezas y marcas — 18 piezas, cada una con su marca y un
+ejemplo — vive en `FORMATOS.md`. Acá el resumen:
 
-| Marca | Para qué | Ejemplo |
-|---|---|---|
-| `` `texto` `` | String literal: CVE, comando, ruta, puerto | `` `vssadmin delete shadows` `` |
-| `*texto*` | Destacar un fragmento dentro de una línea | `en el perímetro *y entre segmentos*` |
-| `\|` | Separa término de definición, o título de descripción | `` `MS17-010` \| el parche `` |
-| `-` | Ítem de una lista | `- Backups offline` |
-| `>` | Comentario al margen, en tono aparte | `> Es aritmética mal hecha.` |
-| `!destacado` `!incorrecto` | Marca **un elemento entero** | `EternalBlue !incorrecto \| el exploit` |
-| `↻` | Nota de bucle, al pie de una secuencia | `↻ el último paso reinicia el primero` |
+- `` `texto` `` marca un string literal: comando, ruta, CVE, puerto.
+- `*texto*` destaca un fragmento; `~texto~` lo marca como incorrecto o erróneo. Son
+  las dos únicas marcas de énfasis — no existen sufijos de elemento como
+  `!destacado`/`!incorrecto`. Única excepción: en la pieza de secuencia, si el
+  nombre completo de un paso va envuelto en `*...*` o `~...~`, se marca el recuadro
+  entero, no solo el texto (ver `FORMATOS.md` 2.15).
+- `!! frase` es la franja de idea clave. Puede aparecer en cualquier punto del texto,
+  las veces que haga falta, sin una etiqueta fija.
+- `## texto` abre una sección nueva; `### texto` abre un subtítulo dentro de ella.
 
-Dos aclaraciones que evitan confusiones:
-
-- **`*asteriscos*` es para fragmentos; `!marca` es para elementos completos.** Hoy se
-  usan sobre el nombre de un par (`[IDENTIDAD]`) y sobre un paso (`[SECUENCIA]`,
-  `[EN LA PRACTICA]`). Una `!marca` en medio de una oración no tiene dónde terminar: si
-  aparece así, es un error del `.txt` y se consulta antes de construir.
-- **Las marcas no llevan color propio.** `!destacado` e `!incorrecto` nombran la
-  función, no el tono. Si la paleta cambia, el `.txt` no se toca.
-
-**Subsecciones dentro de un bloque.** Una línea sola en MAYÚSCULAS, sin corchetes,
-abre una subsección. Se usa cuando un bloque tiene partes con nombre:
-
-```
-[QUE HAGO YO]
-MITIGAR
-- Aplicar el parche `MS17-010`
-
-DETECTAR
-- Tráfico SMB este-oeste anómalo
-```
-
-Las subsecciones que espera cada bloque están fijadas por su esqueleto: los títulos de
-las dos columnas en `[QUE HAGO YO]` y `[QUE HACER]`, y las tres partes de la analogía
-(`ANALOGIA`, `TRADUCCION`, `AVISO`) en `[COMO FUNCIONA]`. Una subsección que el
-esqueleto no contempla se consulta.
+Ante contenido que no encaje en ninguna pieza del catálogo, se consulta — no se
+improvisa.
 
 ---
 
@@ -260,8 +166,9 @@ esqueleto no contempla se consulta.
 reservorio/
 ├── README.md
 ├── AGENTS.md                              instrucciones para agentes de IA
-├── PLANTILLAS.md                          guía para escribir el contenido
+├── FORMATOS.md                            catálogo de piezas para escribir el contenido
 ├── estilo.css                             el diseño, uno solo para todo
+├── esqueleto.html                         el esqueleto único, se copia para cada ficha
 │
 ├── fuentes/                               tipografías alojadas localmente
 │   ├── Inter-Regular.ttf
@@ -271,17 +178,17 @@ reservorio/
 │   ├── OFL-Inter.txt                      licencias, se distribuyen con la fuente
 │   └── OFL-JetBrainsMono.txt
 │
-├── esqueletos/
-│   ├── ficha-tecnica.html
-│   └── ficha-divulgacion.html
-│
 ├── contenidos/                            la fuente de verdad
+│   ├── active-directory/
+│   │   └── 01.1-active-directory-introduccion.txt
 │   └── vulnerabilidades/
 │       ├── 01.1-eternalblue.txt
 │       └── 01.2-eternalblue-divulgacion.txt
 │
 └── publicado/                             lo que se abre en el navegador
     ├── index.html
+    ├── active-directory/
+    │   └── 01.1-active-directory-introduccion.html
     └── vulnerabilidades/
         ├── 01.1-eternalblue.html
         └── 01.2-eternalblue-divulgacion.html
@@ -340,15 +247,15 @@ Más adelante, un script podrá generar el índice con sus conteos automáticame
 que toma el contenido**, no el tema que lo contiene: `.pares` es "término y
 definición", `.cadena` es "pasos en fila", `.lit` es "texto que se escribe exacto".
 
-Por eso el mismo componente sirve en contextos distintos — `.pares` arma tanto el
-bloque de identidad de una ficha técnica como el glosario de una de divulgación — y
-por eso cambiar los nombres de los bloques no obliga a tocar el CSS.
+Por eso el mismo componente sirve en contextos distintos — `.pares` arma tanto un
+grupo de nombres que se confunden entre sí como un glosario — y por eso el catálogo
+de piezas no obliga a tocar el CSS cada vez que se usa una combinación distinta.
 
-Cuando una plantilla nueva necesita una forma que no existe, se **agrega** una sección al
-final del archivo. No se reemplazan las que ya están, porque romperían el material ya
-construido.
+Cuando una plantilla nueva necesita una forma que no existe, se **agrega** una sección
+al final del archivo. No se reemplazan las que ya están, porque romperían el material
+ya construido.
 
-La lista completa de componentes, con qué bloque usa cada uno, está en `AGENTS.md`.
+La lista completa de componentes, con qué pieza usa cada uno, está en `AGENTS.md`.
 
 ### 3.5 Rutas al CSS
 
@@ -375,10 +282,11 @@ explican.
    → 1
 4. **Nunca se inventan datos.** Fechas, cifras, comandos, nombres de firmas: si no
    está en el `.txt`, no entra en la salida.
-5. **Los bloques vacíos se omiten, no se rellenan.** Vale más una ficha de cinco
-   bloques honestos que una de siete con dos inventados. → 2.1.2
-6. **El orden de los bloques no se altera dentro de una misma variante.** Es lo que hace
-   que la posición signifique algo. → 2.1
+5. **Las piezas sin contenido real se omiten, no se rellenan.** Vale más una ficha
+   con pocas piezas honestas que una completa con contenido inventado. → `FORMATOS.md`
+6. **El orden de las piezas lo decide quien escribe el `.txt`.** Ya no hay un orden
+   fijo que se repita entre fichas — cada tema arma sus piezas en el orden que tenga
+   más sentido para él. → 2.1
 7. **Todo string literal va con `.lit`.** CVEs, rutas, comandos, puertos, nombres de
    archivo: cualquier cosa que se escriba tal cual en una terminal, o que aparezca
    exactamente así en la salida de una herramienta real. La excepción son
@@ -388,13 +296,14 @@ explican.
    deforman el texto, y un dato mal escrito en material de estudio es peor que no
    tener el material. Si se agregan ilustraciones, se generan sin texto y las
    etiquetas se ponen en HTML encima.
-9. **Si no entra en una página, se recorta el contenido.** Una ficha es una página
-   web: un documento continuo que se lee con scroll, no algo que tenga que entrar en
-   una pantalla — pero tampoco un texto largo. No se achica la tipografía ni se
-   comprime el espaciado. Qué recortar lo decide el autor, no el agente.
-10. **Ante cualquier duda, se consulta.** Un marcador que no coincide, un bloque que
-    no encaja, un componente que no existe: se pregunta. No se interpreta ni se
-    improvisa.
+9. **El texto puede ser tan largo como haga falta — pero no se simula que entra.** No
+   hay límite de piezas ni de repeticiones: un paso o diez, una celda o ninguna. Lo
+   que no se hace es achicar la tipografía ni comprimir el espaciado para forzar el
+   contenido en menos espacio. Sigue siendo una sola página continua, de scroll, no
+   un documento partido en varias.
+10. **Ante cualquier duda, se consulta.** Contenido que no encaja en ninguna pieza del
+    catálogo, una marca que no se entiende, un componente de CSS que no existe: se
+    pregunta. No se interpreta ni se improvisa.
 11. **Este es un repositorio público. No entra información sensible.** Ni
     credenciales, claves o tokens; ni datos de clientes, empleadores o terceros; ni
     direcciones IP internas, nombres de host, rutas o configuraciones reales de una
@@ -407,19 +316,18 @@ explican.
 ## 5. Cómo se agrega un tema
 
 1. **Estudiar el tema.** Fuera de este proyecto, donde sea.
-2. **Escribir el `.txt`.** `PLANTILLAS.md` tiene todo lo necesario: qué plantillas hay,
-   cómo elegir, las marcas y un modelo comentado de cada variante. Está pensado para
-   llevárselo a la conversación donde se estudió el tema y pedirle a esa IA que vuelque
-   el contenido, que es la que tiene el contexto completo.
+2. **Escribir el `.txt`.** `FORMATOS.md` tiene el catálogo completo de piezas, cómo
+   marcarlas y el encabezado. Está pensado para llevárselo a la conversación donde se
+   estudió el tema y pedirle a esa IA que vuelque el contenido, que es la que tiene
+   el contexto completo.
 3. **Guardarlo** en `contenidos/area/NN.N-nombre.txt`, siguiendo la numeración de 3.3.
    Si el área no existe todavía, se crea.
-4. **Pedirle al agente que lo construya**, indicando qué archivo (el `TIPO:` ya dice
-   qué esqueleto usar).
+4. **Pedirle al agente que lo construya.**
 5. **Revisar el resultado** en el navegador y, si algo no cierra, corregir el `.txt` y
    reconstruir. Nunca el `.html`.
 
-El procedimiento de construcción — cómo se traduce cada bloque a HTML, qué componente
-usa cada uno, cómo se valida — está en `AGENTS.md`.
+El procedimiento de construcción — cómo se traduce cada pieza a HTML, qué componente
+usa cada una, cómo se valida — está en `AGENTS.md`.
 
 ---
 
@@ -469,11 +377,13 @@ un CVE o en un comando importa.
 
 ## 7. Evolución
 
-Todo lo anterior es **el estado actual**, no un diseño cerrado. Hoy hay una sola plantilla
-porque es la única que se necesitó hasta ahora; van a aparecer temas que pidan otras.
+Todo lo anterior es **el estado actual**, no un diseño cerrado. Hoy hay una sola
+plantilla porque es la única que se necesitó hasta ahora; van a aparecer temas que
+pidan otras.
 
-Las plantillas, los esqueletos y los componentes nuevos **los define el autor**. El
-agente no los propone por su cuenta ni los improvisa sobre la marcha.
+Las plantillas, los esqueletos, las piezas del catálogo y los componentes de CSS
+nuevos **los define el autor**. El agente no los propone por su cuenta ni los
+improvisa sobre la marcha.
 
 ### 7.1 Cuando algo no encaja
 
@@ -495,7 +405,7 @@ qué se rompe y qué hay que rehacer.
 
 ### 7.3 Qué actualizar cuando algo cambia
 
-Cuando algo del sistema cambia (una plantilla, una variante, un bloque, un componente
+Cuando algo del sistema cambia (una plantilla, una pieza del catálogo, un componente
 de CSS, una marca del `.txt`, una regla de trabajo) hay que tocar más de un documento.
 La lista de qué actualizar en cada caso está en `AGENTS.md` punto 9.
 
