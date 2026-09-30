@@ -62,47 +62,35 @@ De ahí salen tres criterios:
 
 ---
 
-## 2. Plantillas
+## 2. Cómo se arma un documento
 
-Una **plantilla** es una familia de documento: hoy la ficha, y mañana quizás un
-apunte o una lista de definiciones. Cada plantilla se arma con un **esqueleto** — el
-`.html` que se copia y rellena — y un catálogo de piezas disponibles, documentado en
-`FORMATOS.md`.
+Cada tema se documenta en un `.txt`, o en varios según la necesidad, combinando piezas de un catálogo abierto (títulos, listas, términos, secuencias, árboles...) documentado en `FORMATOS.md`. No
+hay una estructura fija que se repita igual en todos los documentos: cada uno elige
+sus propias piezas, en el orden que tenga sentido para ese tema.
 
-No hay `TIPO:` ni variantes fijas por archivo: un solo esqueleto (`esqueleto.html`)
-alcanza para cualquier tema de la plantilla, porque el catálogo es abierto y el orden
-de las piezas lo decide quien escribe, no una estructura predefinida.
+Ese `.txt` se construye después en HTML con `esqueleto.html`, la única parte fija del
+documento (la cabecera, el pie y poco más) que envuelve las piezas elegidas.
 
-### 2.1 Ficha
+Tres cosas definen a cualquier documento de este reservorio:
 
-Una ficha es **una sola página** que condensa un tema. No reemplaza al material de
-estudio: sirve para volver a activarlo rápido.
+- **El orden y las piezas los decide quien escribe**, según lo que el tema pida.
+- **El catálogo es genérico.** Las piezas no preguntan sobre un tema en particular,
+  sirven para cualquiera. Eso es lo que las hace reutilizables.
+- **Es una sola página, de lectura continua.** El largo lo decide el contenido, no un
+  límite fijo, pero sigue siendo un documento que se lee de una pasada con scroll,
+  no algo que se reparte en varias páginas.
 
-Tres cosas la definen:
+### 2.1 Un tema puede tener más de un documento
 
-- **El orden y las piezas los decide quien escribe**, según lo que el tema pida. No
-  hay una estructura fija que se repita igual en todas las fichas — cada una arma su
-  propio catálogo de piezas, en el orden que tenga sentido para ese tema.
-- **El catálogo es genérico.** Las piezas (una lista, un término y su definición, una
-  secuencia de pasos, un árbol jerárquico...) no preguntan sobre un tema en
-  particular — sirven para cualquiera. Eso es lo que las hace reutilizables.
-- **Sigue siendo una sola página, de lectura continua.** El largo lo decide el
-  contenido, no un límite fijo — pero sigue siendo un documento que se lee de una
-  sentada con scroll, no algo que se reparte en varias páginas.
+Un tema puede dividirse en más de un `.txt` si fuera conveniente. Puede ser porque
+es demasiado largo para leerse de una pasada, o porque tiene enfoques que no
+conviene mezclar, por ejemplo, uno con los comandos y pasos prácticos, y
+otro con la explicación teórica de fondo.
 
-#### 2.1.1 Un tema puede tener más de una ficha
+Cada documento es, simplemente, un `.txt` más, armado desde cero con las
+piezas del catálogo que su enfoque necesite. Si se escriben varios, son archivos separados en el directorio `contenidos/`.
 
-Sigue siendo válido escribir dos fichas sobre el mismo tema con enfoques distintos —
-una técnica, para repasar, y otra para alguien que no conoce el tema. Pero ya no es
-un mecanismo del sistema: no hay un `TIPO:` que las distinga ni un esqueleto separado
-para cada una. Cada ficha es, simplemente, un `.txt` más, armado con las piezas del
-catálogo que su enfoque necesite.
-
-La de divulgación **no es la técnica escrita más fácil**: cambia el orden, cambian
-las piezas y cambia el texto entero. Si se escriben las dos, son dos archivos
-separados en `contenidos/`, cada uno pensado desde cero para su lector.
-
-#### 2.1.2 Encabezado del `.txt`
+### 2.2 Encabezado del `.txt`
 
 Cada archivo abre con un encabezado, un campo por línea, antes del contenido:
 
@@ -114,38 +102,38 @@ CLAVES: active directory, AD, domain controller, LDAP, Kerberos, NTLM, Entra ID
 REFERENCIAS:
 ```
 
-| Campo         | Obligatorio | Para qué                                                                                                                                                                                                      |
-| ------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TITULO`      | sí          | Va en el `<h1>`, en el `<title>` y en la tarjeta del índice                                                                                                                                                   |
-| `SUBTITULO`   | no          | Línea de contexto bajo el título. Si falta, no se muestra                                                                                                                                                     |
-| `RESUMEN`     | sí          | Una frase que resume el tema. Se usa en la tarjeta del índice y en los metadatos de la página (`description`, `og:description`) — no es lo mismo que `SUBTITULO`, que es solo la línea visible bajo el título |
-| `CLAVES`      | sí          | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo                                                                                                                                           |
-| `REFERENCIAS` | no          | Va al pie. CVEs, TTPs de MITRE, RFCs, páginas de `man`: dónde seguir                                                                                                                                          |
+| Campo         | Obligatorio | Para qué                                                                                                                                                                                                     |
+| ------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `TITULO`      | sí          | Va en el `<h1>`, en el `<title>` y en la tarjeta del índice                                                                                                                                                  |
+| `SUBTITULO`   | no          | Línea de contexto bajo el título. Si falta, no se muestra                                                                                                                                                    |
+| `RESUMEN`     | sí          | Una frase que resume el tema. Se usa en la tarjeta del índice y en los metadatos de la página (`description`, `og:description`), no es lo mismo que `SUBTITULO`, que es solo la línea visible bajo el título |
+| `CLAVES`      | sí          | Términos de búsqueda y tags de la tarjeta del índice. Ver más abajo                                                                                                                                          |
+| `REFERENCIAS` | no          | Va al pie. CVEs, TTPs de MITRE, RFCs, páginas de `man`: dónde seguir                                                                                                                                         |
 
-No hay campo de área: **la carpeta ya lo dice**. Duplicarlo crearía dos fuentes de
-verdad que pueden contradecirse si el archivo se mueve.
+No hay campo de área: **la define el directorio**. Habrá un directorio por área
+(como ser Linux, Windows, Redes) y dentro de cada área se agrupan los documentos
+de los distintos temas. Abordaremos de nuevo el concepto de área en el punto 3.
 
-Cada término de `CLAVES` se muestra como tag en la tarjeta del índice, en el orden en
-que está escrito. Por eso conviene que sean pocos: los imprescindibles. El buscador
-que viene más adelante también va a leer de ahí, y completar cuarenta archivos a mano
-después es mucho peor que escribir una línea ahora.
+Cada término de `CLAVES` se muestra como tag en una tarjeta del índice, en el orden en
+que está escrito. Por eso conviene que sean pocos, los imprescindibles. El buscador
+(aún pendiente de construir) va a leer de ahí.
 
-#### 2.1.3 Marcas del `.txt`
+### 2.3 Marcas del `.txt`
 
-El catálogo completo de piezas y marcas — 18 piezas, cada una con su marca y un
-ejemplo — vive en `FORMATOS.md`. Acá el resumen:
+El catálogo completo de piezas y marcas (piezas, cada una con su marca y un
+ejemplo) vive en `FORMATOS.md`. Acá el resumen:
 
 - `` `texto` `` marca un string literal: comando, ruta, CVE, puerto.
-- `*texto*` destaca un fragmento; `~texto~` lo marca como incorrecto o erróneo. Son
-  las dos únicas marcas de énfasis — no existen sufijos de elemento como
-  `!destacado`/`!incorrecto`. Única excepción: en la pieza de secuencia, si el
+- `*texto*` destaca un fragmento; `~texto~` lo marca como incorrecto o erróneo. Única excepción: en la pieza de secuencia, si el
   nombre completo de un paso va envuelto en `*...*` o `~...~`, se marca el recuadro
   entero, no solo el texto (ver `FORMATOS.md` 2.15).
-- `!! frase` es la franja de idea clave. Puede aparecer en cualquier punto del texto,
-  las veces que haga falta, sin una etiqueta fija.
+- `!! frase` es la franja de idea clave. Puede aparecer en cualquier punto del texto.
 - `## texto` abre una sección nueva; `### texto` abre un subtítulo dentro de ella.
+- `` `término` | qué es `` (con backticks en el término) arma el par en versión
+  angosta y monoespaciada, para nombres cortos y técnicos; `término | qué es` (sin
+  backticks) arma la versión ancha, para definiciones más largas o conceptuales.
 
-Ante contenido que no encaje en ninguna pieza del catálogo, se consulta — no se
+Ante contenido que no encaje en ninguna pieza del catálogo, se revisa, no se
 improvisa.
 
 ---
