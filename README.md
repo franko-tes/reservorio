@@ -44,25 +44,19 @@ Las instrucciones de trabajo para agentes de IA están en `AGENTS.md`.
 
 ## 1. Para qué sirve esto
 
-El problema que resuelve no es _aprender_ un tema, sino **volver a encontrarlo meses
-después**.
+El problema que resuelve no es _aprender_ un tema, sino **volver a encontrarlo meses después**.
 
-Estudiar muchos temas en paralelo deja el conocimiento repartido en notas sueltas,
-conversaciones viejas y capturas de pantalla. Cuando hace falta recuperar algo, no
-está el material: está el recuerdo de haberlo estudiado.
+Estudiar muchos temas en paralelo deja el conocimiento repartido en notas sueltas, conversaciones viejas y capturas de pantalla.
 
 Este reservorio es el lugar donde ese material queda. Un tema estudiado se documenta
-una vez, con la forma que le corresponda, y se puede volver a él cuantas veces sea
-necesario.
+una vez, y se puede volver a él cuantas veces sea necesario. O incluso actualizar lo documentado.
 
-De ahí salen tres criterios que valen para cualquier plantilla:
+De ahí salen tres criterios:
 
-- **El material asume que el tema ya se estudió.** No enseña desde cero: sirve para
-  recuperar lo que se aprendió en otro momento.
-- **Cada plantilla tiene su propia estructura; la base visual es común.** Un apunte
-  largo y una ficha no se organizan igual — no deberían — pero comparten colores,
-  tipografías y jerarquía. La hoja de estilos crece con cada plantilla nueva: se
-  agregan componentes, no se reemplazan los que ya existen.
+- **El material asume que el tema ya se estudió.** No enseña desde cero, sirve para
+  repasar lo que se aprendió anteriormente.
+- **El contenido de cada tema es libre, pero manteniendo una base visual en común.** Cada archivo `.txt` se estructura a partir de piezas configuradas y documentadas en un catálogo, permitiendo mantener colores, tipografías y jerarquía iguales, entre distintos temas. La hoja de estilos crece agregando
+  componentes nuevos.
 - **El contenido lo aporta quien estudió el tema.** Este proyecto documenta y
   construye; no investiga ni completa lo que falte.
 
