@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: por qué importa y contexto</title>
+<meta name="description" content="Por qué Active Directory es un objetivo crítico de seguridad, su contexto histórico y cómo se compara con Entra ID en el modelo híbrido (ADFS, Azure AD Connect).">
+<meta name="keywords" content="Entra ID, Azure AD, ADFS, SAML, NTDS.DIT, seguridad active directory, Azure AD Connect">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: por qué importa y contexto">
+<meta property="og:description" content="Por qué Active Directory es un objetivo crítico de seguridad, su contexto histórico y cómo se compara con Entra ID en el modelo híbrido (ADFS, Azure AD Connect).">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: por qué importa y contexto",
+  "description": "Por qué Active Directory es un objetivo crítico de seguridad, su contexto histórico y cómo se compara con Entra ID en el modelo híbrido.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Introducción"
+  },
+  "position": 2
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Por qué importa y contexto</h1>
+      <p class="ficha__subtitle">Introducción</p>
+    </header>
+
+    <section>
+      <h2>Por qué importa en seguridad</h2>
+      <ul>
+        <li>AD fue diseñado para ser <strong class="highlight">retrocompatible</strong> con versiones viejas de Windows → muchas funciones no son seguras por default → es fácil de malconfigurar.</li>
+        <li>Es, en esencia, una base de datos de <strong class="highlight">solo lectura accesible por cualquier usuario autenticado</strong>, sin importar su nivel de privilegio → una cuenta de dominio básica puede enumerar la mayoría de los objetos.</li>
+        <li>Se estima que <strong class="highlight">~95% de las empresas Fortune 500</strong> corren AD → es un objetivo de altísimo valor para atacantes.</li>
+        <li>Un DC comprometido o el <code>NTDS.DIT</code> (la base de AD) extraído significa todas las credenciales del dominio.</li>
+      </ul>
+
+      <aside class="callout">
+        <p>Anclaje histórico, en una línea: AD nace a partir de LDAP y del modelo de directorio X.500 (de los años 90), y llega a Windows recién con Server 2000.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>AD on-premise vs Entra ID</h2>
+
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>AD (on-premise)</h3>
+          <ul>
+            <li>DCs propios</li>
+            <li>Kerberos, NTLM, LDAP</li>
+            <li>GPO y OUs clásicas</li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>Entra ID (antes Azure AD)</h3>
+          <ul>
+            <li>Servicio de identidad en la nube</li>
+            <li>OAuth, OIDC, SAML</li>
+            <li>Sin GPO ni OUs clásicas</li>
+          </ul>
+        </div>
+      </div>
+
+      <p><span class="error-mark">Entra ID no es "AD en la nube"</span>: es un servicio de identidad distinto, aunque cumple un rol equivalente.</p>
+
+      <h3>Dos piezas que conectan ambos mundos</h3>
+      <dl class="term-list">
+        <div>
+          <dt><code>ADFS</code></dt>
+          <dd>Active Directory Federation Services: rol de Windows Server que permite SSO (inicio de sesión único) hacia aplicaciones fuera de la red local, usando tokens de seguridad. Es la base de SAML.</dd>
+        </div>
+        <div>
+          <dt><code>Azure AD Connect</code></dt>
+          <dd>La herramienta concreta que sincroniza un AD on-premise con Entra ID en el modelo híbrido.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout">
+        <p>Es común el modelo híbrido: AD on-premise sincronizado con Entra ID (vía Azure AD Connect).</p>
+      </aside>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>Entra ID</li>
+      <li>Azure AD</li>
+      <li>ADFS</li>
+      <li>SAML</li>
+      <li>NTDS.DIT</li>
+      <li>seguridad AD</li>
+      <li>Azure AD Connect</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="01.1-ad-introduccion.html">← 01.1 - Qué es y cómo funciona</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>

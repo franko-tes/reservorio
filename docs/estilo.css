@@ -1,0 +1,439 @@
+/* =========================================================
+   RESERVORIO — Hoja de estilos compartida
+   Sistema de componentes para fichas de estudio técnicas.
+   Pensado para reutilizarse en todo el contenido futuro:
+   cada formato de la guía (FORMATOS.md) tiene su componente
+   acá. Para agregar contenido nuevo, no se toca este archivo
+   — se reusan estas clases.
+   ========================================================= */
+
+/* ---------- 1. Reset mínimo ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+}
+
+img, svg, video {
+  max-width: 100%;
+  display: block;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- 2. Tokens de diseño ---------- */
+:root {
+  /* Color — Gruvbox oscuro, fijo (el modo claro solo existe al imprimir) */
+  color-scheme: dark;
+  --color-bg: #282828;
+  --color-bg-subtle: #3c3836;
+  --color-text: #ebdbb2;
+  --color-text-muted: #aca095;
+  --color-border: #504945;
+  --color-primary: #8ec07c;
+  --color-accent: #fe8019;
+  --color-warning: #fc7d6e;
+  --color-code-bg: #3c3836;
+
+  /* Tipografía */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --fs-sm: 0.9rem;
+  --fs-base: 1.0625rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.45rem;
+  --fs-2xl: 1.75rem;
+  --lh-base: 1.65;
+
+  /* Espaciado */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.25rem;
+  --space-6: 3.5rem;
+
+  /* Layout */
+  --max-width: 42rem;
+  --radius: 0.5rem;
+  --radius-sm: 0.25rem;
+
+  /* Alto mínimo de un área de toque (enlaces de navegación) */
+  --tap-size: 2.75rem;
+}
+
+/* Títulos más grandes desde pantallas medianas (los valores base son móviles) */
+@media (min-width: 40.0625rem) {
+  :root {
+    --fs-xl: 1.6rem;
+    --fs-2xl: 2rem;
+  }
+}
+
+/* Color — impresión: Gruvbox claro, para no gastar tinta en fondo oscuro */
+@media print {
+  :root {
+    color-scheme: light;
+    --color-bg: #fbf1c7;
+    --color-bg-subtle: #ebdbb2;
+    --color-text: #3c3836;
+    --color-text-muted: #6b5f54;
+    --color-border: #d5c4a1;
+    --color-primary: #076678;
+    --color-accent: #ac3903;
+    --color-warning: #9d0006;
+    --color-code-bg: #ebdbb2;
+  }
+}
+
+/* ---------- 3. Base ---------- */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Oculto visualmente, disponible para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- 4. Layout de la ficha ---------- */
+.ficha {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: var(--space-5) var(--space-4) var(--space-6);
+}
+
+.ficha__header {
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-4);
+}
+
+.ficha__kicker {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.ficha__header h1 {
+  margin: 0;
+  font-size: var(--fs-2xl);
+  line-height: 1.2;
+}
+
+.ficha__subtitle {
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-lg);
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.ficha section {
+  margin-bottom: var(--space-5);
+}
+
+.ficha section h2 {
+  font-size: var(--fs-xl);
+  margin: 0 0 var(--space-3);
+}
+
+.ficha section h3 {
+  font-size: var(--fs-lg);
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+.ficha p {
+  margin: 0 0 var(--space-3);
+}
+
+.ficha > section > ul:not([class]) {
+  margin: 0 0 var(--space-3);
+  padding-left: 1.25rem;
+}
+
+.ficha > section > ul:not([class]) li {
+  margin-bottom: var(--space-2);
+}
+
+/* ---------- 5. Código y literales ---------- */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--color-code-bg);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+}
+
+pre.code-block {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  overflow-x: auto;
+  margin: 0 0 var(--space-3);
+}
+
+pre.code-block code {
+  background: none;
+  padding: 0;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+/* ---------- 6. Término → definición ---------- */
+dl.term-list {
+  margin: 0 0 var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+dl.term-list > div {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+dl.term-list dt {
+  font-weight: 600;
+}
+
+/* Área de toque ampliada sin mover el texto: el padding se compensa con margen negativo */
+dl.term-list dt a {
+  display: block;
+  padding-block: var(--space-2);
+  margin-block: calc(var(--space-2) * -1);
+}
+
+dl.term-list dd {
+  margin: 0;
+}
+
+@media (min-width: 40.0625rem) {
+  dl.term-list > div {
+    grid-template-columns: minmax(10rem, 28%) 1fr;
+    gap: var(--space-3);
+  }
+}
+
+/* ---------- 7. Énfasis y marcas de contenido ---------- */
+strong.highlight {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+span.error-mark {
+  color: var(--color-warning);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-warning);
+}
+
+/* ---------- 8. Comentarios al margen y bandas destacadas ---------- */
+aside.callout {
+  margin: var(--space-3) 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+aside.callout p:last-child {
+  margin-bottom: 0;
+}
+
+p.callout--key {
+  margin: var(--space-5) 0;
+  padding: var(--space-4);
+  border-left: 4px solid var(--color-primary);
+  background: var(--color-bg-subtle);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-weight: 600;
+}
+
+/* ---------- 9. Dos columnas ---------- */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.two-col__col h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-base);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}
+
+.two-col__col ul {
+  list-style: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.two-col__col li {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (min-width: 40.0625rem) {
+  .two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---------- 10. Árbol jerárquico ---------- */
+ul.tree,
+ul.tree ul {
+  list-style: none;
+  padding-left: 1.1rem;
+}
+
+ul.tree {
+  padding-left: 0;
+  margin-bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+ul.tree li {
+  margin: 0.2rem 0;
+}
+
+ul.tree > li {
+  font-weight: 600;
+}
+
+ul.tree li ul li {
+  font-weight: 400;
+  border-left: 1px solid var(--color-border);
+  padding-left: 0.75rem;
+}
+
+.tree__detail {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  font-family: var(--font-sans);
+}
+
+/* ---------- 11. Cifras en fila ---------- */
+.stats-row {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.stats-row__item {
+  flex: 1 1 8rem;
+}
+
+.stats-row__number {
+  display: block;
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.stats-row__label {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+/* ---------- 12. Etiquetas (claves) ---------- */
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-5) 0 0;
+}
+
+.tags li {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+}
+
+/* ---------- 13. Paginación entre partes ---------- */
+nav.ficha__pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-weight: 600;
+}
+
+nav.ficha__pagination a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-size);
+  text-decoration: none;
+}
+
+nav.ficha__pagination a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 14. Pie de página ---------- */
+.site-footer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-4) var(--space-6);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-size);
+}

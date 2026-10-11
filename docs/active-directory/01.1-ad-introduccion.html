@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: qué es y cómo funciona</title>
+<meta name="description" content="Qué es Active Directory, para qué sirve, los protocolos que usa (LDAP, Kerberos, NTLM, DNS) y cómo se organiza su estructura jerárquica (Forest, Domain, OU).">
+<meta name="keywords" content="active directory, domain controller, LDAP, Kerberos, NTLM, DNS, forest, domain, OU">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: qué es y cómo funciona">
+<meta property="og:description" content="Qué es Active Directory, para qué sirve, los protocolos que usa (LDAP, Kerberos, NTLM, DNS) y cómo se organiza su estructura jerárquica (Forest, Domain, OU).">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: qué es y cómo funciona",
+  "description": "Qué es Active Directory, para qué sirve, los protocolos que usa y cómo se organiza su estructura jerárquica.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Introducción"
+  },
+  "position": 1
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Qué es y cómo funciona</h1>
+      <p class="ficha__subtitle">Introducción</p>
+    </header>
+
+    <section>
+      <h2>Qué es</h2>
+      <p>Servicio de directorio de Microsoft, distribuido y jerárquico, que centraliza la administración de identidades y recursos de una organización: usuarios, grupos, equipos, impresoras, dispositivos de red, políticas y relaciones de confianza (<em>trusts</em>) entre dominios.</p>
+      <p>Toda esa información vive en una base de datos jerárquica (el directorio) que sirven los Domain Controllers.</p>
+    </section>
+
+    <section>
+      <h2>Para qué sirve</h2>
+      <ul>
+        <li><strong>Autenticación:</strong> verificar quién es cada usuario (un solo login válido en todo el dominio).</li>
+        <li><strong>Autorización:</strong> decidir a qué puede acceder (grupos, permisos, ACLs).</li>
+        <li><strong>Administración centralizada:</strong> políticas (GPO), altas y bajas de cuentas, delegación de tareas.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Cómo funciona</h2>
+      <dl class="term-list">
+        <div>
+          <dt><code>Domain Controller (DC)</code></dt>
+          <dd>Servidor que corre AD y guarda la base del directorio, el archivo <code>NTDS.DIT</code> (contiene usuarios, grupos y los hashes de las contraseñas de todo el dominio).</dd>
+        </div>
+        <div>
+          <dt><code>LDAP</code></dt>
+          <dd>Protocolo para consultar y modificar el directorio. Usa el puerto <code>389</code> (o el puerto <code>636</code> cuando es la versión cifrada con TLS, llamada LDAPS).</dd>
+        </div>
+        <div>
+          <dt><code>Kerberos</code></dt>
+          <dd>Protocolo de autenticación principal, basado en tickets. Usa el puerto <code>88</code>.</dd>
+        </div>
+        <div>
+          <dt><code>NTLM</code></dt>
+          <dd>Protocolo de autenticación más viejo, tipo challenge-response (el server manda un desafío y el cliente prueba que conoce la password sin enviarla en texto plano). Se usa cuando Kerberos no se puede aplicar.</dd>
+        </div>
+        <div>
+          <dt><code>DNS</code></dt>
+          <dd>Protocolo que usan los clientes para <em>encontrar</em> a los DCs en la red (no para autenticar). Sin DNS funcionando, AD no funciona.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Estructura</h2>
+      <p><code>Forest &gt; Tree &gt; Domain &gt; OU (container) &gt; objetos (leaf)</code></p>
+
+      <h3>Ejemplo mental (TechCorp)</h3>
+      <ul class="tree">
+        <li>Forest: techcorp.local
+          <ul>
+            <li>Domain: techcorp.local
+              <ul>
+                <li>OU Finance <span class="tree__detail">— usuarios, equipos</span></li>
+                <li>OU IT <span class="tree__detail">— usuarios, equipos</span></li>
+                <li>OU Domain Controllers <span class="tree__detail">— DC01, DC02</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <aside class="callout">
+        <p>Cuando hay más de un domain o forest, se conectan entre sí mediante <strong>trusts</strong> (relaciones de confianza).</p>
+      </aside>
+    </section>
+
+    <p class="callout--key"><span class="sr-only">Idea clave: </span>AD es la base de datos de identidades más los servicios de autenticación y autorización sobre ella. Todo lo demás (GPO, trusts, FSMO, ACLs) se apoya en eso.</p>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>domain controller</li>
+      <li>LDAP</li>
+      <li>Kerberos</li>
+      <li>NTLM</li>
+      <li>DNS</li>
+      <li>forest</li>
+      <li>domain</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <span></span>
+      <a href="01.2-ad-contexto.html">01.2 - Por qué importa y contexto →</a>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
