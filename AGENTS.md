@@ -13,7 +13,11 @@ Reemplaza a la versión anterior, pensada para el sistema de `contenidos/` →
 Un reservorio de material de estudio sobre temas técnicos, publicado como sitio
 estático. Es documentación propia del progreso del autor, no una plataforma.
 
-- Todo vive en `docs/` (GitHub Pages).
+- Todo vive en `docs/` y se publica con GitHub Pages desde la rama `main`,
+  carpeta `/docs`. El repositorio es público: ver la regla de datos sensibles
+  en la sección 7.
+- Pendiente de decidir: dominio propio (hoy, dirección `github.io`). Al
+  definirlo, completar `og:url` y `og:image` de las fichas.
 - El contenido lo escribe el autor. El agente ayuda con estructura, forma y
   revisión; no decide qué dice cada ficha.
 
@@ -180,7 +184,7 @@ Rescatado de las reglas anteriores, que siguen aplicando:
 1. ~~Mobile first y revisión a 375 px~~ (hecho, a revisar): los `@media` pasaron
    a `min-width: 40.0625rem`; áreas de toque de 44 px (`--tap-size`) en pie,
    paginación y listas; títulos más chicos en móvil (`--fs-xl`/`--fs-2xl`).
-   Quedó para revisar a ojo en un celular real.
+   Verificado por el autor en un celular real, ya publicado: funciona bien.
 2. **Tokens de tamaño de letra.** Tokenizar los `em` sueltos (`0.92em`, `0.9em`)
    y decidir si los títulos llevan `clamp()` en lugar de los dos tamaños fijos
    actuales (base móvil y `min-width`).
