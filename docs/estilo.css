@@ -523,3 +523,69 @@ nav.ficha__pagination a:last-child {
   font-family: var(--font-mono);
   color: var(--color-text-muted);
 }
+
+/* ---------- 17. Tema desplegable ----------
+   Un tema del área con sus contenidos, plegado por defecto. Sin JavaScript.
+   Estructura: details.topic > summary.topic__summary
+   (span.topic__title + span.topic__count) + dl.term-list con los contenidos. */
+.topic {
+  border-top: 1px solid var(--color-border);
+}
+
+.topic:last-of-type {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.topic__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-size);
+  padding: var(--space-2) 0;
+  list-style: none;
+  cursor: pointer;
+}
+
+.topic__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Indicador: chevron dibujado con bordes, sin depender de la fuente */
+.topic__summary::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-inline: 0.25rem;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  transform: rotate(-45deg);
+}
+
+.topic[open] > .topic__summary::before {
+  transform: rotate(45deg);
+}
+
+.topic__summary:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.topic__title {
+  font-weight: 600;
+}
+
+.topic__count {
+  margin-left: auto;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.topic > dl.term-list {
+  margin-bottom: 0;
+}
+
+.topic > dl.term-list > div:last-child {
+  border-bottom: none;
+}

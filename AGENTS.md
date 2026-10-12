@@ -115,7 +115,14 @@ Clases con nomenclatura tipo BEM: `.ficha`, `.ficha__header`, `.ficha__kicker`,
 `.ficha__subtitle`, `.ficha__pagination`, `.site-footer`, `dl.term-list`,
 `.two-col`, `ul.tree`, `.tags`, `aside.callout`, `p.callout--key`,
 `strong.highlight`, `span.error-mark`, `.sr-only`, `.concept` (+ `__head`,
-`__id`, `__analogy`) y `.toc` (+ `__id`).
+`__id`, `__analogy`), `.toc` (+ `__id`) y `.topic` (+ `__summary`, `__title`,
+`__count`).
+
+- Índice del área: cada tema es un `<details class="topic">`, **cerrado por
+  defecto**, con su nombre (`NN - Tema`) y el contador de contenidos en el
+  `<summary>`, y sus contenidos adentro. Sin JavaScript. Al sumar un contenido o
+  un tema hay que actualizar a mano el contador. Dentro de un tema, los enlaces
+  no repiten el nombre del tema (`02.1 - Estructura jerárquica`).
 
 - Conceptos de un glosario (`.concept` / `.toc`): se numeran con un entero
   simple del 1 al N dentro de la ficha, solo para ver cuántos son; sin prefijo
@@ -203,9 +210,8 @@ Rescatado de las reglas anteriores, que siguen aplicando:
 2. **Tokens de tamaño de letra.** Tokenizar los `em` sueltos (`0.92em`, `0.9em`)
    y decidir si los títulos llevan `clamp()` en lugar de los dos tamaños fijos
    actuales (base móvil y `min-width`).
-3. **Índice del área con temas desplegables:** mostrar solo los temas y
-   desplegar los contenidos con un clic, con `<details>/<summary>` (sin JS; el
-   hover no existe en celular). El tema 01 abierto mientras sea el único.
+3. ~~Índice del área con temas desplegables~~ (hecho): `<details>/<summary>`
+   cerrados por defecto, sin JS.
 4. **`meta description`** en el índice del sitio y en el del área.
 5. ~~Indentación de `docs/index.html`~~ (hecho).
 6. **Tipografía y `docs/fuentes/`:** Inter (400/500) y JetBrains Mono (400/700)
@@ -213,6 +219,12 @@ Rescatado de las reglas anteriores, que siguen aplicando:
    Decidir entre sistema o fuentes propias (en `woff2` y solo latín, ~100–150 KB,
    en lugar de los `.ttf` de ~920 KB). **No se borra la carpeta**; queda sin
    publicar (fuera del commit) hasta decidirlo.
+8. **JavaScript: reconsiderar solo con un disparador concreto.** Hoy el sitio
+   se mantiene sin JS (decisión del autor). Revisar cuando haya unas 20 a 30
+   páginas y haga falta un **buscador** (no hay búsqueda de servidor en GitHub
+   Pages), o cuando actualizar a mano contadores, índices y enlaces de
+   paginación cause olvidos o enlaces rotos: ahí lo que corresponde es un
+   **script generador que corra al construir**, no JavaScript en el navegador.
 7. **Revisar este archivo.** `AGENTS.md` debería contener solo lo que importa
    para construir y mantener el proyecto (estructura, convenciones, decisiones
    de diseño vigentes). Decidir qué de lo que hoy tiene no merece estar acá
