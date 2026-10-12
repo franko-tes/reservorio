@@ -425,6 +425,12 @@ nav.ficha__pagination a:hover {
   text-decoration: underline;
 }
 
+/* El enlace "siguiente" queda siempre a la derecha, aunque pase a otra fila */
+nav.ficha__pagination a:last-child {
+  margin-left: auto;
+  text-align: right;
+}
+
 /* ---------- 14. Pie de página ---------- */
 .site-footer {
   max-width: var(--max-width);
