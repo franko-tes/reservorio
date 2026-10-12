@@ -109,6 +109,30 @@ Reglas:
   navegación y se decidió dejarlo.
 - Un enlace dentro de una oración debe tener algo más que el color (WCAG 1.4.1).
 
+### Tipografía y grilla
+
+Fuentes del sistema (decisión del autor; ver pendiente 6). Una sola regla:
+
+- **Espaciado, alturas e interlineado: múltiplos de 4 px** (tokens `--space-*`,
+  `--tap-size`, `--lh-*`).
+- **Tamaños de letra: pares, en pasos de 4 px desde 16 px**; 14 px es la única
+  excepción, por legibilidad en celular.
+
+| Token | Valor | Interlineado |
+|---|---|---|
+| `--fs-sm` | 14 px | `--lh-sm` = 20 px |
+| `--fs-base` | 16 px | `--lh-base` = 24 px |
+| `--fs-lg` | 20 px | `--lh-lg` = 28 px |
+| `--fs-xl` | 24 px | 36 px (hereda 1,5) |
+| `--fs-2xl` | 28 px, 32 px desde 641 px | `--lh-2xl` = 36 px / 40 px |
+| `--fs-code` | `0.875em` (14 px sobre 16) | `--lh-sm` |
+
+- Los tamaños van en `rem` (respetan la preferencia de letra del usuario); el
+  `em` solo se usa en `--fs-code`, para que el código acompañe al texto que lo
+  rodea. No se escriben tamaños sueltos ni `px` en el texto.
+- Un componente nuevo con texto usa estos tokens, y si cambia el tamaño define
+  también su interlineado.
+
 ### Componentes del CSS
 
 Clases con nomenclatura tipo BEM: `.ficha`, `.ficha__header`, `.ficha__kicker`,
@@ -211,19 +235,19 @@ Rescatado de las reglas anteriores, que siguen aplicando:
    a `min-width: 40.0625rem`; áreas de toque de 44 px (`--tap-size`) en pie,
    paginación y listas; títulos más chicos en móvil (`--fs-xl`/`--fs-2xl`).
    Verificado por el autor en un celular real, ya publicado: funciona bien.
-2. **Tokens de tamaño de letra.** Tokenizar los `em` sueltos (`0.92em`, `0.9em`)
-   y decidir si los títulos llevan `clamp()` en lugar de los dos tamaños fijos
-   actuales (base móvil y `min-width`).
+2. ~~Tokens de tamaño de letra~~ (hecho): escala de 14/16/20/24/28→32 px sobre
+   la grilla de 4, interlineados en múltiplos de 4 y `--fs-code`; ver la
+   sección de tipografía. Cuerpo de 17 a 16 px y páginas ~10–15% más cortas.
 3. ~~Índice del área con temas desplegables~~ (hecho): `<details>/<summary>`
    cerrados por defecto, sin JS.
 4. ~~`meta description` y Open Graph en la portada y en el índice del área~~
    (hecho).
 5. ~~Indentación de `docs/index.html`~~ (hecho).
-6. **Tipografía y `docs/fuentes/`:** Inter (400/500) y JetBrains Mono (400/700)
-   son parte del diseño original, pero el CSS actual usa fuentes del sistema.
-   Decidir entre sistema o fuentes propias (en `woff2` y solo latín, ~100–150 KB,
-   en lugar de los `.ttf` de ~920 KB). **No se borra la carpeta**; queda sin
-   publicar (fuera del commit) hasta decidirlo.
+6. **Tipografía y `docs/fuentes/`:** decidido por ahora: **fuentes del sistema**
+   (poco contenido, un solo lector). Inter (400/500) y JetBrains Mono (400/700)
+   eran parte del diseño original y siguen en `docs/fuentes/` (`.ttf`, ~920 KB),
+   **sin publicar y sin borrar**. Revisar cuando se publique con dominio propio;
+   en ese caso convertirlas a `woff2` y solo latín (~100–150 KB).
 7. **Revisar este archivo.** `AGENTS.md` debería contener solo lo que importa
    para construir y mantener el proyecto (estructura, convenciones, decisiones
    de diseño vigentes). Decidir qué de lo que hoy tiene no merece estar acá

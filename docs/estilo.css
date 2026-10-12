@@ -49,12 +49,22 @@ ul, ol {
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --fs-sm: 0.9rem;
-  --fs-base: 1.0625rem;
-  --fs-lg: 1.25rem;
-  --fs-xl: 1.45rem;
-  --fs-2xl: 1.75rem;
-  --lh-base: 1.65;
+
+  /* Escala: tamaños pares, en pasos de 4 px desde 16 px (14 es la única
+     excepción, por legibilidad en celular). Espaciados, alturas e
+     interlineados salen siempre de múltiplos de 4 px. */
+  --fs-sm: 0.875rem;   /* 14 px */
+  --fs-base: 1rem;     /* 16 px */
+  --fs-lg: 1.25rem;    /* 20 px */
+  --fs-xl: 1.5rem;     /* 24 px */
+  --fs-2xl: 1.75rem;   /* 28 px, 32 px desde pantallas medianas */
+  --fs-code: 0.875em;  /* código: relativo al texto que lo rodea */
+
+  /* Interlineado: ratio que da múltiplos de 4 px con su tamaño */
+  --lh-base: 1.5;      /* 24 px sobre 16 px */
+  --lh-sm: 1.4286;     /* 20 px sobre 14 px */
+  --lh-lg: 1.4;        /* 28 px sobre 20 px */
+  --lh-2xl: 1.2857;    /* 36 px sobre 28 px (40 px sobre 32 px) */
 
   /* Espaciado */
   --space-1: 0.25rem;
@@ -73,11 +83,11 @@ ul, ol {
   --tap-size: 2.75rem;
 }
 
-/* Títulos más grandes desde pantallas medianas (los valores base son móviles) */
+/* Título principal más grande desde pantallas medianas (los valores base son móviles) */
 @media (min-width: 40.0625rem) {
   :root {
-    --fs-xl: 1.6rem;
     --fs-2xl: 2rem;
+    --lh-2xl: 1.25;
   }
 }
 
@@ -148,6 +158,7 @@ button:focus-visible {
 .ficha__kicker {
   margin: 0 0 var(--space-2);
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -157,12 +168,13 @@ button:focus-visible {
 .ficha__header h1 {
   margin: 0;
   font-size: var(--fs-2xl);
-  line-height: 1.2;
+  line-height: var(--lh-2xl);
 }
 
 .ficha__subtitle {
   margin: var(--space-2) 0 0;
   font-size: var(--fs-lg);
+  line-height: var(--lh-lg);
   color: var(--color-text-muted);
   font-weight: 400;
 }
@@ -178,6 +190,7 @@ button:focus-visible {
 
 .ficha section h3 {
   font-size: var(--fs-lg);
+  line-height: var(--lh-lg);
   margin: var(--space-4) 0 var(--space-2);
 }
 
@@ -203,7 +216,8 @@ button:focus-visible {
 /* ---------- 5. Código y literales ---------- */
 code {
   font-family: var(--font-mono);
-  font-size: 0.92em;
+  font-size: var(--fs-code);
+  line-height: var(--lh-sm);
   background: var(--color-code-bg);
   padding: 0.15em 0.4em;
   border-radius: var(--radius-sm);
@@ -221,8 +235,8 @@ pre.code-block {
 pre.code-block code {
   background: none;
   padding: 0;
-  font-size: 0.9em;
-  line-height: 1.5;
+  font-size: var(--fs-code);
+  line-height: var(--lh-sm);
 }
 
 /* ---------- 6. Término → definición ---------- */
@@ -282,6 +296,7 @@ aside.callout {
   border-radius: 0 var(--radius) var(--radius) 0;
   color: var(--color-text-muted);
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
 }
 
 aside.callout p:last-child {
@@ -342,7 +357,8 @@ ul.tree {
   overflow-wrap: anywhere;
   margin-bottom: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 0.92em;
+  font-size: var(--fs-code);
+  line-height: var(--lh-sm);
 }
 
 ul.tree li {
@@ -387,6 +403,7 @@ ul.tree li ul li {
 .stats-row__label {
   display: block;
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
   color: var(--color-text-muted);
 }
 
@@ -401,6 +418,7 @@ ul.tree li ul li {
 
 .tags li {
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
   color: var(--color-text-muted);
   background: var(--color-bg-subtle);
   border: 1px solid var(--color-border);
@@ -444,6 +462,7 @@ nav.ficha__pagination a:last-child {
   padding: 0 var(--space-4) var(--space-6);
   color: var(--color-text-muted);
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
 }
 
 .site-footer a {
@@ -475,6 +494,7 @@ nav.ficha__pagination a:last-child {
 .concept__id {
   font-family: var(--font-mono);
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
   color: var(--color-text-muted);
   background: var(--color-code-bg);
   padding: 0.1em 0.5em;
@@ -484,6 +504,7 @@ nav.ficha__pagination a:last-child {
 .concept .concept__analogy {
   margin: 0 0 var(--space-2);
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
   font-weight: 600;
   font-style: italic;
   color: var(--color-text-muted);
@@ -514,6 +535,7 @@ nav.ficha__pagination a:last-child {
   min-height: var(--tap-size);
   padding: 0 0.75rem;
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
   text-decoration: none;
   background: var(--color-bg-subtle);
   border: 1px solid var(--color-border);
@@ -585,6 +607,7 @@ nav.ficha__pagination a:last-child {
 .topic__count {
   margin-left: auto;
   font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
   color: var(--color-text-muted);
 }
 
