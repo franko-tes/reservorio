@@ -375,7 +375,7 @@ ul.tree li ul li {
   padding-left: 0.75rem;
 }
 
-.tree__detail {
+.muted-detail {
   color: var(--color-text-muted);
   font-weight: 400;
   font-family: var(--font-sans);

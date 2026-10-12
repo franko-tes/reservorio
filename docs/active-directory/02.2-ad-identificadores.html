@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: identificadores de objetos</title>
+<meta name="description" content="Glosario de Active Directory: GUID, SID, Security Principal, Distinguished Name, RDN, sAMAccountName y UPN. Cómo se identifica cada objeto, por nombre y por identidad.">
+<meta name="keywords" content="active directory, GUID, SID, RID, security principal, distinguished name, RDN, sAMAccountName, UPN">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: identificadores de objetos">
+<meta property="og:description" content="GUID, SID, Security Principal, DN, RDN, sAMAccountName y UPN: cómo se identifica cada objeto de Active Directory.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: identificadores de objetos",
+  "description": "GUID, SID, Security Principal, DN, RDN, sAMAccountName y UPN: cómo se identifica cada objeto de Active Directory.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 2
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Identificadores de objetos</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Cada objeto de AD tiene varias “identidades”. Unas sirven para <strong>ubicarlo por nombre</strong> (cómodas para las personas, pero se pueden cambiar). Otras sirven para <strong>reconocerlo con certeza</strong> (las usa el sistema para permisos y autenticación, y no dependen del nombre).</p>
+
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>Para ubicar por nombre</h3>
+          <ul>
+            <li>DN: la ruta completa</li>
+            <li>RDN: el nombre en su nivel</li>
+            <li>sAMAccountName: el logon clásico</li>
+            <li>UPN: el logon tipo email</li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>Para confiar en la identidad</h3>
+          <ul>
+            <li>GUID: identifica al objeto</li>
+            <li>SID: identifica al security principal para permisos</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Los nombres se pueden cambiar y repetir en distintos lugares. El GUID y el SID no se pueden falsificar tan fácil, por eso el sistema confía en ellos.</p>
+
+      <nav aria-label="Conceptos">
+        <ul class="toc">
+          <li><a href="#guid"><span class="toc__id">1</span>GUID</a></li>
+          <li><a href="#sid"><span class="toc__id">2</span>SID</a></li>
+          <li><a href="#security-principal"><span class="toc__id">3</span>Security Principal</a></li>
+          <li><a href="#dn"><span class="toc__id">4</span>DN</a></li>
+          <li><a href="#rdn"><span class="toc__id">5</span>RDN</a></li>
+          <li><a href="#samaccountname"><span class="toc__id">6</span>sAMAccountName</a></li>
+          <li><a href="#upn"><span class="toc__id">7</span>UPN</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section>
+      <h2>Conceptos</h2>
+
+      <article class="concept" id="guid">
+        <div class="concept__head">
+          <span class="concept__id">1</span>
+          <h3>GUID <span class="muted-detail">(Global Unique Identifier)</span></h3>
+        </div>
+        <ul>
+          <li>Número de 128 bits asignado a <strong>todo objeto</strong> creado en AD, no solo a usuarios.</li>
+          <li>Es único en todo el enterprise y <strong class="highlight">no cambia mientras el objeto exista</strong>, aunque se lo renombre o se lo mueva de OU.</li>
+          <li>Se guarda en el atributo <code>objectGUID</code>.</li>
+          <li>Es el identificador más confiable para apuntar a un objeto exacto.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="sid">
+        <div class="concept__head">
+          <span class="concept__id">2</span>
+          <h3>SID <span class="muted-detail">(Security Identifier)</span></h3>
+        </div>
+        <p>Identifica a un <strong>security principal</strong> (usuario, grupo o equipo) para temas de permisos y autenticación. Lo emite el DC y <strong class="highlight">nunca se reutiliza</strong>, ni siquiera si se borra la cuenta.</p>
+        <p>Estructura:</p>
+        <pre class="code-block" tabindex="0"><code>S-1-5-21-3623811015-3361044348-30300820-1013</code></pre>
+        <dl class="term-list">
+          <div>
+            <dt><code>S</code></dt>
+            <dd>Marca que es un SID.</dd>
+          </div>
+          <div>
+            <dt><code>1</code></dt>
+            <dd>Revision level.</dd>
+          </div>
+          <div>
+            <dt><code>5</code></dt>
+            <dd>Identifier authority. <code>5</code> es NT Authority, el valor más común.</dd>
+          </div>
+          <div>
+            <dt><code>21</code></dt>
+            <dd>Constante: marca un SID emitido por un domain de AD. No varía entre domains, no lo confundas con lo que sigue.</dd>
+          </div>
+          <div>
+            <dt>Domain identifier</dt>
+            <dd>3 números pseudo-aleatorios, <strong>únicos por domain</strong> y fijos desde su creación. Es lo que se compara para saber si dos SIDs son del mismo domain (en el ejemplo: <code>3623811015-3361044348-30300820</code>).</dd>
+          </div>
+          <div>
+            <dt>RID</dt>
+            <dd>Relative Identifier: único por cuenta, es la parte variable (en el ejemplo: <code>1013</code>).</dd>
+          </div>
+        </dl>
+
+        <p>RIDs conocidos:</p>
+        <dl class="term-list">
+          <div>
+            <dt><code>500</code></dt>
+            <dd>Administrator</dd>
+          </div>
+          <div>
+            <dt><code>501</code></dt>
+            <dd>Guest</dd>
+          </div>
+          <div>
+            <dt><code>512</code></dt>
+            <dd>Domain Admins</dd>
+          </div>
+          <div>
+            <dt><code>513</code></dt>
+            <dd>Domain Users</dd>
+          </div>
+          <div>
+            <dt><code>518</code></dt>
+            <dd>Schema Admins</dd>
+          </div>
+          <div>
+            <dt><code>519</code></dt>
+            <dd>Enterprise Admins</dd>
+          </div>
+          <div>
+            <dt><code>1000+</code></dt>
+            <dd>Cuentas normales creadas por sysadmins.</dd>
+          </div>
+        </dl>
+        <p>Para repartir RIDs sin duplicarlos, el DC depende del <strong>RID Master</strong>, que le da bloques de RIDs.</p>
+      </article>
+
+      <article class="concept" id="security-principal">
+        <div class="concept__head">
+          <span class="concept__id">3</span>
+          <h3>Security Principal</h3>
+        </div>
+        <p>Cualquier cosa que el sistema operativo puede autenticar: usuarios, cuentas de equipo, o procesos y threads que corren en el contexto de una cuenta.</p>
+        <ul>
+          <li><strong>De domain:</strong> los administra AD.</li>
+          <li><strong>Locales:</strong> los administra el SAM (la base de cuentas locales de Windows) de esa máquina puntual, no AD.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="dn">
+        <div class="concept__head">
+          <span class="concept__id">4</span>
+          <h3>DN <span class="muted-detail">(Distinguished Name)</span></h3>
+        </div>
+        <p>Ruta completa del objeto en el árbol. Se lee de adentro hacia afuera: <strong>objeto → OUs → domain</strong>.</p>
+        <pre class="code-block" tabindex="0"><code>cn=bjones,ou=IT,ou=Employees,dc=techcorp,dc=local</code></pre>
+        <dl class="term-list">
+          <div>
+            <dt><code>cn</code></dt>
+            <dd>Common name: el objeto en sí.</dd>
+          </div>
+          <div>
+            <dt><code>ou</code></dt>
+            <dd>Cada OU por la que hay que pasar.</dd>
+          </div>
+          <div>
+            <dt><code>dc</code></dt>
+            <dd>Domain component: cada parte del nombre del domain (<code>techcorp</code> y <code>local</code>).</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="concept" id="rdn">
+        <div class="concept__head">
+          <span class="concept__id">5</span>
+          <h3>RDN <span class="muted-detail">(Relative Distinguished Name)</span></h3>
+        </div>
+        <p>Solo el nombre del objeto en su nivel actual. En el DN del ejemplo, es <code>cn=bjones</code>.</p>
+        <ul>
+          <li>Puede repetirse en containers <strong>distintos</strong>, porque el DN completo los diferencia.</li>
+          <li><strong class="highlight">No puede repetirse en el mismo container.</strong></li>
+        </ul>
+      </article>
+
+      <article class="concept" id="samaccountname">
+        <div class="concept__head">
+          <span class="concept__id">6</span>
+          <h3>sAMAccountName</h3>
+        </div>
+        <p>Nombre de logon clásico, de la época anterior a Windows 2000. Es único y tiene como máximo <strong>20 caracteres</strong>.</p>
+      </article>
+
+      <article class="concept" id="upn">
+        <div class="concept__head">
+          <span class="concept__id">7</span>
+          <h3>UPN <span class="muted-detail">(userPrincipalName)</span></h3>
+        </div>
+        <p>Nombre de logon con formato de email: <code>bjones@techcorp.local</code>. <strong>No es obligatorio.</strong></p>
+      </article>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Si renombro o muevo un usuario, cambia su SID</span>: no. Dentro del mismo domain, cambian el DN (y el sAMAccountName o el UPN, si se los edita), pero el GUID y el SID siguen igual.</li>
+        <li>El GUID y el SID se generan en el mismo momento y lugar (el DC que corre AD DS), pero el SID depende de un bloque de RIDs que le asignó antes el RID Master.</li>
+        <li>El <code>21</code> del SID es siempre el mismo. Para saber si dos SIDs son del mismo domain hay que comparar el domain identifier, los 3 números que le siguen.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>GUID</li>
+      <li>SID</li>
+      <li>RID</li>
+      <li>security principal</li>
+      <li>distinguished name</li>
+      <li>RDN</li>
+      <li>sAMAccountName</li>
+      <li>UPN</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.1-ad-estructura.html">← 02.1 - Estructura jerárquica</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
