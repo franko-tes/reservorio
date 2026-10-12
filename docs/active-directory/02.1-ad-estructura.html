@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: estructura jerárquica</title>
+<meta name="description" content="Grupo 1 del glosario de Active Directory: Object, Attributes, Schema, Domain, Forest, Tree, Container y Leaf, con la jerarquía completa de Forest a Leaf.">
+<meta name="keywords" content="active directory, object, attributes, schema, domain, forest, tree, container, leaf, OU">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: estructura jerárquica">
+<meta property="og:description" content="Object, Attributes, Schema, Domain, Forest, Tree, Container y Leaf, con la jerarquía completa de Forest a Leaf.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: estructura jerárquica",
+  "description": "Object, Attributes, Schema, Domain, Forest, Tree, Container y Leaf, con la jerarquía completa de Forest a Leaf.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 1
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Estructura jerárquica</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata este grupo</h2>
+      <p>Todo lo que AD administra es un <strong>objeto</strong>, y los objetos no están sueltos: viven dentro de una jerarquía. Este grupo responde dos preguntas: <em>qué puede existir</em> (Object, Attributes, Schema) y <em>dónde vive</em> (Forest, Tree, Domain, Container, Leaf).</p>
+
+      <h3>La jerarquía, de mayor a menor</h3>
+      <ul class="tree">
+        <li>Forest <span class="tree__detail">— el país: el contenedor más grande</span>
+          <ul>
+            <li>Tree <span class="tree__detail">— domains que comparten namespace</span>
+              <ul>
+                <li>Domain <span class="tree__detail">— la ciudad</span>
+                  <ul>
+                    <li>Container (OU) <span class="tree__detail">— contiene otros objetos</span>
+                      <ul>
+                        <li>Leaf <span class="tree__detail">— usuario, equipo… no contiene nada</span></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>El Schema atraviesa toda la jerarquía: define qué clases de objetos y qué atributos pueden existir en cualquier nivel.</p>
+
+      <nav aria-label="Conceptos de este grupo">
+        <ul class="toc">
+          <li><a href="#object"><span class="toc__id">1</span>Object</a></li>
+          <li><a href="#attributes"><span class="toc__id">2</span>Attributes</a></li>
+          <li><a href="#schema"><span class="toc__id">3</span>Schema</a></li>
+          <li><a href="#domain"><span class="toc__id">4</span>Domain</a></li>
+          <li><a href="#forest"><span class="toc__id">5</span>Forest</a></li>
+          <li><a href="#tree"><span class="toc__id">6</span>Tree</a></li>
+          <li><a href="#container"><span class="toc__id">7</span>Container</a></li>
+          <li><a href="#leaf"><span class="toc__id">8</span>Leaf</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section>
+      <h2>Conceptos</h2>
+
+      <article class="concept" id="object">
+        <div class="concept__head">
+          <span class="concept__id">1</span>
+          <h3>Object</h3>
+        </div>
+        <p>Cualquier recurso que existe en AD: usuarios, equipos, OUs, impresoras, Domain Controllers, GPOs. Es el término más amplio de todos.</p>
+      </article>
+
+      <article class="concept" id="attributes">
+        <div class="concept__head">
+          <span class="concept__id">2</span>
+          <h3>Attributes</h3>
+        </div>
+        <p>Características que definen a un objeto. Un equipo tiene, por ejemplo, hostname y DNS name; un usuario, nombre, apellido y mail.</p>
+        <p>Cada atributo tiene un <strong>nombre LDAP</strong>, y es ese el que se usa en las consultas, no el que se ve en la interfaz:</p>
+        <dl class="term-list">
+          <div>
+            <dt><code>displayName</code></dt>
+            <dd>En la interfaz: <em>Full Name</em>.</dd>
+          </div>
+          <div>
+            <dt><code>givenName</code></dt>
+            <dd>En la interfaz: <em>First Name</em>.</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="concept" id="schema">
+        <div class="concept__head">
+          <span class="concept__id">3</span>
+          <h3>Schema</h3>
+        </div>
+        <p class="concept__analogy">El plano de todo el forest</p>
+        <p>Define qué tipos de objetos pueden existir y qué atributos tiene cada tipo (algunos obligatorios, otros opcionales). Los usuarios pertenecen a la clase <code>user</code>, los equipos a la clase <code>computer</code>, y así.</p>
+        <p>Crear un objeto a partir de una clase se llama <strong>instanciar</strong>, y el objeto resultante es una <strong>instancia</strong> de esa clase. Ejemplo: el equipo <code>RDS01</code> es una instancia de la clase <code>computer</code>.</p>
+      </article>
+
+      <article class="concept" id="domain">
+        <div class="concept__head">
+          <span class="concept__id">4</span>
+          <h3>Domain</h3>
+        </div>
+        <p class="concept__analogy">La ciudad</p>
+        <p>Agrupamiento lógico de objetos: usuarios, equipos, OUs, grupos. Puede operar de forma independiente o conectarse con otros domains mediante relaciones de confianza (<em>trusts</em>).</p>
+      </article>
+
+      <article class="concept" id="forest">
+        <div class="concept__head">
+          <span class="concept__id">5</span>
+          <h3>Forest</h3>
+        </div>
+        <p class="concept__analogy">El país (o el estado)</p>
+        <p>Contenedor máximo. Tiene uno o varios domains y contiene todos los objetos: domains, usuarios, grupos, equipos y GPOs. Cada forest opera de forma independiente, aunque puede tener trusts con otros forests.</p>
+        <p><strong class="highlight">El forest es el límite de seguridad:</strong> es el perímetro dentro del cual todos los objetos están bajo un mismo control administrativo.</p>
+      </article>
+
+      <article class="concept" id="tree">
+        <div class="concept__head">
+          <span class="concept__id">6</span>
+          <h3>Tree</h3>
+        </div>
+        <p>Conjunto de domains que arranca en un único domain raíz y comparten namespace. Un forest es una colección de trees. Al agregar un domain debajo de otro se forma una relación de confianza padre-hijo.</p>
+        <p><strong class="highlight">Dos trees del mismo forest no pueden compartir namespace.</strong> Ejemplo con dos trees:</p>
+        <ul class="tree">
+          <li>Forest
+            <ul>
+              <li>Tree 1
+                <ul>
+                  <li>techcorp.local <span class="tree__detail">— domain raíz</span>
+                    <ul>
+                      <li>corp.techcorp.local <span class="tree__detail">— domain hijo</span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>Tree 2
+                <ul>
+                  <li>labcorp.local <span class="tree__detail">— domain raíz</span>
+                    <ul>
+                      <li>corp.labcorp.local <span class="tree__detail">— domain hijo</span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+
+      <article class="concept" id="container">
+        <div class="concept__head">
+          <span class="concept__id">7</span>
+          <h3>Container</h3>
+        </div>
+        <p>Objeto que puede contener otros objetos y tiene un lugar definido en la jerarquía del directorio. El ejemplo típico es una OU.</p>
+      </article>
+
+      <article class="concept" id="leaf">
+        <div class="concept__head">
+          <span class="concept__id">8</span>
+          <h3>Leaf</h3>
+        </div>
+        <p>Objeto que no contiene otros objetos: está al final de la jerarquía. Por ejemplo, un usuario o un equipo.</p>
+      </article>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Un domain tiene un solo DC</span>: no es así, un domain puede tener varios DCs. Cada DC guarda la copia completa de su propio domain y nada de los demás (salvo que sea Global Catalog, que guarda una copia parcial).</li>
+        <li>Las OUs cuelgan de un domain, nunca directamente del forest.</li>
+        <li>Un DC es un objeto más: vive en la OU <code>Domain Controllers</code> de su domain.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>object</li>
+      <li>attributes</li>
+      <li>schema</li>
+      <li>domain</li>
+      <li>forest</li>
+      <li>tree</li>
+      <li>container</li>
+      <li>leaf</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="01.2-ad-contexto.html">← 01.2 - Introducción: Por qué importa y contexto</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>

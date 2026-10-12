@@ -333,6 +333,7 @@ ul.tree ul {
 
 ul.tree {
   padding-left: 0;
+  overflow-wrap: anywhere;
   margin-bottom: var(--space-3);
   font-family: var(--font-mono);
   font-size: 0.92em;
@@ -404,6 +405,7 @@ ul.tree li ul li {
 /* ---------- 13. Paginación entre partes ---------- */
 nav.ficha__pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-3);
   margin-top: var(--space-6);
@@ -436,4 +438,82 @@ nav.ficha__pagination a:hover {
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-size);
+}
+
+/* ---------- 15. Concepto de glosario ----------
+   Un concepto numerado (1 a N dentro de la ficha) con su analogía opcional.
+   Estructura: article.concept > div.concept__head (número + h3)
+   + p.concept__analogy (opcional) + contenido. */
+.concept {
+  padding: var(--space-4) 0 var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+
+.concept__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.ficha .concept h3 {
+  margin: 0;
+}
+
+.concept__id {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  background: var(--color-code-bg);
+  padding: 0.1em 0.5em;
+  border-radius: var(--radius-sm);
+}
+
+.concept .concept__analogy {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.concept ul:not([class]) {
+  margin: 0 0 var(--space-3);
+  padding-left: 1.25rem;
+}
+
+.concept ul:not([class]) li {
+  margin-bottom: var(--space-2);
+}
+
+/* ---------- 16. Índice de conceptos ----------
+   Lista de enlaces internos (anclas) a cada concepto de la ficha. */
+.toc {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+}
+
+.toc a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-size);
+  padding: 0 0.75rem;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+
+.toc a:hover {
+  border-color: var(--color-primary);
+}
+
+.toc__id {
+  margin-right: 0.35em;
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
 }

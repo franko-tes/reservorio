@@ -45,8 +45,10 @@ Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
 (segundo número).
 
 - Nombre de archivo: `NN.N-nombre.html`. Ejemplo: `01.1-ad-introduccion.html`.
-- El tema se llama como lo define el autor. En Active Directory, el tema 01 es
-  "Introducción", y va como subtítulo de cada ficha.
+- El tema se llama como lo define el autor, y va como subtítulo de cada ficha.
+  En Active Directory: tema 01 "Introducción" (`01.1`, `01.2`) y tema 02
+  "Fundamental" (`02.1-ad-estructura.html`, primer grupo de un glosario que se
+  planea en varios grupos).
 - Un área puede tener muchos temas (se planean al menos 5 en Active Directory).
 - `docs/fuentes/` no está en uso y no la referencia el CSS actual.
 
@@ -110,8 +112,14 @@ Reglas:
 Clases con nomenclatura tipo BEM: `.ficha`, `.ficha__header`, `.ficha__kicker`,
 `.ficha__subtitle`, `.ficha__pagination`, `.site-footer`, `dl.term-list`,
 `.two-col`, `ul.tree`, `.tags`, `aside.callout`, `p.callout--key`,
-`strong.highlight`, `span.error-mark`, `.sr-only`.
+`strong.highlight`, `span.error-mark`, `.sr-only`, `.concept` (+ `__head`,
+`__id`, `__analogy`) y `.toc` (+ `__id`).
 
+- Conceptos de un glosario (`.concept` / `.toc`): se numeran con un entero
+  simple del 1 al N dentro de la ficha, solo para ver cuántos son; sin prefijo
+  de grupo, para que no se confundan con la numeración de contenidos (`01.3`).
+  La analogía va en texto atenuado y cursiva, no en naranja (el naranja es del
+  `strong.highlight`).
 - No se escriben estilos en el HTML (`<style>`, `style=`).
 - Para contenido nuevo se reutilizan las clases existentes. Un componente nuevo
   se consulta antes y se agrega al final del CSS, con su sección numerada.
@@ -137,7 +145,12 @@ Clases con nomenclatura tipo BEM: `.ficha`, `.ficha__header`, `.ficha__kicker`,
 </footer>
 ```
 
-- Paginación: `← 01.1 - Título` y `01.2 - Título →`; sin "Parte N de M".
+- Paginación: `← 01.1 - Título` y `01.2 - Título →`; sin "Parte N de M". Cruza
+  de un tema a otro, y en ese caso el enlace lleva el nombre del tema:
+  `02.1 - Fundamental: Estructura jerárquica →`. Al sumar un contenido hay que
+  actualizar el enlace "siguiente" de la ficha anterior.
+- Los ejemplos de dominio son ficticios y comunes a todo el sitio: `techcorp.local`
+  (y `labcorp.local` cuando hace falta un segundo).
 - El pie vuelve al **área** (no al inicio del sitio) y sube al inicio de la
   página sin tener que desplazarse.
 - No hay notas al pie como "Reservorio — notas de estudio personales" ni
