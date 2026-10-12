@@ -213,6 +213,12 @@ Rescatado de las reglas anteriores, que siguen aplicando:
    Decidir entre sistema o fuentes propias (en `woff2` y solo latín, ~100–150 KB,
    en lugar de los `.ttf` de ~920 KB). **No se borra la carpeta**; queda sin
    publicar (fuera del commit) hasta decidirlo.
+7. **Revisar este archivo.** `AGENTS.md` debería contener solo lo que importa
+   para construir y mantener el proyecto (estructura, convenciones, decisiones
+   de diseño vigentes). Decidir qué de lo que hoy tiene no merece estar acá
+   (por ejemplo la lista de pendientes, el historial de alternativas
+   descartadas o las notas de cómo trabajar con el autor) y qué corresponde
+   dejar solo en la memoria del asistente.
 
 Otros: el kicker de la portada dice "1 área · 1 tema · 2 contenidos" y se
 actualiza a mano al agregar contenido.
