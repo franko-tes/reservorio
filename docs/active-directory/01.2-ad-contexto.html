@@ -47,7 +47,14 @@
       <h2>Por qué importa en seguridad</h2>
       <ul>
         <li>AD fue diseñado para ser <strong class="highlight">retrocompatible</strong> con versiones viejas de Windows → muchas funciones no son seguras por default → es fácil de malconfigurar.</li>
-        <li>Es, en esencia, una base de datos de <strong class="highlight">solo lectura accesible por cualquier usuario autenticado</strong>, sin importar su nivel de privilegio → una cuenta de dominio básica puede enumerar la mayoría de los objetos.</li>
+        <li>Es, en esencia, una base de datos de <strong class="highlight">solo lectura accesible por cualquier usuario autenticado</strong>, sin importar su nivel de privilegio → una cuenta de dominio básica puede enumerar la mayoría de los objetos.
+          <ul>
+            <li>Equipos, usuarios y grupos del domain</li>
+            <li>OUs, GPOs y la Default Domain Policy</li>
+            <li>Password policy y niveles funcionales</li>
+            <li>Trusts y ACLs</li>
+          </ul>
+        </li>
         <li>Se estima que <strong class="highlight">~95% de las empresas Fortune 500</strong> corren AD → es un objetivo de altísimo valor para atacantes.</li>
         <li>Un DC comprometido o el <code>NTDS.DIT</code> (la base de AD) extraído significa todas las credenciales del dominio.</li>
       </ul>

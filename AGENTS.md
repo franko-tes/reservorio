@@ -129,6 +129,10 @@ Clases con nomenclatura tipo BEM: `.ficha`, `.ficha__header`, `.ficha__kicker`,
   de grupo, para que no se confundan con la numeración de contenidos (`01.3`).
   La analogía va en texto atenuado y cursiva, no en naranja (el naranja es del
   `strong.highlight`).
+- Listas anidadas (un `<ul>` dentro de un `<li>` de una lista de sección o de un
+  `.concept`): llevan sangría propia de 1,25 rem, ya resuelta en el CSS. En el
+  HTML se escriben con 2 espacios por nivel y el `</li>` del punto padre cierra
+  después del `</ul>` anidado.
 - No se escriben estilos en el HTML (`<style>`, `style=`).
 - Para contenido nuevo se reutilizan las clases existentes. Un componente nuevo
   se consulta antes y se agrega al final del CSS, con su sección numerada.
@@ -212,28 +216,35 @@ Rescatado de las reglas anteriores, que siguen aplicando:
    actuales (base móvil y `min-width`).
 3. ~~Índice del área con temas desplegables~~ (hecho): `<details>/<summary>`
    cerrados por defecto, sin JS.
-4. **`meta description`** en el índice del sitio y en el del área.
+4. ~~`meta description` y Open Graph en la portada y en el índice del área~~
+   (hecho).
 5. ~~Indentación de `docs/index.html`~~ (hecho).
 6. **Tipografía y `docs/fuentes/`:** Inter (400/500) y JetBrains Mono (400/700)
    son parte del diseño original, pero el CSS actual usa fuentes del sistema.
    Decidir entre sistema o fuentes propias (en `woff2` y solo latín, ~100–150 KB,
    en lugar de los `.ttf` de ~920 KB). **No se borra la carpeta**; queda sin
    publicar (fuera del commit) hasta decidirlo.
-8. **JavaScript: reconsiderar solo con un disparador concreto.** Hoy el sitio
-   se mantiene sin JS (decisión del autor). Revisar cuando haya unas 20 a 30
-   páginas y haga falta un **buscador** (no hay búsqueda de servidor en GitHub
-   Pages), o cuando actualizar a mano contadores, índices y enlaces de
-   paginación cause olvidos o enlaces rotos: ahí lo que corresponde es un
-   **script generador que corra al construir**, no JavaScript en el navegador.
 7. **Revisar este archivo.** `AGENTS.md` debería contener solo lo que importa
    para construir y mantener el proyecto (estructura, convenciones, decisiones
    de diseño vigentes). Decidir qué de lo que hoy tiene no merece estar acá
    (por ejemplo la lista de pendientes, el historial de alternativas
    descartadas o las notas de cómo trabajar con el autor) y qué corresponde
    dejar solo en la memoria del asistente.
+8. **JavaScript: reconsiderar solo con un disparador concreto.** Hoy el sitio
+   se mantiene sin JS (decisión del autor). Revisar cuando haya unas 20 a 30
+   páginas y haga falta un **buscador** (no hay búsqueda de servidor en GitHub
+   Pages), o cuando actualizar a mano contadores, índices y enlaces de
+   paginación cause olvidos o enlaces rotos: ahí lo que corresponde es un
+   **script generador que corra al construir**, no JavaScript en el navegador.
+9. **Dominio propio, `og:url` y `og:image`.** Hoy el sitio vive en la dirección
+   `github.io`. Las etiquetas Open Graph `og:url` (dirección absoluta y
+   canónica de cada página) y `og:image` (imagen de la vista previa, PNG o JPG
+   de 1200 × 630 px, sin texto técnico) quedan marcadas con "Completar" en las
+   páginas hasta decidir el dominio, para no cargarlas dos veces.
 
-Otros: el kicker de la portada dice "1 área · 1 tema · 2 contenidos" y se
-actualiza a mano al agregar contenido.
+Otros: el kicker de la portada ("N áreas · N temas · N contenidos"), el contador
+de la tarjeta del área y los contadores de cada tema del índice del área se
+actualizan a mano al agregar contenido.
 
 ## 9. Mantener este archivo al día
 
