@@ -54,9 +54,9 @@ El sitio se publica con GitHub Pages desde la rama `main`, carpeta `/docs`. Cada
 
 ## Convenciones de trabajo
 
-Las decisiones de diseño, la estructura de las fichas y los pendientes están en
-[`AGENTS.md`](AGENTS.md). Ese archivo es la referencia para quien trabaje sobre el
-repositorio, incluidos los asistentes de IA.
+La estructura, las decisiones de diseño, las convenciones de los contenidos y los
+pasos para agregar uno nuevo están en [`AGENTS.md`](AGENTS.md). Ese archivo es la
+referencia para quien trabaje sobre el repositorio, incluidos los asistentes de IA.
 
 ## Nota
 

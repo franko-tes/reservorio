@@ -1,27 +1,19 @@
 # AGENTS.md
 
-Instrucciones de trabajo para agentes de IA que operen sobre este repositorio.
-Reemplaza a la versión anterior, pensada para el sistema de `contenidos/` →
-`publicado/` con esqueletos, que ya no existe.
-
-Última revisión: octubre de 2026.
+Instrucciones de trabajo para agentes de IA (y para cualquiera) que construya o
+mantenga este repositorio. Última revisión: octubre de 2026.
 
 ---
 
-## 1. Qué es este proyecto
+## 1. Qué es y stack
 
 Un reservorio de material de estudio sobre temas técnicos, publicado como sitio
 estático. Es documentación propia del progreso del autor, no una plataforma.
 
 - Todo vive en `docs/` y se publica con GitHub Pages desde la rama `main`,
-  carpeta `/docs`. El repositorio es público: ver la regla de datos sensibles
-  en la sección 7.
-- Pendiente de decidir: dominio propio (hoy, dirección `github.io`). Al
-  definirlo, completar `og:url` y `og:image` de las fichas.
+  carpeta `/docs`. El repositorio es **público** (ver sección 6).
 - El contenido lo escribe el autor. El agente ayuda con estructura, forma y
-  revisión; no decide qué dice cada ficha.
-
-## 2. Stack
+  revisión; no decide qué dice cada contenido.
 
 **HTML y CSS. Nada más.** Sin JavaScript, frameworks, preprocesadores ni
 dependencias externas.
@@ -29,141 +21,98 @@ dependencias externas.
 - Las páginas tienen que abrirse con doble clic (`file://`) y desde GitHub Pages.
 - Rutas siempre relativas.
 - Cualquier tecnología nueva se propone y se espera la decisión del autor.
+- JavaScript solo con un disparador concreto: un buscador (GitHub Pages no tiene
+  búsqueda de servidor) o actualizaciones manuales que causen enlaces rotos. En
+  ese segundo caso corresponde un script que genere el HTML al construir, no
+  JavaScript en el navegador.
 
-## 3. Estructura
+## 2. Estructura y nomenclatura
 
 ```
 docs/
   index.html                        portada: solo muestra áreas
   estilo.css                        hoja única compartida
   <area>/
-    index.html                      índice del área: sus contenidos
+    index.html                      índice del área: sus temas y contenidos
     NN.N-<abreviatura>-<nombre>.html
 ```
 
 Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
 (segundo número).
 
-- Nombre de archivo: `NN.N-nombre.html`. Ejemplo: `01.1-ad-introduccion.html`.
-- El tema se llama como lo define el autor, y va como subtítulo de cada ficha.
-  En Active Directory: tema 01 "Introducción" (`01.1`, `01.2`) y tema 02
-  "Fundamental" (`02.1-ad-estructura.html`, primer grupo de un glosario que se
-  planea en varios grupos).
-- Un área puede tener muchos temas (se planean al menos 5 en Active Directory).
-- `docs/fuentes/` no está en uso y no la referencia el CSS actual.
+- `NN` es el tema, `N` el orden dentro del tema, `<abreviatura>` la sigla del
+  área (`ad` = Active Directory) y `<nombre>` una palabra que describe el
+  contenido. Ejemplo: `01.1-ad-introduccion.html`.
+- El tema lo nombra el autor y va como subtítulo de cada contenido.
 
-## 4. Cómo se trabaja con el autor
+## 3. Cómo se trabaja
 
-- **Analizar y proponer antes de cambiar.** Cuando el autor pide "analicemos" o
-  "no cambiemos nada", no se toca ningún archivo.
-- **Listas numeradas** para modificaciones, y se espera confirmación punto por
-  punto.
-- **Nunca se hace `git add`, `git commit` ni `git push`.** Lo hace siempre el
-  autor. El agente solo pasa los comandos y muestra el diff si se lo piden;
-  ante una pregunta ambigua ("¿podemos commitear?") se pregunta quién ejecuta.
+- **Proponer antes de cambiar.** Ante la duda se pregunta, con opciones y una
+  recomendación. Si el autor pide "analicemos", no se toca ningún archivo.
+- **`git add`, `git commit` y `git push` los hace siempre el autor.** El agente
+  pasa los comandos y muestra el diff si se lo piden.
 - **Alcance mínimo:** solo se tocan los archivos que el pedido nombra.
-- **Recomendar sí, aplicar sin aviso no.** El agente señala mejoras, pero la
-  decisión es del autor.
-- **Ante la duda, se pregunta**, con opciones y una recomendación, no con un
-  "no puedo continuar".
-- **Respaldar con datos.** Contrastes, medidas y comparaciones se calculan o se
-  verifican en el navegador, no se afirman de memoria. Si algo no se pudo
-  verificar, se dice.
-- Se reconoce el error cuando lo hay (por ejemplo, recomendar un cambio que no
-  se percibe).
+- **Verificar antes de afirmar.** Medidas, contrastes y comparaciones se
+  calculan o se prueban en el navegador. Si algo no se pudo verificar, se dice.
 
-## 5. Diseño decidido
+## 4. Diseño
 
 ### Paleta
 
-**Gruvbox con acento naranja, modo oscuro fijo.** Sin modo claro en pantalla.
-En impresión (`@media print`) se usa Gruvbox claro.
+**Gruvbox con acento naranja, modo oscuro fijo**; en impresión (`@media print`)
+pasa a Gruvbox claro. Los valores viven en `:root` de `estilo.css`.
 
-| Token | Valor | Uso |
-|---|---|---|
-| `--color-bg` | `#282828` | Fondo |
-| `--color-bg-subtle` | `#3c3836` | Fondos suaves, callouts |
-| `--color-text` | `#ebdbb2` | Texto |
-| `--color-text-muted` | `#aca095` | Texto secundario |
-| `--color-border` | `#504945` | Bordes |
-| `--color-primary` | `#8ec07c` | Enlaces, borde de banda clave, cifras |
-| `--color-accent` | `#fe8019` | Solo `strong.highlight` |
-| `--color-warning` | `#fc7d6e` | Solo `span.error-mark`, siempre con tachado |
-| `--color-code-bg` | `#3c3836` | Fondo de código |
+| Token | Uso |
+|---|---|
+| `--color-bg`, `--color-bg-subtle`, `--color-code-bg` | Fondo, bloques y callouts, código |
+| `--color-text`, `--color-text-muted` | Texto y texto secundario |
+| `--color-border` | Bordes |
+| `--color-primary` | Enlaces, borde de banda clave, cifras |
+| `--color-accent` | **Solo** `strong.highlight` |
+| `--color-warning` | **Solo** `span.error-mark`, siempre con tachado |
 
-Reglas:
-
-- Los colores se usan solo mediante tokens; no hay valores sueltos en el CSS.
-- Todo texto debe cumplir contraste WCAG AA (4,5:1).
+- Los colores se usan solo mediante tokens; no hay valores sueltos.
+- Todo texto cumple contraste WCAG AA (4,5:1).
 - El error nunca depende solo del color: lleva tachado.
-- Se evaluaron y descartaron Tokyo Night, Gruvbox amarillo y la paleta de
-  Crunchyroll. El naranja se eligió porque separa mejor lo remarcado del texto,
-  y el modo oscuro porque el rojo de error se ve mejor.
 
 ### Enlaces
 
-- El color de enlace actual (`#8ec07c`) está aceptado, aunque el autor no
-  percibe diferencia con la alternativa apagada. Si se revisa, el candidato
-  evaluado es el celeste `#7cc4f4`.
-- **El subrayado se mantiene** en los enlaces. Se evaluó quitarlo en los de
-  navegación y se decidió dejarlo.
-- Un enlace dentro de una oración debe tener algo más que el color (WCAG 1.4.1).
+Color `--color-primary`, con **subrayado**. Un enlace dentro de una oración debe
+distinguirse por algo más que el color (WCAG 1.4.1).
 
 ### Tipografía y grilla
 
-Fuentes del sistema (decisión del autor; ver pendiente 6). Una sola regla:
+Fuentes del sistema. Una sola regla:
 
-- **Espaciado, alturas e interlineado: múltiplos de 4 px** (tokens `--space-*`,
+- **Espaciado, alturas e interlineado: múltiplos de 4 px** (`--space-*`,
   `--tap-size`, `--lh-*`).
-- **Tamaños de letra: pares, en pasos de 4 px desde 16 px**; 14 px es la única
-  excepción, por legibilidad en celular.
+- **Tamaños de letra: pares, en pasos de 4 px desde 16 px** (14 · 16 · 20 · 24 ·
+  28 → 32 px); 14 px es la única excepción, por legibilidad en celular.
+- Tamaños en `rem` mediante los tokens `--fs-*`. El `em` solo se usa en
+  `--fs-code`. No se escriben tamaños sueltos ni `px` en el texto.
+- Un componente nuevo con texto usa estos tokens y, si cambia el tamaño, define
+  su interlineado.
 
-| Token | Valor | Interlineado |
-|---|---|---|
-| `--fs-sm` | 14 px | `--lh-sm` = 20 px |
-| `--fs-base` | 16 px | `--lh-base` = 24 px |
-| `--fs-lg` | 20 px | `--lh-lg` = 28 px |
-| `--fs-xl` | 24 px | 36 px (hereda 1,5) |
-| `--fs-2xl` | 28 px, 32 px desde 641 px | `--lh-2xl` = 36 px / 40 px |
-| `--fs-code` | `0.875em` (14 px sobre 16) | `--lh-sm` |
+### Componentes
 
-- Los tamaños van en `rem` (respetan la preferencia de letra del usuario); el
-  `em` solo se usa en `--fs-code`, para que el código acompañe al texto que lo
-  rodea. No se escriben tamaños sueltos ni `px` en el texto.
-- Un componente nuevo con texto usa estos tokens, y si cambia el tamaño define
-  también su interlineado.
+Las clases están documentadas por sección en `estilo.css` (nomenclatura tipo
+BEM: `.ficha__header`, `.topic__summary`).
 
-### Componentes del CSS
-
-Clases con nomenclatura tipo BEM: `.ficha`, `.ficha__header`, `.ficha__kicker`,
-`.ficha__subtitle`, `.ficha__pagination`, `.site-footer`, `dl.term-list`,
-`.two-col`, `ul.tree`, `.tags`, `aside.callout`, `p.callout--key`,
-`strong.highlight`, `span.error-mark`, `.sr-only`, `.concept` (+ `__head`,
-`__id`, `__analogy`), `.toc` (+ `__id`) y `.topic` (+ `__summary`, `__title`,
-`__count`).
-
-- Índice del área: cada tema es un `<details class="topic">`, **cerrado por
-  defecto**, con su nombre (`NN - Tema`) y el contador de contenidos en el
-  `<summary>`, y sus contenidos adentro. Sin JavaScript. Al sumar un contenido o
-  un tema hay que actualizar a mano el contador. Dentro de un tema, los enlaces
-  no repiten el nombre del tema (`02.1 - Estructura jerárquica`).
-
-- Conceptos de un glosario (`.concept` / `.toc`): se numeran con un entero
-  simple del 1 al N dentro de la ficha, solo para ver cuántos son; sin prefijo
-  de grupo, para que no se confundan con la numeración de contenidos (`01.3`).
-  La analogía va en texto atenuado y cursiva, no en naranja (el naranja es del
-  `strong.highlight`).
-- Listas anidadas (un `<ul>` dentro de un `<li>` de una lista de sección o de un
-  `.concept`): llevan sangría propia de 1,25 rem, ya resuelta en el CSS. En el
-  HTML se escriben con 2 espacios por nivel y el `</li>` del punto padre cierra
-  después del `</ul>` anidado.
 - No se escriben estilos en el HTML (`<style>`, `style=`).
-- Para contenido nuevo se reutilizan las clases existentes. Un componente nuevo
-  se consulta antes y se agrega al final del CSS, con su sección numerada.
+- Se reutilizan las clases existentes. Un componente nuevo se consulta antes y se
+  agrega al **final** del CSS, con su sección numerada.
+- **Glosario** (`.concept` / `.toc`): los conceptos se numeran con un entero
+  simple del 1 al N dentro de la ficha (sin prefijo de grupo, para no confundirlo
+  con `01.3`). La analogía va en texto atenuado y cursiva; el naranja es de
+  `strong.highlight`.
+- **Índice del área**: cada tema es un `<details class="topic">` **cerrado por
+  defecto**, con `NN - Tema` y su contador de contenidos en el `<summary>`.
+- **Listas anidadas**: llevan sangría propia (ya resuelta en el CSS). En el HTML,
+  2 espacios por nivel y el `</li>` del punto padre después del `</ul>` anidado.
 
-## 6. Convenciones del HTML
+## 5. Convenciones del HTML
 
-### Ficha (contenido)
+### Contenido (ficha)
 
 ```
 <main id="inicio">
@@ -182,96 +131,88 @@ Clases con nomenclatura tipo BEM: `.ficha`, `.ficha__header`, `.ficha__kicker`,
 </footer>
 ```
 
-- Paginación: `← 01.1 - Título` y `01.2 - Título →`; sin "Parte N de M". Cruza
-  de un tema a otro, y en ese caso el enlace lleva el nombre del tema:
-  `02.1 - Fundamental: Estructura jerárquica →`. Al sumar un contenido hay que
-  actualizar el enlace "siguiente" de la ficha anterior.
-- Los ejemplos de dominio son ficticios y comunes a todo el sitio: `techcorp.local`
-  (y `labcorp.local` cuando hace falta un segundo).
-- El pie vuelve al **área** (no al inicio del sitio) y sube al inicio de la
-  página sin tener que desplazarse.
-- No hay notas al pie como "Reservorio — notas de estudio personales" ni
-  "Parte 2 de 2".
+- **Paginación:** `← 01.1 - Título` y `01.2 - Título →`. Cruza de un tema a otro,
+  y en ese caso el enlace lleva el nombre del tema: `02.1 - Fundamental:
+  Estructura jerárquica →`. El "siguiente" va siempre a la derecha.
+- **Pie:** vuelve al **área** y sube al inicio de la página.
+- **Etiquetas** (`ul.tags`) al final de cada contenido; no se muestran en los
+  índices.
 
 ### Textos y vocabulario
 
-- La palabra para los elementos de un área es **"Contenidos"** (no "Fichas").
-- En los índices no se muestran etiquetas (tags).
-- Idioma `es`; archivos en UTF-8 con `<meta charset>`. Se escriben las tildes y
-  la ñ directamente; las entidades se reservan para `&`, `<` y `>`.
+- Para lo que ve el lector se dice **"contenido"** (no "ficha"); `.ficha` es solo
+  el nombre de la clase.
+- Idioma `es`; archivos en UTF-8 con `<meta charset>`. Las tildes y la ñ se
+  escriben directamente; las entidades se reservan para `&`, `<` y `>`.
 
 ### `<title>` y metadatos
 
-- `<title>`: `Active Directory: qué es y cómo funciona` (área + título, sin
-  sufijo "— Reservorio", para no alargar la pestaña).
-- `og:title` y `headline` del JSON-LD: el mismo texto.
-- `meta description`, Open Graph y JSON-LD por ficha. Los comentarios
-  "Completar…" quedan para el momento de publicar.
+- **Contenido:** `<title>` = `<Área>: <título>` (por ejemplo `Active Directory:
+  qué es y cómo funciona`), sin sufijo, para no alargar la pestaña.
+- **Índices:** portada `Reservorio de estudio`; área `<Área> — Reservorio`.
+- Toda página lleva `meta description` y Open Graph (`og:title`,
+  `og:description`, `og:type`, `og:locale`). Los contenidos suman JSON-LD
+  (`TechArticle`, con `isPartOf` = `<Área> — <Tema>` y `position`).
+- `og:url`, `og:image`, `author` y `datePublished` quedan con el comentario
+  "Completar…" hasta definir el dominio propio.
 
 ### Formato del código
 
-- `<head>` y `<body>` sin sangría; 2 espacios por nivel dentro de `<main>`.
-- Todos los HTML siguen el mismo formato.
+`<head>` y `<body>` sin sangría; 2 espacios por nivel dentro de `<main>`. Todos
+los HTML siguen el mismo formato.
 
-## 7. Contenido
-
-Rescatado de las reglas anteriores, que siguen aplicando:
+## 6. Contenido
 
 - **No se inventan datos.** Fechas, cifras, CVEs, comandos, puertos, versiones:
   si el autor no los dio, no se agregan. Un dato falso en material de estudio es
   peor que uno ausente.
 - **No se completa ni se mejora el contenido** del autor aunque el agente sepa
-  del tema. Se puede señalar: "falta X, ¿lo agregás?".
-- Se señalan las contradicciones o los datos incompletos dentro de una ficha.
+  del tema. Se puede señalar: "falta X, ¿lo agregás?". También se señalan las
+  contradicciones y los datos incompletos.
 - **Repositorio público, sin información sensible:** nada de credenciales,
   nombres de clientes o empleadores, IPs/hosts internos ni datos personales.
-  Para ejemplos de red se usan los rangos de documentación `192.0.2.0/24`,
+  Para ejemplos de red, los rangos de documentación `192.0.2.0/24`,
   `198.51.100.0/24` y `203.0.113.0/24`.
+- **Ejemplos ficticios y comunes a todo el sitio:** `techcorp.local` (y
+  `labcorp.local` cuando hace falta un segundo).
 - No se generan datos técnicos con IA de imágenes.
 
-## 8. Pendientes (por prioridad)
+## 7. Calidad mínima
 
-1. ~~Mobile first y revisión a 375 px~~ (hecho, a revisar): los `@media` pasaron
-   a `min-width: 40.0625rem`; áreas de toque de 44 px (`--tap-size`) en pie,
-   paginación y listas; títulos más chicos en móvil (`--fs-xl`/`--fs-2xl`).
-   Verificado por el autor en un celular real, ya publicado: funciona bien.
-2. ~~Tokens de tamaño de letra~~ (hecho): escala de 14/16/20/24/28→32 px sobre
-   la grilla de 4, interlineados en múltiplos de 4 y `--fs-code`; ver la
-   sección de tipografía. Cuerpo de 17 a 16 px y páginas ~10–15% más cortas.
-3. ~~Índice del área con temas desplegables~~ (hecho): `<details>/<summary>`
-   cerrados por defecto, sin JS.
-4. ~~`meta description` y Open Graph en la portada y en el índice del área~~
-   (hecho).
-5. ~~Indentación de `docs/index.html`~~ (hecho).
-6. **Tipografía y `docs/fuentes/`:** decidido por ahora: **fuentes del sistema**
-   (poco contenido, un solo lector). Inter (400/500) y JetBrains Mono (400/700)
-   eran parte del diseño original y siguen en `docs/fuentes/` (`.ttf`, ~920 KB),
-   **sin publicar y sin borrar**. Revisar cuando se publique con dominio propio;
-   en ese caso convertirlas a `woff2` y solo latín (~100–150 KB).
-7. **Revisar este archivo.** `AGENTS.md` debería contener solo lo que importa
-   para construir y mantener el proyecto (estructura, convenciones, decisiones
-   de diseño vigentes). Decidir qué de lo que hoy tiene no merece estar acá
-   (por ejemplo la lista de pendientes, el historial de alternativas
-   descartadas o las notas de cómo trabajar con el autor) y qué corresponde
-   dejar solo en la memoria del asistente.
-8. **JavaScript: reconsiderar solo con un disparador concreto.** Hoy el sitio
-   se mantiene sin JS (decisión del autor). Revisar cuando haya unas 20 a 30
-   páginas y haga falta un **buscador** (no hay búsqueda de servidor en GitHub
-   Pages), o cuando actualizar a mano contadores, índices y enlaces de
-   paginación cause olvidos o enlaces rotos: ahí lo que corresponde es un
-   **script generador que corra al construir**, no JavaScript en el navegador.
-9. **Dominio propio, `og:url` y `og:image`.** Hoy el sitio vive en la dirección
-   `github.io`. Las etiquetas Open Graph `og:url` (dirección absoluta y
-   canónica de cada página) y `og:image` (imagen de la vista previa, PNG o JPG
-   de 1200 × 630 px, sin texto técnico) quedan marcadas con "Completar" en las
-   páginas hasta decidir el dominio, para no cargarlas dos veces.
+- Contraste AA y áreas de toque de al menos 44 px (`--tap-size`).
+- Un solo `h1` por página y encabezados sin saltos de nivel.
+- Cada `<nav>` con su `aria-label`; `lang="es"`.
+- Sin scroll horizontal desde 320 px de ancho.
+- Enlaces relativos que resuelvan, y anclas (`#id`) que existan.
 
-Otros: el kicker de la portada ("N áreas · N temas · N contenidos"), el contador
-de la tarjeta del área y los contadores de cada tema del índice del área se
-actualizan a mano al agregar contenido.
+## 8. Mantenimiento
 
-## 9. Mantener este archivo al día
+### Agregar un contenido
 
-Un archivo de instrucciones desactualizado es peor que no tenerlo. Si el autor
-decide algo que contradice este documento, se actualiza en la misma tarea y se
-avisa qué cambió.
+1. Crear `NN.N-<abreviatura>-<nombre>.html` a partir del formato de otro.
+2. Índice del área: sumar la entrada dentro de su tema y actualizar el contador
+   de contenidos de ese tema.
+3. Paginación: completar "anterior" en el nuevo y el "siguiente" del contenido
+   que lo precede.
+4. Portada: contadores del encabezado (`N áreas · N temas · N contenidos`) y de
+   la entrada del área.
+5. Metadatos del nuevo: `<title>`, descripción, Open Graph y JSON-LD.
+6. Verificar (ver abajo).
+
+**Un tema nuevo** suma además un `<details class="topic">` en el índice del
+área. **Un área nueva**, una carpeta con su `index.html` (copiando el de otra) y
+su entrada en la portada.
+
+### Verificar un cambio
+
+- Servidor local: `python3 -m http.server --directory docs 8000`.
+- Probar a 320, 375 y 1024 px: sin scroll horizontal y con los enlaces resueltos.
+- Si el cambio es de CSS, comparar antes y después que las demás páginas no se
+  mueven. El navegador puede servir el CSS viejo de caché: verificar en otro
+  puerto o forzando la recarga.
+
+### Este archivo
+
+Tiene que reflejar el proyecto tal como está. Si el autor decide algo que lo
+contradice, se actualiza en la misma tarea y se avisa qué cambió. Los pendientes
+y el historial de decisiones no van acá.
