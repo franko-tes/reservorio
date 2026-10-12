@@ -58,7 +58,9 @@ Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
   "no cambiemos nada", no se toca ningún archivo.
 - **Listas numeradas** para modificaciones, y se espera confirmación punto por
   punto.
-- **Nunca se hace commit.** Lo hace el autor. Se muestra el diff si lo pide.
+- **Nunca se hace `git add`, `git commit` ni `git push`.** Lo hace siempre el
+  autor. El agente solo pasa los comandos y muestra el diff si se lo piden;
+  ante una pregunta ambigua ("¿podemos commitear?") se pregunta quién ejecuta.
 - **Alcance mínimo:** solo se tocan los archivos que el pedido nombra.
 - **Recomendar sí, aplicar sin aviso no.** El agente señala mejoras, pero la
   decisión es del autor.
