@@ -22,11 +22,13 @@ El material se organiza en tres niveles:
 docs/
   index.html                  portada: lista las áreas
   estilo.css                  hoja de estilos única, compartida
-  active-directory/
+  <área>/
     index.html                índice del área
-    01.1-ad-introduccion.html
-    01.2-ad-contexto.html
+    NN.N-nombre.html          un contenido (NN = tema, N = orden dentro del tema)
 ```
+
+Por ejemplo, `active-directory/01.1-ad-introduccion.html` es el contenido 1 del
+tema 01 del área Active Directory.
 
 - **HTML y CSS, nada más.** Sin JavaScript, frameworks ni dependencias externas.
 - **Rutas relativas**, así que las páginas se abren igual desde el sitio publicado
