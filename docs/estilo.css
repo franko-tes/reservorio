@@ -519,6 +519,11 @@ nav.ficha__pagination a:last-child {
   margin-bottom: var(--space-2);
 }
 
+/* Lista anidada dentro de un punto: mismo espaciado que en las secciones */
+.concept > ul:not([class]) ul:not([class]) {
+  margin: var(--space-2) 0 0;
+}
+
 /* ---------- 16. Índice de conceptos ----------
    Lista de enlaces internos (anclas) a cada concepto de la ficha. */
 .toc {

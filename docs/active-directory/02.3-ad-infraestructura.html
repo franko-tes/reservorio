@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: infraestructura y disponibilidad</title>
+<meta name="description" content="Glosario de Active Directory: roles FSMO, Global Catalog, RODC y replicación. Cómo se reparten el trabajo los Domain Controllers cuando hay más de uno.">
+<meta name="keywords" content="active directory, FSMO, schema master, domain naming master, RID master, PDC emulator, infrastructure master, global catalog, RODC, replicación, KCC">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: infraestructura y disponibilidad">
+<meta property="og:description" content="Roles FSMO, Global Catalog, RODC y replicación: cómo se reparten el trabajo los Domain Controllers de Active Directory.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: infraestructura y disponibilidad",
+  "description": "Roles FSMO, Global Catalog, RODC y replicación: cómo se reparten el trabajo los Domain Controllers de Active Directory.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 3
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Infraestructura y disponibilidad</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Con <strong>un solo Domain Controller (DC)</strong> no hay decisiones que tomar: todo vive en esa máquina. Estos conceptos cobran sentido cuando hay <strong>dos o más DCs</strong> y aparecen preguntas nuevas:</p>
+
+      <dl class="term-list">
+        <div>
+          <dt>FSMO</dt>
+          <dd>¿Quién puede hacer los cambios que no admiten conflicto?</dd>
+        </div>
+        <div>
+          <dt>Global Catalog</dt>
+          <dd>¿Quién conoce un poco de todo el forest?</dd>
+        </div>
+        <div>
+          <dt>RODC</dt>
+          <dd>¿Qué pasa con una sucursal donde un DC no está seguro?</dd>
+        </div>
+        <div>
+          <dt>Replicación</dt>
+          <dd>¿Cómo se enteran los demás DCs de cada cambio?</dd>
+        </div>
+      </dl>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Los DCs se reparten el trabajo y se copian la información entre ellos. Si uno cae, los otros siguen funcionando.</p>
+
+      <nav aria-label="Conceptos">
+        <ul class="toc">
+          <li><a href="#fsmo"><span class="toc__id">1</span>FSMO</a></li>
+          <li><a href="#global-catalog"><span class="toc__id">2</span>Global Catalog</a></li>
+          <li><a href="#rodc"><span class="toc__id">3</span>RODC</a></li>
+          <li><a href="#replicacion"><span class="toc__id">4</span>Replicación</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section>
+      <h2>Conceptos</h2>
+
+      <article class="concept" id="fsmo">
+        <div class="concept__head">
+          <span class="concept__id">1</span>
+          <h3>Roles FSMO <span class="muted-detail">(Flexible Single Master Operation)</span></h3>
+        </div>
+        <p>5 responsabilidades de escritura repartidas entre DCs para evitar conflictos (por ejemplo, que dos DCs repartan el mismo RID a la vez).</p>
+
+        <p><strong>2 roles de forest:</strong> uno solo en todo el forest, sin importar cuántos domains haya.</p>
+        <dl class="term-list">
+          <div>
+            <dt>Schema Master</dt>
+            <dd>Es el único que puede modificar el schema. Los demás DCs solo lo leen.</dd>
+          </div>
+          <div>
+            <dt>Domain Naming Master</dt>
+            <dd>Es el único que puede agregar o quitar domains, así garantiza que no haya dos con el mismo nombre en el forest.</dd>
+          </div>
+        </dl>
+
+        <p><strong>3 roles de domain:</strong> uno de cada uno por cada domain.</p>
+        <dl class="term-list">
+          <div>
+            <dt>RID Master</dt>
+            <dd>Reparte bloques de RIDs a los DCs de ese domain.</dd>
+          </div>
+          <div>
+            <dt>PDC Emulator</dt>
+            <dd>Es el punto de referencia <strong>prioritario</strong> para cambios de password, resolución de lockouts (cuando un login falla por un posible delay de replicación), conflictos de edición de GPO y sincronización de hora del domain. Es el más relevante en el troubleshooting del día a día.</dd>
+          </div>
+          <div>
+            <dt>Infrastructure Master</dt>
+            <dd>Traduce y actualiza referencias de GUID, SID y DN entre domains distintos del mismo forest (solo importa con 2 o más domains). Si falla, las ACLs muestran SIDs crudos en vez de nombres. No hace nada si todos los DCs del domain son también GC.</dd>
+          </div>
+        </dl>
+
+        <p><strong class="highlight">Los roles “viven” en un DC específico como una etiqueta extra</strong>, no son una entidad separada. Un DC puede tener varios roles a la vez: el primer DC de un forest nuevo arranca con los 5.</p>
+
+        <p>Ejemplo de dónde pueden vivir:</p>
+        <ul class="tree">
+          <li>techcorp.local <span class="muted-detail">— forest y domain raíz</span>
+            <ul>
+              <li>DC01 <span class="muted-detail">— Schema Master, Domain Naming Master, RID Master, PDC Emulator, Infrastructure Master</span></li>
+              <li>DC02 <span class="muted-detail">— sin roles</span></li>
+              <li>sales.techcorp.local <span class="muted-detail">— domain hijo</span>
+                <ul>
+                  <li>DC03 <span class="muted-detail">— RID Master, PDC Emulator, Infrastructure Master (los 3 roles de este domain)</span></li>
+                  <li>DC04 <span class="muted-detail">— sin roles</span></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </article>
+
+      <article class="concept" id="global-catalog">
+        <div class="concept__head">
+          <span class="concept__id">2</span>
+          <h3>Global Catalog <span class="muted-detail">(GC)</span></h3>
+        </div>
+        <p>Un DC al que se le activa una función extra: guarda la copia completa de su propio domain y una copia <strong>parcial</strong> de los demás domains del forest (solo atributos clave, no todo el detalle).</p>
+        <ul>
+          <li>Sirve para buscar objetos en todo el forest y para la autenticación (arma el access token con los grupos de otros domains).</li>
+          <li><strong class="highlight">No es automático, hay que activarlo.</strong></li>
+          <li>Conviene tener al menos 1 GC por site (una ubicación física, como una oficina).</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="rodc">
+        <div class="concept__head">
+          <span class="concept__id">3</span>
+          <h3>RODC <span class="muted-detail">(Read-Only Domain Controller)</span></h3>
+        </div>
+        <p>DC de solo lectura, pensado para ubicaciones con seguridad física débil, como sucursales sin data center.</p>
+        <ul>
+          <li>Por defecto <strong>no guarda las passwords del domain</strong>, salvo las de su propia cuenta y las de su propio KRBTGT. Si lo roban, no se llevan las credenciales de la empresa.</li>
+          <li>No tiene roles FSMO: como no puede escribir, no tiene sentido dárselos.</li>
+          <li>Replicación de una sola vía: recibe cambios, nunca los envía.</li>
+          <li>Permite separar la administración: alguien puede ser admin local del RODC sin ser Domain Admin.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="replicacion">
+        <div class="concept__head">
+          <span class="concept__id">4</span>
+          <h3>Replicación</h3>
+        </div>
+        <ul>
+          <li>Los cambios hechos en un DC se propagan a otros DCs, pero <strong>el alcance depende del tipo de dato</strong>:
+            <ul>
+              <li>Los datos del domain (usuarios, equipos, grupos…) se replican solo entre los DCs <strong>del mismo domain</strong>.</li>
+              <li>El schema y la configuración (la estructura del forest: domains, sites, topología de replicación) se replican a <strong>todos los DCs del forest</strong>.</li>
+              <li>De los otros domains solo llega la copia parcial que guardan los GC.</li>
+            </ul>
+          </li>
+          <li>La coordina el servicio <strong>KCC</strong> (Knowledge Consistency Checker), que corre automáticamente en todos los DCs.</li>
+          <li>Da redundancia: si un DC cae, los demás ya tienen la información. <strong class="highlight">No reemplaza a un backup</strong>, porque también replica los borrados y los errores.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">El PDC Emulator procesa toda la autenticación</span>: no. Cualquier DC autentica. El PDC Emulator es la referencia prioritaria para cambios de password, lockouts, GPO y hora.</li>
+        <li>Los roles FSMO no son un servidor aparte: son una etiqueta que lleva un DC, y un mismo DC puede llevar varias.</li>
+        <li>Los roles de forest son 2 en total. Los de domain son 3 por cada domain.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>FSMO</li>
+      <li>schema master</li>
+      <li>domain naming master</li>
+      <li>RID master</li>
+      <li>PDC emulator</li>
+      <li>infrastructure master</li>
+      <li>global catalog</li>
+      <li>RODC</li>
+      <li>replicación</li>
+      <li>KCC</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.2-ad-identificadores.html">← 02.2 - Identificadores de objetos</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
