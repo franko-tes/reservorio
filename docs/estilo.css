@@ -474,7 +474,7 @@ nav.ficha__pagination a:last-child {
 /* ---------- 15. Concepto de glosario ----------
    Un concepto numerado (1 a N dentro de la ficha) con su analogía opcional.
    Estructura: article.concept > div.concept__head (número + h3)
-   + p.concept__analogy (opcional) + contenido. */
+   + p.concept__subtitle (opcional) + contenido. */
 .concept {
   padding: var(--space-4) 0 var(--space-2);
   border-top: 1px solid var(--color-border);
@@ -501,7 +501,7 @@ nav.ficha__pagination a:last-child {
   border-radius: var(--radius-sm);
 }
 
-.concept .concept__analogy {
+.concept .concept__subtitle {
   margin: 0 0 var(--space-2);
   font-size: var(--fs-sm);
   line-height: var(--lh-sm);

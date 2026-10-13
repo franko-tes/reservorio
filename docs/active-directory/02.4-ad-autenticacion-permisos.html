@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: autenticación y permisos</title>
+<meta name="description" content="Glosario de Active Directory: SPN, ACL, ACE, DACL, SACL y Security Descriptor. Cómo se asocia un servicio a su cuenta en Kerberos y cómo AD decide y audita el acceso a un objeto.">
+<meta name="keywords" content="active directory, SPN, kerberoasting, ACL, ACE, DACL, SACL, security descriptor, permisos, auditoría">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: autenticación y permisos">
+<meta property="og:description" content="SPN, ACL, ACE, DACL, SACL y Security Descriptor: cómo Active Directory asocia servicios a cuentas y controla y audita el acceso a los objetos.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: autenticación y permisos",
+  "description": "SPN, ACL, ACE, DACL, SACL y Security Descriptor: cómo Active Directory asocia servicios a cuentas y controla y audita el acceso a los objetos.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 4
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Autenticación y permisos</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Dos temas relacionados con la seguridad de los objetos: cómo Kerberos encuentra la <strong>cuenta que está detrás de un servicio</strong> (SPN), y cómo AD decide y registra <strong>quién puede hacer qué sobre un objeto</strong> (ACL, ACE, DACL, SACL y Security Descriptor).</p>
+
+      <h3>Cómo se arma el control de permisos de un objeto</h3>
+      <ul class="tree">
+        <li>Security Descriptor <span class="muted-detail">— la estructura completa de seguridad del objeto</span>
+          <ul>
+            <li>Owner <span class="muted-detail">— el dueño (un SID)</span></li>
+            <li>Primary Group <span class="muted-detail">— más bien legacy</span></li>
+            <li>DACL <span class="muted-detail">— una ACL: define quién puede acceder</span>
+              <ul>
+                <li>ACE <span class="muted-detail">— cada regla: trustee + derechos + permitir o denegar</span></li>
+              </ul>
+            </li>
+            <li>SACL <span class="muted-detail">— una ACL: define qué accesos se auditan</span>
+              <ul>
+                <li>ACE <span class="muted-detail">— cada regla: trustee + derechos + auditar</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>La DACL decide si podés entrar. La SACL decide si queda registrado que lo intentaste.</p>
+
+      <nav aria-label="Conceptos">
+        <ul class="toc">
+          <li><a href="#spn"><span class="toc__id">1</span>SPN</a></li>
+          <li><a href="#acl"><span class="toc__id">2</span>ACL</a></li>
+          <li><a href="#ace"><span class="toc__id">3</span>ACE</a></li>
+          <li><a href="#dacl"><span class="toc__id">4</span>DACL</a></li>
+          <li><a href="#sacl"><span class="toc__id">5</span>SACL</a></li>
+          <li><a href="#security-descriptor"><span class="toc__id">6</span>Security Descriptor</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section>
+      <h2>Conceptos</h2>
+
+      <article class="concept" id="spn">
+        <div class="concept__head">
+          <span class="concept__id">1</span>
+          <h3>SPN <span class="muted-detail">(Service Principal Name)</span></h3>
+        </div>
+        <p>Identifica una <strong>instancia de un servicio</strong>. Ejemplo: <code>MSSQLSvc/server:1433</code>.</p>
+        <ul>
+          <li>Kerberos lo usa para asociar el servicio con la cuenta que lo corre, <strong class="highlight">sin que el cliente necesite conocer el nombre de esa cuenta</strong>.</li>
+          <li>Flujo: la app pide un ticket para el SPN → el KDC (el servicio de Kerberos que corre en el DC) busca qué cuenta tiene ese SPN registrado, en el atributo <code>servicePrincipalName</code> → arma el ticket cifrado con el hash de esa cuenta.</li>
+          <li><strong class="highlight">Riesgo:</strong> es la base del ataque <strong>Kerberoasting</strong>, que consiste en pedir tickets de cuentas con SPN y crackearlos offline.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="acl">
+        <div class="concept__head">
+          <span class="concept__id">2</span>
+          <h3>ACL <span class="muted-detail">(Access Control List)</span></h3>
+        </div>
+        <p class="concept__subtitle">El concepto genérico</p>
+        <p>Lista ordenada de ACEs sobre un objeto. En la práctica <strong class="highlight">siempre se implementa como DACL, como SACL, o como ambas a la vez</strong> en el mismo objeto. No existe una “ACL simple” suelta.</p>
+      </article>
+
+      <article class="concept" id="ace">
+        <div class="concept__head">
+          <span class="concept__id">3</span>
+          <h3>ACE <span class="muted-detail">(Access Control Entry)</span></h3>
+        </div>
+        <p>Cada entrada individual dentro de una ACL. Define:</p>
+        <dl class="term-list">
+          <div>
+            <dt>Trustee</dt>
+            <dd>Quién: el usuario, grupo o equipo al que se aplica la regla.</dd>
+          </div>
+          <div>
+            <dt>Derechos</dt>
+            <dd>Qué puede hacer sobre el objeto.</dd>
+          </div>
+          <div>
+            <dt>Tipo</dt>
+            <dd>Permitir, denegar o auditar.</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="concept" id="dacl">
+        <div class="concept__head">
+          <span class="concept__id">4</span>
+          <h3>DACL <span class="muted-detail">(Discretionary ACL)</span></h3>
+        </div>
+        <p>Controla el <strong>acceso real</strong>: permite o deniega.</p>
+        <ul>
+          <li><strong class="highlight">Sin DACL en el objeto = acceso total a todos.</strong> Es peligroso.</li>
+          <li><strong class="highlight">DACL presente pero sin ACEs = acceso denegado a todos.</strong></li>
+          <li>Las ACEs se evalúan en orden hasta encontrar una que responda.</li>
+          <li>Los permisos se <strong>heredan hacia abajo</strong>: dar un derecho sobre una OU lo propaga a sus sub-OUs y a los objetos leaf que contiene, salvo que se corte la herencia en alguno de ellos.</li>
+        </ul>
+        <p>Por eso el alcance real de un permiso depende de <strong>cómo está armada la jerarquía de OUs</strong>, no solo de qué permiso se otorgó. Por ejemplo, delegar “reset password” sobre una OU de nivel alto da un alcance mucho más amplio que delegarlo sobre una OU más específica y bien ubicada en el árbol.</p>
+      </article>
+
+      <article class="concept" id="sacl">
+        <div class="concept__head">
+          <span class="concept__id">5</span>
+          <h3>SACL <span class="muted-detail">(System ACL)</span></h3>
+        </div>
+        <p>Controla la <strong>auditoría</strong>, no el acceso. Define qué intentos de acceso quedan registrados en el Security Event Log de Windows.</p>
+      </article>
+
+      <article class="concept" id="security-descriptor">
+        <div class="concept__head">
+          <span class="concept__id">6</span>
+          <h3>Security Descriptor</h3>
+        </div>
+        <p>No es exclusivo de AD: es de Windows en general. Es la estructura completa que tiene <strong>todo objeto securable</strong> (archivos, registro, objetos de AD, etc.). Contiene:</p>
+        <dl class="term-list">
+          <div>
+            <dt>Owner</dt>
+            <dd>El SID del dueño.</dd>
+          </div>
+          <div>
+            <dt>Primary Group</dt>
+            <dd>Más legacy, viene del mundo POSIX.</dd>
+          </div>
+          <div>
+            <dt>DACL</dt>
+            <dd>Quién puede acceder.</dd>
+          </div>
+          <div>
+            <dt>SACL</dt>
+            <dd>Qué accesos se auditan.</dd>
+          </div>
+        </dl>
+        <ul>
+          <li><strong class="highlight">Por defecto, el owner siempre puede modificar la DACL del objeto</strong>, sin importar lo que diga esa DACL sobre sus propios permisos.</li>
+          <li>El owner por default es quien crea el objeto. Si el creador es miembro de un grupo privilegiado (por ejemplo Domain Admins), muchas veces el owner queda como <strong>el grupo</strong> y no como la cuenta individual.</li>
+          <li><strong class="highlight">Riesgo:</strong> cambiar el owner de un objeto es una técnica de escalación, porque permite reescribir la DACL después aunque no se tuvieran permisos explícitos antes.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Un objeto tiene una ACL simple</span>: no. La ACL es el concepto general, y en la práctica siempre es una DACL, una SACL o ambas.</li>
+        <li>Sin DACL y DACL vacía son casos opuestos: sin DACL, todos acceden; con una DACL vacía, nadie accede.</li>
+        <li>La SACL no bloquea nada: solo hace que el intento quede registrado.</li>
+        <li>El SPN no es el nombre de la cuenta: es el nombre de una instancia de un servicio, y por eso el cliente no necesita conocer la cuenta.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>SPN</li>
+      <li>Kerberoasting</li>
+      <li>ACL</li>
+      <li>ACE</li>
+      <li>DACL</li>
+      <li>SACL</li>
+      <li>security descriptor</li>
+      <li>permisos</li>
+      <li>auditoría</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.3-ad-infraestructura.html">← 02.3 - Infraestructura y disponibilidad</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>

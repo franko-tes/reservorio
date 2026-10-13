@@ -103,8 +103,9 @@ BEM: `.ficha__header`, `.topic__summary`).
   agrega al **final** del CSS, con su sección numerada.
 - **Glosario** (`.concept` / `.toc`): los conceptos se numeran con un entero
   simple del 1 al N dentro de la ficha (sin prefijo de grupo, para no confundirlo
-  con `01.3`). La analogía va en texto atenuado y cursiva; el naranja es de
-  `strong.highlight`.
+  con `01.3`). Debajo del título, el subtítulo del concepto
+  (`.concept__subtitle`: una analogía o una aclaración corta) va en texto
+  atenuado y cursiva; el naranja es de `strong.highlight`.
 - **Índice del área**: cada tema es un `<details class="topic">` **cerrado por
   defecto**, con `NN - Tema` y su contador de contenidos en el `<summary>`.
 - **Listas anidadas**: llevan sangría propia (ya resuelta en el CSS). En el HTML,
