@@ -196,7 +196,7 @@
     <section>
       <h2>Para no confundirse</h2>
       <ul>
-        <li><span class="error-mark">Un domain tiene un solo DC</span>: no es así, un domain puede tener varios DCs. Cada DC guarda la copia completa de su propio domain y nada de los demás (salvo que sea Global Catalog, que guarda una copia parcial).</li>
+        <li><span class="error-mark">Un domain tiene un solo DC</span>: no es así, un domain puede tener varios DCs. Cada DC guarda la copia completa de los datos de su propio domain y nada de los datos de los demás domains (salvo que sea Global Catalog, que guarda una copia parcial).</li>
         <li>Las OUs cuelgan de un domain, nunca directamente del forest.</li>
         <li>Un DC es un objeto más: vive en la OU <code>Domain Controllers</code> de su domain.</li>
       </ul>
