@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: nombres de red y browsing legacy</title>
+<meta name="description" content="Glosario de Active Directory: FQDN y MSBROWSE. Cómo se nombra y se ubica un host en la red, la diferencia entre FQDN y DN, y un mecanismo de browsing obsoleto.">
+<meta name="keywords" content="active directory, FQDN, DN, DNS, LDAP, MSBROWSE, Master Browser, NetBIOS, nbtstat, SMB, CIFS">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: nombres de red y browsing legacy">
+<meta property="og:description" content="FQDN y MSBROWSE: cómo se nombra y se ubica un host en la red, la diferencia entre FQDN y DN, y un mecanismo de browsing obsoleto.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: nombres de red y browsing legacy",
+  "description": "FQDN y MSBROWSE: cómo se nombra y se ubica un host en la red, la diferencia entre FQDN y DN, y un mecanismo de browsing obsoleto.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 7
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Nombres de red y browsing legacy</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Dos conceptos de red sobre cómo se nombra y se encuentra un equipo: uno que se sigue usando todos los días y otro que quedó obsoleto.</p>
+
+      <dl class="term-list">
+        <div>
+          <dt>FQDN</dt>
+          <dd>El nombre completo de un host en la red. Vigente.</dd>
+        </div>
+        <div>
+          <dt>MSBROWSE</dt>
+          <dd>Cómo se descubrían los equipos y sus recursos compartidos en redes viejas. Obsoleto.</dd>
+        </div>
+      </dl>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>El FQDN ubica una máquina en la red, con DNS. El DN ubica un objeto en el directorio, con LDAP. Se parecen, pero no son lo mismo.</p>
+
+      <nav aria-label="Conceptos">
+        <ul class="toc">
+          <li><a href="#fqdn"><span class="toc__id">1</span>FQDN</a></li>
+          <li><a href="#msbrowse"><span class="toc__id">2</span>MSBROWSE</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section>
+      <h2>Conceptos</h2>
+
+      <article class="concept" id="fqdn">
+        <div class="concept__head">
+          <span class="concept__id">1</span>
+          <h3>FQDN <span class="muted-detail">(Fully Qualified Domain Name)</span></h3>
+        </div>
+        <p>Nombre completo de un host: <code>hostname.dominio.tld</code>. Ejemplo: <code>DC01.techcorp.local</code>.</p>
+        <ul>
+          <li>Permite ubicar un host en la red por nombre (vía DNS), sin necesitar su IP directamente.</li>
+          <li><strong class="highlight">Relevante en SOC:</strong> en ambientes con varios domains, el FQDN da certeza de a qué domain pertenece un host. El hostname corto solo puede generar ambigüedad si hay nombres repetidos entre domains.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="msbrowse">
+        <div class="concept__head">
+          <span class="concept__id">2</span>
+          <h3>MSBROWSE</h3>
+        </div>
+        <p>Mecanismo viejo (de la era NT y 95) para el browsing de red, basado en <strong>NetBIOS</strong> (el sistema de nombres que usaban las redes Windows antes de que se generalizara DNS). Mantenía una lista de los equipos disponibles en la red que los usuarios podían navegar (y, desde ahí, sus recursos compartidos: impresoras, carpetas), como el “Entorno de red” clásico.</p>
+        <ul>
+          <li>Usaba la figura de un <strong>Master Browser</strong> (a cargo del servicio Computer Browser), que se anunciaba con el nombre NetBIOS especial <code>__MSBROWSE__</code>. Se lo identificaba con <code>nbtstat -A ip-address</code>, buscando ese nombre en la respuesta.</li>
+          <li><strong class="highlight">Hoy está obsoleto.</strong> Para compartir archivos e impresoras se usa SMB (CIFS es una versión de SMB).</li>
+          <li>Solo es relevante en infraestructura muy legacy.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+
+      <p>FQDN vs DN, que se confunden por su forma jerárquica parecida:</p>
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>FQDN</h3>
+          <ul>
+            <li>Usa <strong>DNS</strong> y resuelve a una IP.</li>
+            <li>Formato con <strong>puntos</strong>: <code>host.dominio.tld</code></li>
+            <li>Responde: ¿dónde vive esta máquina en la red?</li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>DN</h3>
+          <ul>
+            <li>Usa <strong>LDAP</strong> y ubica un objeto en el árbol de AD.</li>
+            <li>Formato con <strong>comas</strong>: <code>cn=x,ou=y,dc=z,dc=tld</code></li>
+            <li>Responde: ¿dónde vive este objeto dentro del directorio?</li>
+          </ul>
+        </div>
+      </div>
+
+      <ul>
+        <li>Se cruzan en la práctica: el FQDN suele vivir como <strong>valor</strong> del atributo <code>dNSHostName</code> dentro del objeto de AD, y ese objeto tiene su propio DN.</li>
+        <li><span class="error-mark">El hostname corto alcanza para identificar un host</span>: no siempre. Si hay nombres repetidos entre domains, el FQDN es el que da certeza.</li>
+        <li>MSBROWSE no es parte del AD moderno: si aparece, es señal de infraestructura muy legacy.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>FQDN</li>
+      <li>DN</li>
+      <li>DNS</li>
+      <li>LDAP</li>
+      <li>MSBROWSE</li>
+      <li>NetBIOS</li>
+      <li>SMB</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.6-ad-almacenamiento-recuperacion.html">← 02.6 - Almacenamiento, recuperación y herramientas</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
