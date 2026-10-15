@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: almacenamiento, recuperación y herramientas</title>
+<meta name="description" content="Glosario de Active Directory: SYSVOL, NTDS.DIT, Tombstone, AD Recycle Bin, ADUC y ADSI Edit. Dónde vive la información, qué pasa cuando se borra un objeto y con qué herramientas se administra.">
+<meta name="keywords" content="active directory, SYSVOL, NTDS.DIT, tombstone, AD Recycle Bin, ADUC, ADSI Edit, deleted objects, ntdsutil">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: almacenamiento, recuperación y herramientas">
+<meta property="og:description" content="SYSVOL, NTDS.DIT, Tombstone, AD Recycle Bin, ADUC y ADSI Edit: dónde vive la información de Active Directory, qué pasa al borrar un objeto y con qué se administra.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: almacenamiento, recuperación y herramientas",
+  "description": "SYSVOL, NTDS.DIT, Tombstone, AD Recycle Bin, ADUC y ADSI Edit: dónde vive la información de Active Directory, qué pasa al borrar un objeto y con qué se administra.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 6
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Almacenamiento, recuperación y herramientas</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Tres preguntas prácticas sobre AD: dónde vive la información, qué pasa cuando algo se borra y con qué se administra todo.</p>
+
+      <dl class="term-list">
+        <div>
+          <dt>Dónde vive la data</dt>
+          <dd><strong>SYSVOL</strong> (compartida y legible por cualquier usuario autenticado) y <strong>NTDS.DIT</strong> (la base completa, con los secretos).</dd>
+        </div>
+        <div>
+          <dt>Qué pasa al borrar</dt>
+          <dd><strong>Tombstone</strong> y <strong>AD Recycle Bin</strong>.</dd>
+        </div>
+        <div>
+          <dt>Con qué se administra</dt>
+          <dd><strong>ADUC</strong> (amigable, para el día a día) y <strong>ADSI Edit</strong> (quirúrgica).</dd>
+        </div>
+      </dl>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>SYSVOL lo puede leer cualquier usuario autenticado; NTDS.DIT guarda los secretos. Un objeto borrado no desaparece al instante.</p>
+
+      <nav aria-label="Conceptos">
+        <ul class="toc">
+          <li><a href="#sysvol"><span class="toc__id">1</span>SYSVOL</a></li>
+          <li><a href="#ntds-dit"><span class="toc__id">2</span>NTDS.DIT</a></li>
+          <li><a href="#tombstone"><span class="toc__id">3</span>Tombstone</a></li>
+          <li><a href="#recycle-bin"><span class="toc__id">4</span>AD Recycle Bin</a></li>
+          <li><a href="#aduc"><span class="toc__id">5</span>ADUC</a></li>
+          <li><a href="#adsi-edit"><span class="toc__id">6</span>ADSI Edit</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section>
+      <h2>Conceptos</h2>
+
+      <article class="concept" id="sysvol">
+        <div class="concept__head">
+          <span class="concept__id">1</span>
+          <h3>SYSVOL</h3>
+        </div>
+        <p>Carpeta compartida presente en <strong>todos los DCs</strong> de un domain. Contiene archivos legibles por cualquier usuario autenticado del domain: policies del sistema, configuraciones de GPO, scripts de logon y logoff y otros scripts operativos.</p>
+        <ul>
+          <li>Se replica automáticamente entre DCs (con FRS, o con DFS-R en versiones modernas).</li>
+          <li>Se accede típicamente como <code>\\dominio.local\SYSVOL</code>.</li>
+          <li><strong class="highlight">Relevante en SOC:</strong> es el lugar físico donde buscar scripts de logon o contenido de GPO sospechoso.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="ntds-dit">
+        <div class="concept__head">
+          <span class="concept__id">2</span>
+          <h3>NTDS.DIT</h3>
+        </div>
+        <p class="concept__subtitle">El corazón de AD</p>
+        <p>Archivo de base de datos que hay en cada DC, ubicado en <code>C:\Windows\NTDS\</code>. Contiene usuarios, grupos, membership y los <strong>password hashes de todos los usuarios del domain</strong>.</p>
+        <ul>
+          <li><strong class="highlight">Objetivo típico tras un domain compromise completo:</strong> se extrae con <code>ntdsutil</code> o con volume shadow copy, y después se usa pass-the-hash o se crackea con Hashcat.</li>
+          <li>Si está habilitada la opción “Store passwords using reversible encryption”, también guarda las passwords en una forma que se puede revertir a texto plano. Es una bandera roja si la ves activa.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="tombstone">
+        <div class="concept__head">
+          <span class="concept__id">3</span>
+          <h3>Tombstone</h3>
+        </div>
+        <p>Cuando se borra un objeto, <strong>no desaparece al instante</strong>: queda como tombstone durante el <strong>Tombstone Lifetime</strong> (es un valor del forest, no de cada DC: por defecto 180 días en forests creados con Windows Server 2003 SP1 o posterior, y 60 en los anteriores).</p>
+        <ul>
+          <li>Pierde la mayoría de sus atributos y queda en el container <code>Deleted Objects</code>.</li>
+          <li><strong class="highlight">Es recuperable, pero sin los atributos que perdió.</strong></li>
+          <li>Cumplido el plazo, el objeto se elimina definitivamente (garbage collection).</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="recycle-bin">
+        <div class="concept__head">
+          <span class="concept__id">4</span>
+          <h3>AD Recycle Bin</h3>
+        </div>
+        <p>Mejora sobre el tombstone, disponible desde Windows Server 2008 R2. Hay que habilitarla, y si está habilitada <strong>preserva la mayoría de los atributos</strong> del objeto borrado, lo que permite una restauración mucho más completa.</p>
+        <ul>
+          <li><strong class="highlight">Se habilita a nivel forest y, una vez habilitada, no se puede deshabilitar.</strong> Requiere un forest functional level de Windows Server 2008 R2 o superior.</li>
+          <li>El plazo para recuperar un objeto depende de la configuración (<code>msDS-deletedObjectLifetime</code>). Si no se especifica un valor, se usa el del tombstone lifetime.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="aduc">
+        <div class="concept__head">
+          <span class="concept__id">5</span>
+          <h3>ADUC <span class="muted-detail">(Active Directory Users and Computers)</span></h3>
+        </div>
+        <p>Consola gráfica clásica para administrar usuarios, grupos, equipos y contactos. Todo lo que se hace desde ahí también se puede hacer con PowerShell.</p>
+      </article>
+
+      <article class="concept" id="adsi-edit">
+        <div class="concept__head">
+          <span class="concept__id">6</span>
+          <h3>ADSI Edit</h3>
+        </div>
+        <p>Herramienta de bajo nivel que da acceso a prácticamente <strong>cualquier atributo de cualquier objeto</strong>, incluso los que ADUC no expone (por ejemplo <code>dsHeuristics</code>, o <code>adminCount</code> a mano).</p>
+        <ul>
+          <li><strong class="highlight">Es potente y peligrosa:</strong> un cambio mal hecho puede romper el ambiente.</li>
+          <li>Se usa solo cuando ADUC no alcanza.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Un objeto borrado desaparece al instante</span>: no. Queda como tombstone, y si la Recycle Bin está habilitada, conserva casi todos sus atributos.</li>
+        <li>SYSVOL y NTDS.DIT no son lo mismo: SYSVOL es una carpeta compartida con policies y scripts; NTDS.DIT es la base de datos con los hashes de todas las cuentas.</li>
+        <li>Tombstone y Recycle Bin: con tombstone se recupera el objeto sin los atributos perdidos; con la Recycle Bin, casi completo.</li>
+        <li>ADUC es la herramienta del día a día; ADSI Edit se reserva para lo que ADUC no muestra.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>SYSVOL</li>
+      <li>NTDS.DIT</li>
+      <li>tombstone</li>
+      <li>AD Recycle Bin</li>
+      <li>ADUC</li>
+      <li>ADSI Edit</li>
+      <li>ntdsutil</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.5-ad-gestion-hardening.html">← 02.5 - Gestión y hardening</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
