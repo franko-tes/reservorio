@@ -89,12 +89,32 @@
           <span class="concept__id">1</span>
           <h3>SPN <span class="muted-detail">(Service Principal Name)</span></h3>
         </div>
-        <p>Identifica una <strong>instancia de un servicio</strong>. Ejemplo: <code>MSSQLSvc/server:1433</code>.</p>
+        <p>Identifica una <strong>instancia de un servicio</strong>: un servicio concreto, en un host y un puerto concretos. Formato: <code>tipo_de_servicio/host:puerto</code>. Ejemplo: <code>MSSQLSvc/server:1433</code>.</p>
+        <p>Los servicios corren bajo una <strong>cuenta de servicio</strong> (por ejemplo <code>svc_sql</code>). El SPN es la etiqueta que une el servicio con esa cuenta, y se guarda en el atributo <code>servicePrincipalName</code> de la cuenta.</p>
         <ul>
-          <li>Kerberos lo usa para asociar el servicio con la cuenta que lo corre, <strong class="highlight">sin que el cliente necesite conocer el nombre de esa cuenta</strong>.</li>
-          <li>Flujo: la app pide un ticket para el SPN → el KDC (el servicio de Kerberos que corre en el DC) busca qué cuenta tiene ese SPN registrado, en el atributo <code>servicePrincipalName</code> → arma el ticket cifrado con el hash de esa cuenta.</li>
-          <li><strong class="highlight">Riesgo:</strong> es la base del ataque <strong>Kerberoasting</strong>, que consiste en pedir tickets de cuentas con SPN y crackearlos offline.</li>
+          <li><strong class="highlight">El cliente no necesita conocer la cuenta:</strong> el equipo arma el SPN solo, a partir del servicio y el host al que el usuario se quiere conectar.</li>
+          <li>Un SPN es único en el forest. Una cuenta sí puede tener varios SPNs.</li>
         </ul>
+        <p>Flujo:</p>
+        <dl class="term-list">
+          <div>
+            <dt>Paso 1</dt>
+            <dd>El usuario quiere conectarse a un servicio. Su equipo arma el SPN (<code>MSSQLSvc/server:1433</code>) y le pide al KDC un ticket para ese SPN.</dd>
+          </div>
+          <div>
+            <dt>Paso 2</dt>
+            <dd>El KDC (el servicio de Kerberos que corre en el DC) busca en AD qué cuenta tiene ese SPN registrado: <code>svc_sql</code>.</dd>
+          </div>
+          <div>
+            <dt>Paso 3</dt>
+            <dd>El KDC arma el ticket y lo cifra con la clave (hash) de <code>svc_sql</code>, derivada de su password.</dd>
+          </div>
+          <div>
+            <dt>Paso 4</dt>
+            <dd>El usuario le entrega el ticket al servidor. Solo <code>svc_sql</code> puede abrirlo, y así el servicio sabe que el ticket es legítimo.</dd>
+          </div>
+        </dl>
+        <p><strong class="highlight">Riesgo, Kerberoasting:</strong> cualquier usuario autenticado del domain puede pedir un ticket para cualquier SPN, aunque no tenga permiso de usar ese servicio. Un atacante pide tickets de cuentas con SPN y crackea sus passwords offline: si la password de la cuenta de servicio es débil, la obtiene. Los objetivos reales son las cuentas de servicio con password elegida por una persona; las cuentas de equipo tienen passwords largas y aleatorias.</p>
       </article>
 
       <article class="concept" id="acl">
@@ -176,8 +196,8 @@
           </div>
         </dl>
         <ul>
-          <li><strong class="highlight">Por defecto, el owner siempre puede modificar la DACL del objeto</strong>, sin importar lo que diga esa DACL sobre sus propios permisos.</li>
-          <li>El owner por default es quien crea el objeto. Si el creador es miembro de un grupo privilegiado (por ejemplo Domain Admins), muchas veces el owner queda como <strong>el grupo</strong> y no como la cuenta individual.</li>
+          <li><strong class="highlight">Por default, el owner siempre puede modificar la DACL del objeto</strong>, sin importar lo que diga esa DACL sobre sus propios permisos.</li>
+          <li>El owner por default es quien crea el objeto. Pero si el creador es miembro de un grupo privilegiado (por ejemplo Domain Admins), muchas veces el owner queda como <strong>el grupo</strong> y no como la cuenta individual: en ese caso, todos los miembros del grupo son dueños del objeto.</li>
           <li><strong class="highlight">Riesgo:</strong> cambiar el owner de un objeto es una técnica de escalación, porque permite reescribir la DACL después aunque no se tuvieran permisos explícitos antes.</li>
         </ul>
       </article>
