@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: gestión y hardening</title>
+<meta name="description" content="Glosario de Active Directory: GPO, AdminSDHolder, SDProp, dsHeuristics, adminCount y sIDHistory. Cómo se administra y se protege AD, y cómo se abusan estos mecanismos.">
+<meta name="keywords" content="active directory, GPO, group policy, AdminSDHolder, SDProp, dsHeuristics, adminCount, sIDHistory, SID filtering, persistencia, threat hunting">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: gestión y hardening">
+<meta property="og:description" content="GPO, AdminSDHolder, dsHeuristics, adminCount y sIDHistory: cómo se administra y se protege Active Directory, y cómo se abusan estos mecanismos.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: gestión y hardening",
+  "description": "GPO, AdminSDHolder, dsHeuristics, adminCount y sIDHistory: cómo se administra y se protege Active Directory, y cómo se abusan estos mecanismos.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 5
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Gestión y hardening</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Mecanismos que sirven para <strong>administrar y proteger</strong> AD. Cada uno es útil para el administrador, pero también es un lugar donde un atacante puede ganar poder o persistencia.</p>
+
+      <dl class="term-list">
+        <div>
+          <dt>GPO</dt>
+          <dd>Gestión masiva: configurar muchos usuarios y equipos a la vez.</dd>
+        </div>
+        <div>
+          <dt>AdminSDHolder y adminCount</dt>
+          <dd>Mecanismo de auto-reparación para las cuentas privilegiadas.</dd>
+        </div>
+        <div>
+          <dt>dsHeuristics</dt>
+          <dd>Configuración global que puede debilitar esa protección.</dd>
+        </div>
+        <div>
+          <dt>sIDHistory</dt>
+          <dd>Legítimo para migraciones, pero mal controlado es una puerta trasera de escalación.</dd>
+        </div>
+      </dl>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Para cada concepto, retené el mecanismo y el riesgo: qué hace para el administrador y qué puede hacer un atacante con él.</p>
+
+      <nav aria-label="Conceptos">
+        <ul class="toc">
+          <li><a href="#gpo"><span class="toc__id">1</span>GPO</a></li>
+          <li><a href="#adminsdholder"><span class="toc__id">2</span>AdminSDHolder</a></li>
+          <li><a href="#admincount"><span class="toc__id">3</span>adminCount</a></li>
+          <li><a href="#dsheuristics"><span class="toc__id">4</span>dsHeuristics</a></li>
+          <li><a href="#sidhistory"><span class="toc__id">5</span>sIDHistory</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section>
+      <h2>Conceptos</h2>
+
+      <article class="concept" id="gpo">
+        <div class="concept__head">
+          <span class="concept__id">1</span>
+          <h3>GPO <span class="muted-detail">(Group Policy Object)</span></h3>
+        </div>
+        <p>Colección de configuraciones de política para usuarios y/o equipos.</p>
+        <ul>
+          <li>Cada GPO tiene su propio GUID.</li>
+          <li>Se <strong>linkea</strong> a nivel domain, OU o site, y eso define su alcance.</li>
+          <li><strong class="highlight">Riesgo:</strong> si un atacante puede editar, o crear y linkear un GPO, puede desplegar cambios maliciosos a gran escala: scripts, membership de grupos locales, desactivar defensas.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="adminsdholder">
+        <div class="concept__head">
+          <span class="concept__id">2</span>
+          <h3>AdminSDHolder</h3>
+        </div>
+        <p>Objeto especial que actúa como <strong>template de seguridad (DACL)</strong> para todos los miembros de grupos protegidos: Domain Admins, Enterprise Admins, Schema Admins, etc.</p>
+        <ul>
+          <li>El proceso <strong>SDProp</strong> (Security Descriptor Propagator) corre en el PDC Emulator, cada 60 minutos por default, y <strong>revierte</strong> cualquier DACL de un miembro protegido que no coincida con el template.</li>
+          <li><strong class="highlight">No se puede modificar de forma persistente la DACL de un solo miembro protegido:</strong> SDProp lo revierte.</li>
+          <li>Para un cambio permanente hay que modificar el AdminSDHolder mismo, y el cambio se propaga a todos por igual. Es todo o nada.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="admincount">
+        <div class="concept__head">
+          <span class="concept__id">3</span>
+          <h3>adminCount</h3>
+        </div>
+        <p>Atributo que le dice a SDProp <strong>a quién proteger</strong>.</p>
+        <dl class="term-list">
+          <div>
+            <dt><code>1</code></dt>
+            <dd>Protegido: su DACL se revierte al template.</dd>
+          </div>
+          <div>
+            <dt><code>0</code> o sin setear</dt>
+            <dd>No protegido.</dd>
+          </div>
+        </dl>
+        <ul>
+          <li><strong class="highlight">Clave:</strong> cuando alguien <strong>sale</strong> de un grupo privilegiado, este atributo no se resetea solo a 0. Queda en 1, salvo que alguien lo limpie a mano.</li>
+          <li>Útil para threat hunting: buscar <code>adminCount=1</code> arma una lista de cuentas que en algún momento tuvieron privilegios, actuales o ex.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="dsheuristics">
+        <div class="concept__head">
+          <span class="concept__id">4</span>
+          <h3>dsHeuristics</h3>
+        </div>
+        <p>Atributo de tipo string, a nivel forest, que controla configuraciones globales. Entre ellas, permite <strong>excluir de la protección de SDProp</strong> a los 4 grupos de operadores integrados: Account Operators, Server Operators, Print Operators y Backup Operators. No permite excluir cualquier grupo.</p>
+        <ul>
+          <li><strong class="highlight">Riesgo:</strong> un grupo excluido vía dsHeuristics deja de estar protegido por AdminSDHolder, y su DACL ya no se revierte. Es una técnica de persistencia avanzada.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="sidhistory">
+        <div class="concept__head">
+          <span class="concept__id">5</span>
+          <h3>sIDHistory</h3>
+        </div>
+        <p>Atributo que guarda los SIDs previos que tuvo un objeto. Su uso legítimo son las <strong>migraciones entre domains</strong>, para no perder accesos.</p>
+        <ul>
+          <li><strong class="highlight">Riesgo:</strong> si el <strong>SID Filtering</strong> no está habilitado en los trusts (el control que descarta SIDs que no corresponden al domain de origen), un atacante que escribe en el sIDHistory de una cuenta puede inyectar el SID de un grupo privilegiado (por ejemplo Domain Admins o Enterprise Admins) y heredar sus permisos sin estar realmente en ese grupo.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Puedo cambiar la DACL de una sola cuenta protegida y que el cambio quede</span>: no. SDProp la revierte, salvo que se modifique el AdminSDHolder, que afecta a todos por igual.</li>
+        <li><code>adminCount=1</code> no significa que la cuenta sea admin hoy: puede ser un ex-miembro de un grupo privilegiado.</li>
+        <li>AdminSDHolder protege a los grupos de su lista, pero dsHeuristics puede dejar afuera a los operadores integrados (Account, Server, Print y Backup Operators).</li>
+        <li>El sIDHistory no es un grupo: son SIDs viejos de la cuenta. Pero si uno de ellos es el de un grupo privilegiado, el sistema trata a la cuenta como si fuera miembro.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>GPO</li>
+      <li>AdminSDHolder</li>
+      <li>SDProp</li>
+      <li>dsHeuristics</li>
+      <li>adminCount</li>
+      <li>sIDHistory</li>
+      <li>SID filtering</li>
+      <li>persistencia</li>
+      <li>threat hunting</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.4-ad-autenticacion-permisos.html">← 02.4 - Autenticación y permisos</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
