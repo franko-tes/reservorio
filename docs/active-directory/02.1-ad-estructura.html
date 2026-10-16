@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Active Directory: estructura jerárquica</title>
-<meta name="description" content="Qué existe en Active Directory y dónde vive: Object, Attributes, Schema, Domain, Forest, Tree, Container y Leaf, con la jerarquía completa de Forest a Leaf.">
-<meta name="keywords" content="active directory, object, attributes, schema, domain, forest, tree, container, leaf, OU">
+<meta name="description" content="Qué existe en Active Directory y dónde vive: Object, Attributes, Schema, Domain, Forest, Tree, Container, OU y Leaf, con la jerarquía completa de Forest a Leaf.">
+<meta name="keywords" content="active directory, object, attributes, schema, domain, forest, tree, container, OU, organizational unit, leaf">
 <meta name="robots" content="index, follow">
 
 <!-- Open Graph -->
 <meta property="og:type" content="article">
 <meta property="og:title" content="Active Directory: estructura jerárquica">
-<meta property="og:description" content="Qué existe en Active Directory y dónde vive: Object, Attributes, Schema, Domain, Forest, Tree, Container y Leaf, con la jerarquía completa de Forest a Leaf.">
+<meta property="og:description" content="Qué existe en Active Directory y dónde vive: Object, Attributes, Schema, Domain, Forest, Tree, Container, OU y Leaf, con la jerarquía completa de Forest a Leaf.">
 <meta property="og:locale" content="es_AR">
 <!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
 
@@ -22,7 +22,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Active Directory: estructura jerárquica",
-  "description": "Qué existe en Active Directory y dónde vive: Object, Attributes, Schema, Domain, Forest, Tree, Container y Leaf, con la jerarquía completa de Forest a Leaf.",
+  "description": "Qué existe en Active Directory y dónde vive: Object, Attributes, Schema, Domain, Forest, Tree, Container, OU y Leaf, con la jerarquía completa de Forest a Leaf.",
   "inLanguage": "es",
   "isPartOf": {
     "@type": "CreativeWorkSeries",
@@ -45,7 +45,7 @@
 
     <section>
       <h2>De qué trata</h2>
-      <p>Todo lo que AD administra es un <strong>objeto</strong>, y los objetos no están sueltos: viven dentro de una jerarquía. Acá respondemos dos preguntas: <em>qué puede existir</em> (Object, Attributes, Schema) y <em>dónde vive</em> (Forest, Tree, Domain, Container, Leaf).</p>
+      <p>Todo lo que AD administra es un <strong>objeto</strong>, y los objetos no están sueltos: viven dentro de una jerarquía. Acá respondemos dos preguntas: <em>qué puede existir</em> (Object, Attributes, Schema) y <em>dónde vive</em> (Forest, Tree, Domain, Container, OU, Leaf).</p>
 
       <h3>La jerarquía, de mayor a menor</h3>
       <ul class="tree">
@@ -55,7 +55,7 @@
               <ul>
                 <li>Domain <span class="muted-detail">— la ciudad</span>
                   <ul>
-                    <li>Container (OU) <span class="muted-detail">— contiene otros objetos</span>
+                    <li>Container (por ejemplo, una OU) <span class="muted-detail">— contiene otros objetos</span>
                       <ul>
                         <li>Leaf <span class="muted-detail">— usuario, equipo… no contiene nada</span></li>
                       </ul>
@@ -79,7 +79,8 @@
           <li><a href="#forest"><span class="toc__id">5</span>Forest</a></li>
           <li><a href="#tree"><span class="toc__id">6</span>Tree</a></li>
           <li><a href="#container"><span class="toc__id">7</span>Container</a></li>
-          <li><a href="#leaf"><span class="toc__id">8</span>Leaf</a></li>
+          <li><a href="#ou"><span class="toc__id">8</span>OU</a></li>
+          <li><a href="#leaf"><span class="toc__id">9</span>Leaf</a></li>
         </ul>
       </nav>
     </section>
@@ -181,12 +182,35 @@
           <span class="concept__id">7</span>
           <h3>Container</h3>
         </div>
-        <p>Objeto que puede contener otros objetos y tiene un lugar definido en la jerarquía del directorio. El ejemplo típico es una OU.</p>
+        <p>Objeto que puede contener otros objetos y que ocupa un lugar en la jerarquía del directorio. El ejemplo típico es una OU.</p>
+        <ul>
+          <li><strong class="highlight">Dos usos de la palabra.</strong> En sentido general, “container” es cualquier objeto que contiene otros. Pero también hay containers concretos que vienen por defecto en cada domain: <code>CN=Users</code>, <code>CN=Computers</code>, <code>CN=Builtin</code>, entre otros.</li>
+          <li>Esos containers por defecto <strong>no son OUs</strong>: no se les puede linkear una GPO.</li>
+          <li>Un grupo también “contiene” objetos (sus miembros), pero lo hace por <strong>membresía</strong>, no por ubicación en el árbol.</li>
+        </ul>
+      </article>
+
+      <article class="concept" id="ou">
+        <div class="concept__head">
+          <span class="concept__id">8</span>
+          <h3>OU <span class="muted-detail">(Organizational Unit)</span></h3>
+        </div>
+        <p>Container que los administradores crean para agrupar objetos parecidos (usuarios, equipos, grupos, otras OUs) y administrarlos juntos. Ejemplo: una OU <code>Employees</code> con OUs hijas para Marketing, HR, Finance y Help Desk.</p>
+        <p>Sirve para dos cosas:</p>
+        <ul>
+          <li><strong>Delegar tareas</strong> sobre su contenido sin dar permisos de administrador completo: resetear passwords, crear o borrar usuarios, modificar membresías de grupos, manejar links de GPO.</li>
+          <li><strong>Aplicar GPOs</strong> a un subconjunto de objetos, en vez de a todo el domain.</li>
+        </ul>
+        <ul>
+          <li><strong class="highlight">El alcance depende de qué tan arriba esté la OU:</strong> un permiso delegado sobre una OU de nivel alto se hereda por defecto a todo lo que tiene debajo, incluidas las OUs hijas.</li>
+          <li>Las OUs cuelgan de un domain, nunca directamente del forest, y se pueden anidar (una OU dentro de otra).</li>
+          <li>No se le asignan permisos como si fuera un grupo. Los permisos se delegan <em>a alguien</em> (usuario o grupo) <em>sobre</em> la OU.</li>
+        </ul>
       </article>
 
       <article class="concept" id="leaf">
         <div class="concept__head">
-          <span class="concept__id">8</span>
+          <span class="concept__id">9</span>
           <h3>Leaf</h3>
         </div>
         <p>Objeto que no contiene otros objetos: está al final de la jerarquía. Por ejemplo, un usuario o un equipo.</p>
@@ -197,7 +221,7 @@
       <h2>Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un domain tiene un solo DC</span>: no es así, un domain puede tener varios DCs. Cada DC guarda la copia completa de los datos de su propio domain y nada de los datos de los demás domains (salvo que sea Global Catalog, que guarda una copia parcial).</li>
-        <li>Las OUs cuelgan de un domain, nunca directamente del forest.</li>
+        <li><span class="error-mark">Users y Computers son OUs</span>: no. Son containers por defecto. La única OU que viene creada en un domain es <code>Domain Controllers</code>.</li>
         <li>Un DC es un objeto más: vive en la OU <code>Domain Controllers</code> de su domain.</li>
       </ul>
     </section>
@@ -211,6 +235,7 @@
       <li>forest</li>
       <li>tree</li>
       <li>container</li>
+      <li>OU</li>
       <li>leaf</li>
     </ul>
 
