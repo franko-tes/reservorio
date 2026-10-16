@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: tipos de objetos</title>
+<meta name="description" content="Tipos de objetos de Active Directory: User, Computer, Group, Contact, Printer y Shared Folder. Cuáles tienen SID y pueden recibir permisos, y cómo se diferencian OU, grupo, GPO y container.">
+<meta name="keywords" content="active directory, user, computer, group, contact, printer, shared folder, security principal, SID, GUID, OU, GPO, grupos anidados, BloodHound">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: tipos de objetos">
+<meta property="og:description" content="User, Computer, Group, Contact, Printer y Shared Folder: cuáles tienen SID y pueden recibir permisos, y la diferencia entre OU, grupo, GPO y container.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: tipos de objetos",
+  "description": "User, Computer, Group, Contact, Printer y Shared Folder: cuáles tienen SID y pueden recibir permisos, y la diferencia entre OU, grupo, GPO y container.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 8
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Tipos de objetos</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Todo en AD es un objeto, pero no todos se comportan igual. Lo que más los distingue es si tienen <strong>SID</strong>: solo los que lo tienen son security principals, es decir, pueden recibir permisos; los usuarios y los equipos, además, pueden autenticarse.</p>
+
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>Con SID y GUID</h3>
+          <ul>
+            <li>User: la cuenta de una persona o servicio</li>
+            <li>Computer: un equipo unido al domain</li>
+            <li>Group: un conjunto de miembros</li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>Solo GUID</h3>
+          <ul>
+            <li>Contact: una persona externa</li>
+            <li>Printer: apunta a una impresora</li>
+            <li>Shared Folder: apunta a una carpeta compartida</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Un objeto sin SID no se autentica ni recibe permisos: es información que apunta a otra cosa.</p>
+    </section>
+
+    <section>
+      <h2>Los que tienen SID</h2>
+
+      <h3>User</h3>
+      <ul>
+        <li>Cuenta de una persona o de un servicio dentro del domain. Es leaf.</li>
+        <li>Atributos típicos: nombre a mostrar, último logon, último cambio de password, mail, descripción, manager y dirección. Según la configuración, hay cientos de atributos posibles.</li>
+        <li><strong class="highlight">Riesgo:</strong> cualquier cuenta, aunque no tenga privilegios, permite enumerar casi todo el domain (equipos, usuarios, grupos, OUs, GPOs, trusts, política de passwords). Por eso es el primer objetivo.</li>
+      </ul>
+
+      <h3>Computer</h3>
+      <ul>
+        <li>Equipo unido al domain, ya sea estación de trabajo o servidor. Es leaf.</li>
+        <li>Tiene su propia cuenta, con nombre terminado en <code>$</code>, por ejemplo <code>PC01$</code>.</li>
+        <li><strong class="highlight">Riesgo:</strong> cuando un equipo sale a la red con su identidad local (<code>SYSTEM</code>), se autentica como esa cuenta de equipo. Esa cuenta alcanza para enumerar gran parte del domain, igual que un usuario común.</li>
+      </ul>
+
+      <h3>Group</h3>
+      <ul>
+        <li>Agrupa usuarios, equipos y otros grupos para asignar permisos a muchos a la vez. Ejemplo: en vez de dar permiso a una carpeta compartida a 20 usuarios de Finanzas, uno por uno, se le da el permiso al grupo <code>Finanzas</code>.</li>
+        <li>Pueden ser de <strong>seguridad</strong> (dan permisos) o de <strong>distribución</strong> (solo para mail, no dan permisos).</li>
+        <li>“Contiene” a sus miembros por <strong>membresía</strong>, no por ubicación en el árbol (ver <a href="02.1-ad-estructura.html#container">02.1</a>).</li>
+        <li><strong class="highlight">Grupos anidados</strong> (un grupo dentro de otro): un usuario puede terminar con derechos que nadie previó. BloodHound los muestra en un grafo y sirve para auditarlos.</li>
+        <li>Los grupos built-in (<code>Administrators</code>, <code>Backup Operators</code>, <code>Remote Management Users</code>…) viven en el container <code>CN=Builtin</code>. Otros, como <code>Domain Admins</code>, viven en <code>CN=Users</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Los que apuntan a algo (solo GUID)</h2>
+      <p>Contact, Printer y Shared Folder tienen en común que son leaf, no son security principals y representan algo que está en otro lado.</p>
+
+      <dl class="term-list">
+        <div>
+          <dt>Contact</dt>
+          <dd>Una persona externa, como un proveedor o un cliente. Atributos: nombre, mail y teléfono. No se autentica ni recibe permisos.</dd>
+        </div>
+        <div>
+          <dt>Printer</dt>
+          <dd>Apunta a una impresora accesible en la red. Atributos: nombre, driver y puerto.</dd>
+        </div>
+        <div>
+          <dt>Shared Folder</dt>
+          <dd>Apunta a una carpeta compartida de un equipo concreto. Atributos: nombre y ubicación.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout">
+        <p>El objeto Shared Folder es solo un <strong>puntero</strong>: el acceso real se controla en el share y en los permisos NTFS de la carpeta. Puede estar abierto a cualquiera, limitado a <code>Authenticated Users</code> (cualquier cuenta del domain o de equipo, incluso la de menos privilegios) o restringido a ciertos usuarios y grupos.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>OU, grupo, GPO y container</h2>
+      <p>Los cuatro “agrupan” o “organizan” algo, y por eso se confunden. Cada uno responde una pregunta distinta:</p>
+
+      <dl class="term-list">
+        <div>
+          <dt>OU</dt>
+          <dd>¿<strong>Dónde</strong> está el objeto? Un objeto está en un solo lugar del árbol (una OU o un container). Ordena, permite delegar y aplicar GPOs. No tiene SID.</dd>
+        </div>
+        <div>
+          <dt>Grupo</dt>
+          <dd>¿<strong>A qué pertenece</strong>? Un objeto puede estar en muchos grupos. Da permisos y derechos. Tiene SID.</dd>
+        </div>
+        <div>
+          <dt>GPO</dt>
+          <dd>¿<strong>Qué configuración</strong> se aplica? Se linkea a un domain, una OU o un site. No contiene objetos.</dd>
+        </div>
+        <div>
+          <dt>Container por defecto</dt>
+          <dd>Carpeta que viene creada (<code>CN=Users</code>, <code>CN=Computers</code>, <code>CN=Builtin</code>). No es una OU y no admite GPO.</dd>
+        </div>
+      </dl>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>La OU ubica, el grupo da permisos y la GPO configura.</p>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Estar en una OU da permisos</span>: no. La OU ubica al objeto; los permisos se asignan a usuarios o grupos.</li>
+        <li><span class="error-mark">Una GPO se linkea a un grupo</span>: no. Se linkea a un domain, una OU o un site. Un grupo solo sirve para filtrar a quién se aplica.</li>
+        <li>Un contact, una impresora o una carpeta compartida no pueden recibir permisos porque no tienen SID. Los permisos de una carpeta compartida se asignan a usuarios y grupos sobre el share, no al objeto.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>user</li>
+      <li>computer</li>
+      <li>group</li>
+      <li>contact</li>
+      <li>printer</li>
+      <li>shared folder</li>
+      <li>security principal</li>
+      <li>SID</li>
+      <li>GUID</li>
+      <li>OU</li>
+      <li>GPO</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.7-ad-nombres-browsing.html">← 02.7 - Nombres de red y browsing legacy</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>

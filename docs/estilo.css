@@ -303,6 +303,10 @@ aside.callout p:last-child {
   margin-bottom: 0;
 }
 
+aside.callout code {
+  font-size: var(--fs-sm);
+}
+
 p.callout--key {
   margin: var(--space-5) 0;
   padding: var(--space-4);

@@ -176,6 +176,10 @@ los HTML siguen el mismo formato.
   `198.51.100.0/24` y `203.0.113.0/24`.
 - **Ejemplos ficticios y comunes a todo el sitio:** `techcorp.local` (y
   `labcorp.local` cuando hace falta un segundo).
+- **Nombres de ejemplo en castellano** (OUs, áreas, grupos propios: `Finanzas`,
+  `Sistemas`, `Empleados`). Los nombres reales de AD y Windows quedan en inglés
+  (`Domain Controllers`, `CN=Users`, `Domain Admins`, atributos, etiquetas de la
+  interfaz).
 - No se generan datos técnicos con IA de imágenes.
 
 ## 7. Calidad mínima

@@ -171,7 +171,7 @@
           <span class="concept__id">3</span>
           <h3>Security Principal</h3>
         </div>
-        <p>Cualquier cosa que el sistema operativo puede autenticar: usuarios, cuentas de equipo, o procesos y threads que corren en el contexto de una cuenta.</p>
+        <p>Cualquier cosa que el sistema operativo puede autenticar: usuarios, cuentas de equipo, procesos y threads que corren en el contexto de una cuenta, o los grupos de seguridad de esas cuentas (no inician sesión, pero se usan para dar permisos).</p>
         <ul>
           <li><strong>De domain:</strong> los administra AD.</li>
           <li><strong>Locales:</strong> los administra el SAM (la base de cuentas locales de Windows) de esa máquina puntual, no AD.</li>
@@ -184,7 +184,7 @@
           <h3>DN <span class="muted-detail">(Distinguished Name)</span></h3>
         </div>
         <p>Ruta completa del objeto en el árbol. Se lee de adentro hacia afuera: <strong>objeto → OUs → domain</strong>.</p>
-        <pre class="code-block" tabindex="0"><code>cn=bjones,ou=IT,ou=Employees,dc=techcorp,dc=local</code></pre>
+        <pre class="code-block" tabindex="0"><code>cn=bjones,ou=Sistemas,ou=Empleados,dc=techcorp,dc=local</code></pre>
         <dl class="term-list">
           <div>
             <dt><code>cn</code></dt>
@@ -235,7 +235,7 @@
       <p>Un mismo usuario, <code>bjones</code>, visto con cada identificador:</p>
       <pre class="code-block" tabindex="0"><code>GUID            3f2a9c4e-7b1d-4e68-9a52-c0d8e1f47b36
 SID             S-1-5-21-3623811015-3361044348-30300820-1013
-DN              cn=bjones,ou=IT,ou=Employees,dc=techcorp,dc=local
+DN              cn=bjones,ou=Sistemas,ou=Empleados,dc=techcorp,dc=local
 RDN             cn=bjones
 sAMAccountName  bjones
 UPN             bjones@techcorp.local</code></pre>
