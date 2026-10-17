@@ -148,7 +148,7 @@
         </div>
         <p>Atributo que guarda los SIDs previos que tuvo un objeto. Su uso legítimo son las <strong>migraciones entre domains</strong>, para no perder accesos.</p>
         <ul>
-          <li><strong class="highlight">Riesgo:</strong> si el <strong>SID Filtering</strong> no está habilitado en los trusts (el control que descarta SIDs que no corresponden al domain de origen), un atacante que escribe en el sIDHistory de una cuenta puede inyectar el SID de un grupo privilegiado (por ejemplo Domain Admins o Enterprise Admins) y heredar sus permisos sin estar realmente en ese grupo.</li>
+          <li><strong class="highlight">Riesgo:</strong> si el <strong>SID filtering</strong> no está habilitado en los trusts (el control que descarta SIDs que no corresponden al domain de origen), un atacante que escribe en el sIDHistory de una cuenta puede inyectar el SID de un grupo privilegiado (por ejemplo Domain Admins o Enterprise Admins) y heredar sus permisos sin estar realmente en ese grupo.</li>
         </ul>
       </article>
     </section>

@@ -40,7 +40,8 @@ docs/
 Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
 (segundo número).
 
-- `NN` es el tema, `N` el orden dentro del tema, `<abreviatura>` la sigla del
+- `NN` es el tema, `N` el orden dentro del tema (uno o más dígitos, sin ceros
+  a la izquierda: `02.9`, `02.10`), `<abreviatura>` la sigla del
   área (`ad` = Active Directory) y `<nombre>` una palabra que describe el
   contenido. Ejemplo: `01.1-ad-introduccion.html`.
 - El tema lo nombra el autor y va como subtítulo de cada contenido.

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: trusts</title>
+<meta name="description" content="Trusts de Active Directory: qué son, cómo se clasifican por transitividad y dirección, los tipos (parent-child, tree-root, shortcut, forest y external), el Foreign Security Principal y los riesgos de seguridad.">
+<meta name="keywords" content="active directory, trust, relación de confianza, transitivo, bidireccional, forest trust, external trust, shortcut trust, parent-child, tree-root, foreign security principal, SID filtering, Kerberoasting">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: trusts">
+<meta property="og:description" content="Qué es un trust, cómo se clasifica, los tipos que existen y qué riesgos trae.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: trusts",
+  "description": "Qué es un trust, cómo se clasifica, los tipos que existen y qué riesgos trae.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 10
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Trusts</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Un <strong>trust</strong> es un vínculo entre los sistemas de autenticación de dos domains (o dos forests) que permite que los usuarios de uno accedan a recursos del otro, o los administren.</p>
+      <p>Son comunes en empresas que absorben otras: crear un trust es más rápido que recrear todos los usuarios en el domain principal.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Un trust abre el camino de autenticación, pero no da acceso por sí solo: el acceso lo siguen decidiendo los permisos.</p>
+    </section>
+
+    <section>
+      <h2>Cómo se clasifican</h2>
+      <p>Todo trust se describe con dos ejes:</p>
+
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>Transitividad</h3>
+          <ul>
+            <li><strong>Transitivo:</strong> si A confía en B y B confía en C, entonces A confía en C.</li>
+            <li><strong>No transitivo:</strong> la confianza llega solo hasta el domain directamente vinculado.</li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>Dirección</h3>
+          <ul>
+            <li><strong>Bidireccional:</strong> los usuarios de ambos domains acceden a recursos del otro.</li>
+            <li><strong>Unidireccional:</strong> solo los usuarios del domain <em>trusted</em> acceden a recursos del domain <em>trusting</em>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>La dirección del trust es opuesta a la del acceso.</p>
+    </section>
+
+    <section>
+      <h2>Tipos</h2>
+
+      <dl class="term-list">
+        <div>
+          <dt>Parent-child</dt>
+          <dd>Entre un domain y su hijo, dentro del mismo forest. Bidireccional y transitivo. Se crea solo al agregar el child domain.</dd>
+        </div>
+        <div>
+          <dt>Tree-root</dt>
+          <dd>Entre el domain raíz del forest y la raíz de un tree nuevo. Bidireccional y transitivo. Se crea solo.</dd>
+        </div>
+        <div>
+          <dt>Shortcut</dt>
+          <dd>Entre dos domains del mismo forest, de ramas distintas, para acortar el camino de autenticación. Transitivo. Se crea a mano.</dd>
+        </div>
+        <div>
+          <dt>Forest</dt>
+          <dd>Entre dos forest root domains. Transitivo entre ambos forests, pero no se extiende a un tercero. Aplica SID filtering por defecto (ver 02.5). Se crea a mano y requiere nivel funcional de forest 2003 o superior (ver 02.9).</dd>
+        </div>
+        <div>
+          <dt>External</dt>
+          <dd>Entre dos domains de forests distintos que no tienen un forest trust. <strong>No es transitivo</strong> y usa SID filtering (ver 02.5). Se crea a mano.</dd>
+        </div>
+        <div>
+          <dt>Realm</dt>
+          <dd>Entre un domain de AD y un realm Kerberos que no es Windows (por ejemplo, MIT Kerberos). Puede ser transitivo o no, y unidireccional o bidireccional. Se crea a mano.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Ejemplo con dos forests</h2>
+      <p>Dos forests, <code>techcorp.local</code> y <code>labcorp.local</code>, con trust bidireccional entre sus raíces. Se quiere saber si un usuario de <code>admin.dev.labcorp.local</code> puede autenticarse contra equipos de <code>wh.corp.techcorp.local</code>.</p>
+
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>Forest 1</h3>
+          <ul class="tree">
+            <li>techcorp.local
+              <ul>
+                <li>corp.techcorp.local
+                  <ul>
+                    <li>wh.corp.techcorp.local</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>Forest 2</h3>
+          <ul class="tree">
+            <li>labcorp.local
+              <ul>
+                <li>dev.labcorp.local
+                  <ul>
+                    <li>admin.dev.labcorp.local</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <ul>
+        <li><strong>Si es un forest trust:</strong> sí puede, porque el trust es transitivo y alcanza a todos los domains de ambos forests. Se puede restringir, por ejemplo con autenticación selectiva (ver 02.9).</li>
+        <li><strong>Si es un external trust:</strong> no puede. El trust no se extiende a los child domains y haría falta otro trust directo entre esos dos domains.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Foreign Security Principal</h2>
+      <p>Un <strong>FSP</strong> es el objeto que representa, en un domain, a un security principal de otro forest.</p>
+      <ul>
+        <li>Se crea solo cuando ese principal (usuario, grupo o equipo) se agrega a un grupo del domain.</li>
+        <li>Es un marcador de posición: guarda el SID del objeto externo, y Windows lo usa para resolver el nombre a través del trust.</li>
+        <li>Vive en el container <code>CN=ForeignSecurityPrincipals</code>.</li>
+        <li><strong class="highlight">Relevante:</strong> si aparecen FSPs con SIDs de otro domain en los grupos, hay un trust en uso.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Riesgos</h2>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> los trusts armados por comodidad rara vez se revisan después.</li>
+        <li><strong class="highlight">Riesgo:</strong> las fusiones y adquisiciones pueden dejar trusts bidireccionales con la empresa adquirida, y con eso se incorpora su nivel de seguridad al domain principal sin que nadie lo note.</li>
+        <li><strong class="highlight">Riesgo:</strong> es posible hacer Kerberoasting contra un domain externo y terminar con una cuenta que tiene permisos administrativos en el domain principal.</li>
+        <li>SID filtering es la defensa contra el abuso de sIDHistory entre domains (ver 02.5).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Un trust bidireccional da acceso a todo</span>: no. Abre la autenticación; el acceso lo siguen decidiendo los permisos.</li>
+        <li><span class="error-mark">Todos los trusts son transitivos</span>: no. El external no lo es.</li>
+        <li><span class="error-mark">La dirección del trust apunta al acceso</span>: es al revés. En un trust unidireccional, el acceso va en sentido opuesto.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>trust</li>
+      <li>transitivo</li>
+      <li>bidireccional</li>
+      <li>forest trust</li>
+      <li>external trust</li>
+      <li>shortcut trust</li>
+      <li>foreign security principal</li>
+      <li>SID filtering</li>
+      <li>Kerberoasting</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.9-ad-sites-niveles-funcionales.html">← 02.9 - Sites y niveles funcionales</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
