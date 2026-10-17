@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: sites y niveles funcionales</title>
+<meta name="description" content="Sites y niveles funcionales de Active Directory: qué es un site y para qué sirve, qué definen los niveles funcionales de domain y forest, y qué funciones de seguridad habilita cada uno.">
+<meta name="keywords" content="active directory, site, replicación, subredes, nivel funcional, functional level, domain functional level, forest functional level, DFL, FFL, Kerberos, Protected Users, Recycle Bin">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: sites y niveles funcionales">
+<meta property="og:description" content="Qué es un site, para qué sirve, y qué definen los niveles funcionales de domain y forest.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: sites y niveles funcionales",
+  "description": "Qué es un site, para qué sirve, y qué definen los niveles funcionales de domain y forest.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Fundamental"
+  },
+  "position": 9
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Sites y niveles funcionales</h1>
+      <p class="ficha__subtitle">Fundamental</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Dos configuraciones de AD que no agrupan objetos, como hacen las OUs o los grupos, y responden a preguntas distintas.</p>
+
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>Sites</h3>
+          <ul>
+            <li>Topología física de la red</li>
+            <li>Qué subredes están bien conectadas</li>
+            <li>Cómo replican los DCs y a cuál se conecta cada cliente</li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>Niveles funcionales</h3>
+          <ul>
+            <li>Un valor por domain y otro por forest</li>
+            <li>Qué funciones de AD están disponibles</li>
+            <li>Qué versiones de Windows Server pueden ser DC</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Los sites organizan la red; los niveles funcionales deciden qué funciones y qué versiones de DC se permiten.</p>
+    </section>
+
+    <section>
+      <h2>Sites</h2>
+      <p>Un site es un conjunto de <strong>subredes IP bien conectadas entre sí</strong>, con enlaces rápidos. Sirve para dos cosas:</p>
+      <ul>
+        <li><strong>Ordenar la replicación entre DCs.</strong> Dentro de un site es rápida; entre sites es programada, para cuidar los enlaces lentos.</li>
+        <li><strong>Que cada cliente use un DC cercano</strong> para autenticarse.</li>
+      </ul>
+      <ul>
+        <li><strong class="highlight">Relevante:</strong> si la subred de un cliente no está asociada a ningún site, puede terminar autenticándose contra un DC lejano. Es una causa típica de lentitud.</li>
+        <li>Un domain puede abarcar varios sites, y un site puede tener DCs de varios domains. No son lo mismo.</li>
+        <li>Una GPO puede linkearse a un site (ver 02.5).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Niveles funcionales</h2>
+      <p>Un nivel funcional define <strong>qué funciones de AD están disponibles</strong> y <strong>qué versiones de Windows Server pueden ser DC</strong>.</p>
+
+      <div class="two-col">
+        <div class="two-col__col">
+          <h3>Nivel del domain</h3>
+          <ul>
+            <li>Uno por cada domain</li>
+            <li>Habilita las funciones de ese domain</li>
+          </ul>
+        </div>
+        <div class="two-col__col">
+          <h3>Nivel del forest</h3>
+          <ul>
+            <li>Uno por todo el forest</li>
+            <li>Habilita las funciones que abarcan todo el forest</li>
+          </ul>
+        </div>
+      </div>
+
+      <ul>
+        <li>Para subir el nivel del forest, todos sus DCs tienen que correr una versión de Windows Server compatible con ese nivel. El nivel de un domain nunca queda por debajo del del forest.</li>
+        <li>Subirlo es manual y conviene tratarlo como irreversible.</li>
+        <li><strong class="highlight">Riesgo:</strong> cualquier usuario del domain puede ver el nivel funcional. Un nivel bajo puede indicar DCs viejos y protecciones que faltan.</li>
+      </ul>
+
+      <h3>Funciones con valor de seguridad</h3>
+      <dl class="term-list">
+        <div>
+          <dt>2003</dt>
+          <dd>En el forest: forest trust y RODC. En el domain: selective authentication, <code>lastLogonTimestamp</code> y constrained delegation.</dd>
+        </div>
+        <div>
+          <dt>2008</dt>
+          <dd>AES para Kerberos, fine-grained password policies y SYSVOL con DFS-R.</dd>
+        </div>
+        <div>
+          <dt>2008 R2</dt>
+          <dd>Gestión automática de SPN para Managed Service Accounts. En el forest: la Recycle Bin (ver 02.6).</dd>
+        </div>
+        <div>
+          <dt>2012</dt>
+          <dd>Claims, compound authentication y Kerberos armoring.</dd>
+        </div>
+        <div>
+          <dt>2012 R2</dt>
+          <dd>Protected Users, authentication policies y silos.</dd>
+        </div>
+        <div>
+          <dt>2016</dt>
+          <dd>En el forest: Privileged Access Management (PAM). En el domain: nuevas protecciones de credenciales.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout">
+        <p>Es un resumen de lo que más pesa en seguridad, no una tabla completa. Windows Server 2019 y 2022 no agregaron un nivel nuevo, y Windows Server 2025 sí. Para el detalle actual, consultar la documentación de Microsoft.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Subir el nivel funcional actualiza los DCs</span>: no. Solo habilita funciones; los DCs se actualizan aparte.</li>
+        <li><span class="error-mark">Un site es un domain</span>: no. El site es topología física; el domain es un agrupamiento lógico.</li>
+        <li>Un site tampoco es una OU: el site es físico y la OU es lógica.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>site</li>
+      <li>replicación</li>
+      <li>subredes</li>
+      <li>nivel funcional</li>
+      <li>domain functional level</li>
+      <li>forest functional level</li>
+      <li>Kerberos</li>
+      <li>Protected Users</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.8-ad-tipos-objetos.html">← 02.8 - Tipos de objetos</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>

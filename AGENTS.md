@@ -143,6 +143,8 @@ BEM: `.ficha__header`, `.topic__summary`).
 
 - Para lo que ve el lector se dice **"contenido"** (no "ficha"); `.ficha` es solo
   el nombre de la clase.
+- Etiquetas en `strong.highlight` al inicio de un punto: **"Riesgo:"** solo para
+  problemas de seguridad y **"Relevante:"** para el resto.
 - Idioma `es`; archivos en UTF-8 con `<meta charset>`. Las tildes y la ñ se
   escriben directamente; las entidades se reservan para `&`, `<` y `>`.
 
