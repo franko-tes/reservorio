@@ -155,7 +155,7 @@
         </div>
         <p>DC de solo lectura, pensado para ubicaciones con seguridad física débil, como sucursales sin data center.</p>
         <ul>
-          <li>Por defecto <strong>no guarda las passwords del domain</strong>, salvo las de su propia cuenta y las de su propio KRBTGT. Si lo roban, no se llevan las credenciales de la empresa.</li>
+          <li>Por defecto <strong>no guarda las passwords del domain</strong>, salvo las de su propia cuenta y las de su propio <code>krbtgt</code>. Si lo roban, no se llevan las credenciales de la empresa.</li>
           <li>No tiene roles FSMO: como no puede escribir, no tiene sentido dárselos.</li>
           <li>Replicación de una sola vía: recibe cambios, nunca los envía.</li>
           <li>Permite separar la administración: alguien puede ser admin local del RODC sin ser Domain Admin.</li>

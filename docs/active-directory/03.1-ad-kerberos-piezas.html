@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Kerberos, las piezas</title>
+<meta name="description" content="Kerberos en Active Directory: qué es, quiénes intervienen (cliente, KDC y servicio), qué clave tiene cada uno, la diferencia entre TGT y ticket de servicio, el vocabulario de mensajes y cuándo se usa.">
+<meta name="keywords" content="active directory, kerberos, KDC, TGT, ticket de servicio, krbtgt, AS-REQ, TGS-REQ, AP-REQ, session key, SPN, puerto 88">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Kerberos, las piezas">
+<meta property="og:description" content="Quiénes intervienen en Kerberos, qué clave tiene cada uno y qué diferencia hay entre el TGT y el ticket de servicio.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Kerberos, las piezas",
+  "description": "Quiénes intervienen en Kerberos, qué clave tiene cada uno y qué diferencia hay entre el TGT y el ticket de servicio.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Protocolos"
+  },
+  "position": 1
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Kerberos, las piezas</h1>
+      <p class="ficha__subtitle">Protocolos</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Kerberos es el protocolo de autenticación por defecto para las cuentas del domain desde Windows 2000. Es un estándar abierto (RFC 4120). En vez de enviar la password por la red, trabaja con <strong>tickets</strong>: el usuario prueba quién es una vez y después usa tickets para acceder a los servicios.</p>
+      <p>Interviene en dos momentos:</p>
+      <ul>
+        <li><strong>Al iniciar sesión</strong> en un equipo del domain: el equipo obtiene un TGT del KDC en nombre del usuario.</li>
+        <li><strong>Al acceder a un servicio</strong> (un share, una web interna, una base de datos): se usa el TGT para pedir un ticket de ese servicio.</li>
+      </ul>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>La password no viaja por la red. Se usa para derivar una clave, y con esa clave se cifra la prueba de identidad. El inicio de sesión en el equipo es el primer paso de Kerberos.</p>
+    </section>
+
+    <section>
+      <h2>Los tres actores</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Cliente</dt>
+          <dd>El usuario, a través del equipo desde el que trabaja.</dd>
+        </div>
+        <div>
+          <dt>KDC</dt>
+          <dd>Key Distribution Center. Corre en <strong>cada Domain Controller</strong> y usa AD como base de cuentas. Es un solo proceso con dos servicios: el <strong>AS</strong> (Authentication Service), que verifica al usuario y entrega el TGT, y el <strong>TGS</strong> (Ticket-Granting Service), que con un TGT válido entrega los tickets de servicio.</dd>
+        </div>
+        <div>
+          <dt>Servicio</dt>
+          <dd>Lo que el cliente quiere usar. Está asociado a una cuenta y a un SPN (ver 02.4). Un equipo del domain también es un servicio, con su propia cuenta de equipo.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Quién tiene qué clave</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Clave del usuario</dt>
+          <dd>Se deriva de su password. La conocen el usuario y el KDC.</dd>
+        </div>
+        <div>
+          <dt>Clave de <code>krbtgt</code></dt>
+          <dd>Se deriva de la password de la cuenta <code>krbtgt</code>. La conoce solo el KDC. Un RODC tiene la suya propia (ver 02.3).</dd>
+        </div>
+        <div>
+          <dt>Clave del servicio</dt>
+          <dd>Se deriva de la password de la cuenta del servicio. La conocen el servicio y el KDC.</dd>
+        </div>
+        <div>
+          <dt>Session keys</dt>
+          <dd>Las genera el KDC en cada intercambio. Las reciben solo las partes que corresponden.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout">
+        <p><code>krbtgt</code> es la cuenta del KDC. Se crea sola con el domain, no se puede borrar ni renombrar, y su password se asigna automáticamente.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Los dos tickets</h2>
+      <dl class="term-list">
+        <div>
+          <dt>TGT</dt>
+          <dd>Ticket-Granting Ticket. Es la credencial de sesión. Se cifra con la clave de <code>krbtgt</code>, así que el cliente lo guarda pero <strong>no puede leerlo</strong>. Solo sirve para pedir tickets de servicio.</dd>
+        </div>
+        <div>
+          <dt>Ticket de servicio</dt>
+          <dd>Es el ticket para un servicio concreto. Se cifra con la clave del servicio, así que el cliente tampoco lo puede leer. Solo lo lee el servicio.</dd>
+        </div>
+      </dl>
+
+      <p>Es común ver “TGS” usado para las dos cosas. Acá <strong>TGS</strong> es el servicio del KDC y <strong>ticket de servicio</strong> es el ticket que entrega.</p>
+    </section>
+
+    <section>
+      <h2>Vocabulario de mensajes</h2>
+      <dl class="term-list">
+        <div>
+          <dt>AS-REQ / AS-REP</dt>
+          <dd>El cliente pide un TGT y el KDC responde.</dd>
+        </div>
+        <div>
+          <dt>TGS-REQ / TGS-REP</dt>
+          <dd>El cliente pide un ticket de servicio y el KDC responde.</dd>
+        </div>
+        <div>
+          <dt>AP-REQ / AP-REP</dt>
+          <dd>El cliente presenta el ticket al servicio; el servicio responde si hay mutual authentication.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Puerto</h2>
+      <p><strong>88</strong>, TCP y UDP. Es una forma habitual de ubicar DCs en un escaneo de red.</p>
+    </section>
+
+    <section>
+      <h2>Cuándo se usa Kerberos y cuándo no</h2>
+      <ul>
+        <li><strong>Con un DC alcanzable:</strong> el inicio de sesión usa Kerberos. El equipo tiene que encontrar un DC por DNS y tener la hora sincronizada.</li>
+        <li><strong>Sin DC alcanzable</strong> (por ejemplo, una notebook sin VPN): no se puede pedir el TGT. Windows permite entrar con las credenciales en caché (MSCache2).</li>
+        <li><strong>Sin Kerberos posible:</strong> por ejemplo, si se accede a un servicio por IP en vez de por nombre, o si el servicio no tiene SPN. En general se cae a NTLM.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">La password se envía cifrada al KDC</span>: no. Se usa para derivar una clave que cifra una prueba; la password nunca viaja.</li>
+        <li><span class="error-mark">TGT y ticket de servicio son lo mismo</span>: no. El TGT da derecho a pedir tickets; el ticket de servicio da acceso a un servicio.</li>
+        <li><span class="error-mark">El cliente lee su TGT</span>: no. Está cifrado con la clave de <code>krbtgt</code>.</li>
+        <li><span class="error-mark">El ticket de servicio se cifra siempre con el hash NTLM del servicio</span>: solo con RC4. Con AES se usa una clave derivada de la password y un salt.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>kerberos</li>
+      <li>KDC</li>
+      <li>TGT</li>
+      <li>ticket de servicio</li>
+      <li>krbtgt</li>
+      <li>session key</li>
+      <li>SPN</li>
+      <li>puerto 88</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="02.10-ad-trusts.html">← 02.10 - Fundamental: Trusts</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
