@@ -48,11 +48,11 @@
       <p>Kerberos es el protocolo de autenticación por defecto para las cuentas del domain desde Windows 2000. Es un estándar abierto (RFC 4120). En vez de enviar la password por la red, trabaja con <strong>tickets</strong>: el usuario prueba quién es una vez y después usa tickets para acceder a los servicios.</p>
       <p>Interviene en dos momentos:</p>
       <ul>
-        <li><strong>Al iniciar sesión</strong> en un equipo del domain: el equipo obtiene un TGT del KDC en nombre del usuario.</li>
+        <li><strong>Al iniciar sesión</strong> en un equipo del domain: el equipo obtiene un TGT (Ticket-Granting Ticket) del KDC en nombre del usuario.</li>
         <li><strong>Al acceder a un servicio</strong> (un share, una web interna, una base de datos): se usa el TGT para pedir un ticket de ese servicio.</li>
       </ul>
 
-      <p class="callout--key"><span class="sr-only">Idea clave: </span>La password no viaja por la red. Se usa para derivar una clave, y con esa clave se cifra la prueba de identidad. El inicio de sesión en el equipo es el primer paso de Kerberos.</p>
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>El inicio de sesión en el equipo es el primer paso de Kerberos. La password no viaja por la red. Se le aplica un algoritmo de hash y el resultado es la clave del usuario. Con esa clave se cifra un dato, que el KDC puede descifrar porque tiene guardada la misma clave. Si lo logra, tiene la prueba de que el usuario conoce la password y es quien dice ser.</p>
     </section>
 
     <section>
@@ -96,6 +96,7 @@
 
       <aside class="callout">
         <p><code>krbtgt</code> es la cuenta del KDC. Se crea sola con el domain, no se puede borrar ni renombrar, y su password se asigna automáticamente.</p>
+        <p>La clave de cada cuenta (usuario, servicio o <code>krbtgt</code>) depende del cifrado que se use. Con RC4, la clave es directamente el hash NT de la password. Con AES, la clave se calcula a partir de la password y un salt (un dato extra, armado con el domain y el nombre de la cuenta, que hace que dos cuentas con la misma password no tengan la misma clave) y es un valor distinto del hash NT.</p>
       </aside>
     </section>
 
@@ -112,7 +113,7 @@
         </div>
       </dl>
 
-      <p>Es común ver “TGS” usado para las dos cosas. Acá <strong>TGS</strong> es el servicio del KDC y <strong>ticket de servicio</strong> es el ticket que entrega.</p>
+      <p>Es común ver “TGS” usado para referirse tanto al servicio como al ticket. Acá <strong>TGS</strong> es el servicio del KDC y <strong>ticket de servicio</strong> es el ticket que entrega.</p>
     </section>
 
     <section>
@@ -153,7 +154,7 @@
         <li><span class="error-mark">La password se envía cifrada al KDC</span>: no. Se usa para derivar una clave que cifra una prueba; la password nunca viaja.</li>
         <li><span class="error-mark">TGT y ticket de servicio son lo mismo</span>: no. El TGT da derecho a pedir tickets; el ticket de servicio da acceso a un servicio.</li>
         <li><span class="error-mark">El cliente lee su TGT</span>: no. Está cifrado con la clave de <code>krbtgt</code>.</li>
-        <li><span class="error-mark">El ticket de servicio se cifra siempre con el hash NTLM del servicio</span>: solo con RC4. Con AES se usa una clave derivada de la password y un salt.</li>
+        <li><span class="error-mark">La clave de una cuenta es siempre el hash NT de su password</span>: solo con RC4. Con AES es otra clave, calculada con un salt.</li>
       </ul>
     </section>
 
