@@ -627,3 +627,61 @@ nav.ficha__pagination a:last-child {
 .topic > dl.term-list > div:last-child {
   border-bottom: none;
 }
+
+/* ---------- 18. Diagrama (figura con SVG en línea) ----------
+   Uso: figure.diagram > svg + figcaption.
+   El SVG se dibuja en un viewBox de 272 px de ancho (el ancho útil a
+   320 px de pantalla) y no pasa de ese ancho (max-width: 17rem), así el
+   texto queda siempre en 14 px, dentro de la escala. Colores solo con
+   tokens; el naranja queda para strong.highlight. El trazo
+   continuo/punteado distingue pedido de respuesta sin depender del color. */
+figure.diagram {
+  margin: 0 0 var(--space-3);
+}
+
+figure.diagram svg {
+  display: block;
+  width: 100%;
+  max-width: 17rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+figure.diagram figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.diagram__actor {
+  fill: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.diagram__lifeline {
+  stroke: var(--color-border);
+  stroke-width: 2;
+  stroke-dasharray: 2 4;
+}
+
+.diagram__msg,
+.diagram__head {
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  fill: none;
+}
+
+.diagram__msg--reply {
+  stroke-dasharray: 6 4;
+}
+
+.diagram__label {
+  fill: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}

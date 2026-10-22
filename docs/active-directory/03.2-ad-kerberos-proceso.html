@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Kerberos, el proceso paso a paso</title>
+<meta name="description" content="El proceso de autenticación de Kerberos en Active Directory, paso a paso: los tres intercambios (AS, TGS y AP), qué envía cada parte, con qué se cifra, las session keys, la preautenticación, la hora y la duración de los tickets.">
+<meta name="keywords" content="active directory, kerberos, AS-REQ, AS-REP, TGS-REQ, TGS-REP, AP-REQ, AP-REP, TGT, ticket de servicio, session key, authenticator, preautenticación, mutual authentication, Kerberoasting">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Kerberos, el proceso paso a paso">
+<meta property="og:description" content="Los tres intercambios de Kerberos, qué envía cada parte y con qué clave se cifra.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Kerberos, el proceso paso a paso",
+  "description": "Los tres intercambios de Kerberos, qué envía cada parte y con qué clave se cifra.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Protocolos"
+  },
+  "position": 2
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Kerberos, el proceso paso a paso</h1>
+      <p class="ficha__subtitle">Protocolos</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Kerberos funciona en <strong>tres intercambios</strong>, cada uno con un pedido y una respuesta. En cada uno cambia quién habla con quién y con qué clave se cifra lo que viaja (ver 03.1 para las piezas).</p>
+      <ul>
+        <li><strong>AS (mensajes 1 y 2):</strong> el cliente prueba quién es y recibe un TGT.</li>
+        <li><strong>TGS (mensajes 3 y 4):</strong> el cliente usa el TGT para pedir un ticket de un servicio concreto.</li>
+        <li><strong>AP (mensajes 5 y 6):</strong> el cliente presenta el ticket al servicio.</li>
+      </ul>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 350" role="img" aria-labelledby="diagrama-titulo diagrama-desc">
+        <title id="diagrama-titulo">Los seis mensajes de Kerberos</title>
+        <desc id="diagrama-desc">Diagrama de secuencia con tres actores: cliente, KDC y servicio. Mensaje 1, AS-REQ, del cliente al KDC. Mensaje 2, AS-REP, del KDC al cliente. Mensaje 3, TGS-REQ, del cliente al KDC. Mensaje 4, TGS-REP, del KDC al cliente. Mensaje 5, AP-REQ, del cliente al servicio. Mensaje 6, AP-REP, del servicio al cliente. Los pedidos se dibujan con línea continua y las respuestas con línea punteada.</desc>
+        <text class="diagram__actor" x="40" y="20" text-anchor="middle">Cliente</text>
+        <line class="diagram__lifeline" x1="40" y1="34" x2="40" y2="338"/>
+        <text class="diagram__actor" x="136" y="20" text-anchor="middle">KDC</text>
+        <line class="diagram__lifeline" x1="136" y1="34" x2="136" y2="338"/>
+        <text class="diagram__actor" x="232" y="20" text-anchor="middle">Servicio</text>
+        <line class="diagram__lifeline" x1="232" y1="34" x2="232" y2="338"/>
+        <line class="diagram__msg" x1="40" y1="66" x2="128" y2="66"/>
+        <polyline class="diagram__head" points="128,61 136,66 128,71"/>
+        <text class="diagram__label" x="88.0" y="58" text-anchor="middle">1 AS-REQ</text>
+        <line class="diagram__msg diagram__msg--reply" x1="136" y1="110" x2="48" y2="110"/>
+        <polyline class="diagram__head" points="48,105 40,110 48,115"/>
+        <text class="diagram__label" x="88.0" y="102" text-anchor="middle">2 AS-REP</text>
+        <line class="diagram__msg" x1="40" y1="166" x2="128" y2="166"/>
+        <polyline class="diagram__head" points="128,161 136,166 128,171"/>
+        <text class="diagram__label" x="88.0" y="158" text-anchor="middle">3 TGS-REQ</text>
+        <line class="diagram__msg diagram__msg--reply" x1="136" y1="210" x2="48" y2="210"/>
+        <polyline class="diagram__head" points="48,205 40,210 48,215"/>
+        <text class="diagram__label" x="88.0" y="202" text-anchor="middle">4 TGS-REP</text>
+        <line class="diagram__msg" x1="40" y1="266" x2="224" y2="266"/>
+        <polyline class="diagram__head" points="224,261 232,266 224,271"/>
+        <text class="diagram__label" x="184" y="258" text-anchor="middle">5 AP-REQ</text>
+        <line class="diagram__msg diagram__msg--reply" x1="232" y1="310" x2="48" y2="310"/>
+        <polyline class="diagram__head" points="48,305 40,310 48,315"/>
+        <text class="diagram__label" x="184" y="302" text-anchor="middle">6 AP-REP</text>
+      </svg>
+        <figcaption>Los seis mensajes de Kerberos. Línea continua: pedido. Línea punteada: respuesta.</figcaption>
+      </figure>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Los dos primeros intercambios son contra el KDC. Solo el tercero es contra el servicio, y el KDC no participa.</p>
+    </section>
+
+    <section>
+      <h2>Antes de empezar</h2>
+      <p>El usuario escribe su password al iniciar sesión. El equipo la convierte en una clave (la <strong>clave del usuario</strong>) y la guarda en memoria. Esa clave es la que se usa en el primer intercambio. La password en sí no se envía.</p>
+    </section>
+
+    <section>
+      <h2>Intercambio 1: AS (el TGT)</h2>
+      <dl class="term-list">
+        <div>
+          <dt>1. AS-REQ</dt>
+          <dd>Cliente → KDC. Lleva la identidad del usuario, el servicio que se pide (el propio <code>krbtgt</code>) y los datos de <strong>preautenticación</strong>: un timestamp cifrado con la clave del usuario.</dd>
+        </div>
+        <div>
+          <dt>El KDC</dt>
+          <dd>Busca al usuario en AD, toma su clave y descifra el timestamp. Si descifra bien y la hora es válida, sabe que quien pide conoce la password.</dd>
+        </div>
+        <div>
+          <dt>2. AS-REP</dt>
+          <dd>KDC → cliente. Lleva dos partes. Una copia de la <strong>logon session key</strong>, cifrada con la clave del usuario, que el cliente puede leer. Y el <strong>TGT</strong>, que contiene otra copia de la session key y los datos de autorización del usuario, cifrado con la clave de <code>krbtgt</code>, que el cliente no puede leer.</dd>
+        </div>
+        <div>
+          <dt>El cliente</dt>
+          <dd>Descifra la session key con su clave y guarda la session key y el TGT en su caché de tickets.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Intercambio 2: TGS (el ticket de servicio)</h2>
+      <dl class="term-list">
+        <div>
+          <dt>3. TGS-REQ</dt>
+          <dd>Cliente → KDC. Lleva el servicio al que quiere acceder, identificado por su SPN (ver 02.4), un <strong>authenticator</strong> cifrado con la logon session key, y el <strong>TGT</strong>.</dd>
+        </div>
+        <div>
+          <dt>El KDC</dt>
+          <dd>Descifra el TGT con la clave de <code>krbtgt</code> y obtiene la logon session key y los datos de autorización. Con esa session key descifra el authenticator y lo valida. Después crea una <strong>service session key</strong> nueva, para que cliente y servicio compartan.</dd>
+        </div>
+        <div>
+          <dt>4. TGS-REP</dt>
+          <dd>KDC → cliente. Lleva dos partes. Una copia de la service session key, cifrada con la logon session key, que el cliente puede leer. Y el <strong>ticket de servicio</strong>, que contiene otra copia de la service session key y los datos de autorización, cifrado con la clave del servicio, que el cliente no puede leer.</dd>
+        </div>
+        <div>
+          <dt>El cliente</dt>
+          <dd>Guarda ambos en su caché.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Intercambio 3: AP (el servicio)</h2>
+      <dl class="term-list">
+        <div>
+          <dt>5. AP-REQ</dt>
+          <dd>Cliente → servicio. Lleva el ticket de servicio, un authenticator cifrado con la service session key, y un indicador de si el cliente quiere <strong>mutual authentication</strong>.</dd>
+        </div>
+        <div>
+          <dt>El servicio</dt>
+          <dd>Descifra el ticket con su propia clave y obtiene la service session key y los datos de autorización. Con esa session key descifra el authenticator y valida el timestamp. Si es válido, acepta al cliente.</dd>
+        </div>
+        <div>
+          <dt>6. AP-REP</dt>
+          <dd>Servicio → cliente, solo con mutual authentication. El servicio devuelve el timestamp del authenticator del cliente, cifrado con la service session key. El cliente lo descifra y lo compara con el original. Si coincide, sabe que el servicio es el verdadero, porque solo quien tenía la clave del servicio pudo abrir el ticket.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Las dos session keys</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Logon session key</dt>
+          <dd>La conocen el cliente y el KDC. Se usa para pedir tickets de servicio.</dd>
+        </div>
+        <div>
+          <dt>Service session key</dt>
+          <dd>La conocen el cliente y el servicio (y el KDC, que la creó). Se usa entre cliente y servicio.</dd>
+        </div>
+      </dl>
+      <p>El cliente carga con dos tickets que no puede leer. Solo los transporta.</p>
+    </section>
+
+    <section>
+      <h2>Por qué hay preautenticación</h2>
+      <p>Sin ella, cualquiera podría pedir al KDC una respuesta AS-REP para el usuario que quisiera, y esa respuesta ya vendría cifrada con la clave de ese usuario. Con eso se podría intentar adivinar la password sin conectarse más. Con preautenticación, el KDC solo responde si el pedido ya viene cifrado con esa clave.</p>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> existe una opción de cuenta que la desactiva (“Do not require Kerberos preauthentication”). Una cuenta así deja de tener esa protección.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>La hora y los timestamps</h2>
+      <p>Los authenticators llevan timestamp y sirven también contra repeticiones: un mensaje copiado y reenviado lleva una hora vieja. Si la diferencia entre el reloj del cliente y el del DC supera la tolerancia, la autenticación falla. El valor por defecto es <strong>5 minutos</strong>. Por eso la hora de los equipos del domain se sincroniza con la jerarquía del domain, que parte del PDC Emulator (ver 02.3).</p>
+    </section>
+
+    <section>
+      <h2>Cuánto duran los tickets</h2>
+      <p>Por defecto, en la política de Kerberos del domain:</p>
+      <dl class="term-list">
+        <div>
+          <dt>TGT</dt>
+          <dd>10 horas. Dentro de un plazo de renovación de <strong>7 días</strong> puede renovarse. Pasado ese plazo, hay que autenticarse de nuevo con un DC.</dd>
+        </div>
+        <div>
+          <dt>Ticket de servicio</dt>
+          <dd>600 minutos (10 horas). Al vencer hay que pedir uno nuevo para abrir conexiones nuevas. Las conexiones ya autenticadas no se cortan.</dd>
+        </div>
+      </dl>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> con un valor de 0, los tickets no vencen.</li>
+        <li><strong class="highlight">Riesgo:</strong> un ticket ya emitido sigue valiendo hasta que vence. Si una cuenta se deshabilita, puede conservar acceso hasta ese momento.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Los datos de autorización</h2>
+      <p>Los dos tickets llevan los datos de autorización del usuario, que el KDC copia del TGT al ticket de servicio. Con ellos el servicio sabe quién es el usuario y de qué grupos es miembro. Por eso un cambio de grupos se refleja recién cuando el usuario obtiene un TGT nuevo, por ejemplo al volver a iniciar sesión.</p>
+    </section>
+
+    <section>
+      <h2>Dónde encajan los ataques</h2>
+      <ul>
+        <li><strong class="highlight">Riesgo, Kerberoasting:</strong> se pide un ticket de servicio (mensaje 3) y el que llega en el mensaje 4 se intenta descifrar sin conexión, porque está cifrado con la clave de la cuenta del servicio (ver 02.4).</li>
+        <li><strong class="highlight">Riesgo, tickets falsificados:</strong> quien tenga la clave de <code>krbtgt</code> puede fabricar un TGT, y quien tenga la clave de un servicio, un ticket de servicio.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Qué deja en los logs</h2>
+      <p>Los intercambios AS y TGS dejan eventos en los DCs: uno cuando se pide un TGT y otro cuando se pide un ticket de servicio.</p>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">El KDC decide si el usuario puede acceder al servicio</span>: en general, no. Autentica y entrega el ticket; la decisión de acceso la toma el servicio, con los permisos. Las authentication policies pueden hacer que el KDC niegue un ticket (ver 02.9).</li>
+        <li><span class="error-mark">La session key viaja en claro</span>: no. Siempre viaja cifrada: una copia con una clave que lee el cliente y otra dentro de un ticket que no lee.</li>
+        <li><span class="error-mark">En el tercer intercambio interviene el KDC</span>: no. El cliente habla directo con el servicio.</li>
+        <li><span class="error-mark">El authenticator es una password</span>: no. Es un timestamp cifrado que prueba que el cliente conoce la session key.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>kerberos</li>
+      <li>AS-REQ</li>
+      <li>TGS-REQ</li>
+      <li>AP-REQ</li>
+      <li>TGT</li>
+      <li>ticket de servicio</li>
+      <li>session key</li>
+      <li>authenticator</li>
+      <li>preautenticación</li>
+      <li>mutual authentication</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="03.1-ad-kerberos-piezas.html">← 03.1 - Kerberos, las piezas</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
