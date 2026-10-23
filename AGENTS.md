@@ -34,7 +34,8 @@ docs/
   estilo.css                        hoja única compartida
   <area>/
     index.html                      índice del área: sus temas y contenidos
-    NN.N-<abreviatura>-<nombre>.html
+    NN-<tema>/                      una carpeta por tema
+      NN.N-<abreviatura>-<nombre>.html
 ```
 
 Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
@@ -44,7 +45,10 @@ Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
   a la izquierda: `02.9`, `02.10`), `<abreviatura>` la sigla del
   área (`ad` = Active Directory) y `<nombre>` una palabra que describe el
   contenido. Ejemplo: `01.1-ad-introduccion.html`.
-- El tema lo nombra el autor y va como subtítulo de cada contenido.
+- El tema lo nombra el autor y va como subtítulo de cada contenido. Cada tema
+  vive en su carpeta `NN-<tema>`, con el número del tema y el nombre sin tildes
+  ni espacios (`01-introduccion`, `02-fundamental`, `03-protocolos`).
+- Cada área numera sus temas desde 01 y usa su propia sigla.
 
 ## 3. Cómo se trabaja
 
@@ -129,13 +133,16 @@ BEM: `.ficha__header`, `.topic__summary`).
   </article>
 </main>
 <footer class="site-footer">
-  <p><a href="index.html">← Área</a> · <a href="#inicio">↑ Volver arriba</a></p>
+  <p><a href="../index.html">← Área</a> · <a href="#inicio">↑ Volver arriba</a></p>
 </footer>
 ```
 
 - **Paginación:** `← 01.1 - Título` y `01.2 - Título →`. Cruza de un tema a otro,
   y en ese caso el enlace lleva el nombre del tema: `02.1 - Fundamental:
   Estructura jerárquica →`. El "siguiente" va siempre a la derecha.
+- **Rutas:** la hoja de estilos es `../../estilo.css` y el pie vuelve al índice
+  del área con `../index.html`. Los enlaces a otro tema llevan la carpeta:
+  `../02-fundamental/02.1-ad-estructura.html`.
 - **Pie:** vuelve al **área** y sube al inicio de la página.
 - **Etiquetas** (`ul.tags`) al final de cada contenido; no se muestran en los
   índices.
@@ -197,18 +204,20 @@ los HTML siguen el mismo formato.
 
 ### Agregar un contenido
 
-1. Crear `NN.N-<abreviatura>-<nombre>.html` a partir del formato de otro.
+1. Crear `NN.N-<abreviatura>-<nombre>.html` en la carpeta de su tema
+   (`docs/<área>/NN-<tema>/`) a partir del formato de otro, con las rutas
+   `../../estilo.css` y `../index.html`.
 2. Índice del área: sumar la entrada dentro de su tema y actualizar el contador
    de contenidos de ese tema.
 3. Paginación: completar "anterior" en el nuevo y el "siguiente" del contenido
-   que lo precede.
+   que lo precede (con la carpeta si cambia de tema).
 4. Portada: contadores del encabezado (`N áreas · N temas · N contenidos`) y de
    la entrada del área.
 5. Metadatos del nuevo: `<title>`, descripción, Open Graph y JSON-LD.
 6. Verificar (ver abajo).
 
-**Un tema nuevo** suma además un `<details class="topic">` en el índice del
-área. **Un área nueva**, una carpeta con su `index.html` (copiando el de otra) y
+**Un tema nuevo** suma además su carpeta `NN-<tema>` y un
+`<details class="topic">` en el índice del área, con los enlaces a su carpeta. **Un área nueva**, una carpeta con su `index.html` (copiando el de otra) y
 su entrada en la portada.
 
 ### Verificar un cambio

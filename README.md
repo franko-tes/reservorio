@@ -10,11 +10,11 @@ que se aprende, ordenado para volver a leerlo.
 
 El material se organiza en tres niveles:
 
-| Nivel         | Qué es                     | Cómo se ve                            |
-| ------------- | -------------------------- | ------------------------------------- |
-| **Área**      | Un campo de estudio amplio | Una carpeta, con su propio índice     |
-| **Tema**      | Un bloque dentro del área  | El primer número del archivo (`01.x`) |
-| **Contenido** | Una ficha concreta         | Una página HTML (`01.1`, `01.2`, …)   |
+| Nivel         | Qué es                     | Cómo se ve                                                       |
+| ------------- | -------------------------- | ---------------------------------------------------------------- |
+| **Área**      | Un campo de estudio amplio | Una carpeta, con su propio índice                                |
+| **Tema**      | Un bloque dentro del área  | Una carpeta (`01-…`) y el primer número de sus archivos (`01.x`) |
+| **Contenido** | Una ficha concreta         | Una página HTML (`01.1`, `01.2`, …)                              |
 
 ## Cómo está armado
 
@@ -24,11 +24,12 @@ docs/
   estilo.css                  hoja de estilos única, compartida
   <área>/
     index.html                índice del área
-    NN.N-nombre.html          un contenido (NN = tema, N = orden dentro del tema)
+    NN-tema/                  una carpeta por tema
+      NN.N-nombre.html        un contenido (NN = tema, N = orden dentro del tema)
 ```
 
-Por ejemplo, `active-directory/01.1-ad-introduccion.html` es el contenido 1 del
-tema 01 del área Active Directory.
+Por ejemplo, `active-directory/01-introduccion/01.1-ad-introduccion.html` es el
+contenido 1 del tema 01 del área Active Directory.
 
 - **HTML y CSS, nada más.** Sin JavaScript, frameworks ni dependencias externas.
 - **Rutas relativas**, así que las páginas se abren igual desde el sitio publicado
