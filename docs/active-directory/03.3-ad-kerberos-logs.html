@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Kerberos en los logs</title>
+<meta name="description" content="Los eventos que deja Kerberos al iniciar sesión o acceder a un servicio: qué registra el KDC en los DCs (4768, 4769 y 4771), qué registra el equipo al que se accede (4624 y 4625) y cómo se relacionan.">
+<meta name="keywords" content="active directory, kerberos, logs, event id, 4768, 4769, 4771, 4624, 4625, logon type, authentication package, TGT, ticket de servicio, KDC, Kerberoasting">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Kerberos en los logs">
+<meta property="og:description" content="Los eventos que registran los DCs y el equipo al que se accede, y cómo se relacionan.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Kerberos en los logs",
+  "description": "Los eventos que registran los DCs y el equipo al que se accede, y cómo se relacionan.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Protocolos"
+  },
+  "position": 3
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Kerberos en los logs</h1>
+      <p class="ficha__subtitle">Protocolos</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Un inicio de sesión o un acceso a un servicio deja eventos en dos tipos de máquinas distintas:</p>
+      <ul>
+        <li><strong>En los DCs:</strong> el KDC registra los tickets que emite o rechaza (4768, 4769, 4771).</li>
+        <li><strong>En el equipo al que se accede:</strong> Windows registra la sesión que se crea o se rechaza (4624 y 4625).</li>
+      </ul>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Los eventos de Kerberos registran pedidos de tickets. Los 4624 y 4625 registran sesiones creadas o rechazadas en un equipo. No son equivalentes ni van uno a uno.</p>
+    </section>
+
+    <section>
+      <h2>Dónde se genera cada evento</h2>
+      <dl class="term-list">
+        <div>
+          <dt>4768</dt>
+          <dd>En el DC. Se pidió un TGT (éxito o falla). Subcategoría de auditoría: <em>Audit Kerberos Authentication Service</em>.</dd>
+        </div>
+        <div>
+          <dt>4771</dt>
+          <dd>En el DC. Falló la preautenticación. Misma subcategoría.</dd>
+        </div>
+        <div>
+          <dt>4769</dt>
+          <dd>En el DC. Se pidió un ticket de servicio (éxito o falla). Subcategoría: <em>Audit Kerberos Service Ticket Operations</em>.</dd>
+        </div>
+        <div>
+          <dt>4624</dt>
+          <dd>En el equipo al que se accede (el destino, no el origen). Sesión creada. Subcategoría: <em>Audit Logon</em>.</dd>
+        </div>
+        <div>
+          <dt>4625</dt>
+          <dd>En el equipo donde se intentó el logon. Sesión rechazada. Subcategorías: <em>Audit Logon</em> y <em>Audit Account Lockout</em>.</dd>
+        </div>
+      </dl>
+      <p>Si la subcategoría no está activada, el evento no se genera.</p>
+    </section>
+
+    <section>
+      <h2>Qué evento deja cada mensaje del proceso (ver 03.2)</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Mensajes 1 y 2 (AS)</dt>
+          <dd>4768 si se emitió el TGT o si falló por un motivo distinto de la preautenticación. 4771 si falló la preautenticación.</dd>
+        </div>
+        <div>
+          <dt>Mensajes 3 y 4 (TGS)</dt>
+          <dd>4769, con éxito o con falla.</dd>
+        </div>
+        <div>
+          <dt>Mensajes 5 y 6 (AP)</dt>
+          <dd>Ningún evento de Kerberos en el DC, porque el KDC no participa. El rastro queda en el equipo o servidor al que se accede: un 4624 (o un 4625 si se rechaza).</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Evento 4768: se pidió un TGT</h2>
+      <h3>Campos clave</h3>
+      <dl class="term-list">
+        <div>
+          <dt>Account Name</dt>
+          <dd>La cuenta para la que se pidió el TGT. Las cuentas de equipo terminan en <code>$</code>.</dd>
+        </div>
+        <div>
+          <dt>Client Address</dt>
+          <dd>La IP de origen. <code>::1</code> es local.</dd>
+        </div>
+        <div>
+          <dt>Ticket Encryption Type</dt>
+          <dd>El cifrado del TGT emitido.</dd>
+        </div>
+        <div>
+          <dt>Pre-Authentication Type</dt>
+          <dd><code>2</code> = password, <code>15</code> = smart card, <code>138</code> = Kerberos armoring, <code>0</code> = sin preautenticación.</dd>
+        </div>
+        <div>
+          <dt>Result Code</dt>
+          <dd><code>0x0</code> = éxito.</dd>
+        </div>
+      </dl>
+
+      <h3>Códigos de resultado de interés</h3>
+      <dl class="term-list">
+        <div>
+          <dt><code>0x6</code></dt>
+          <dd>El usuario no existe. Repetido, puede indicar enumeración de cuentas.</dd>
+        </div>
+        <div>
+          <dt><code>0x12</code></dt>
+          <dd>Cuenta deshabilitada, vencida o bloqueada.</dd>
+        </div>
+        <div>
+          <dt><code>0x19</code></dt>
+          <dd>Se requiere preautenticación adicional.</dd>
+        </div>
+      </dl>
+      <p>El <code>0x18</code> no aparece acá: va en el 4771.</p>
+    </section>
+
+    <section>
+      <h2>Evento 4771: falló la preautenticación</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Failure Code <code>0x18</code></dt>
+          <dd>Preautenticación inválida, normalmente una password incorrecta.</dd>
+        </div>
+        <div>
+          <dt>Failure Code <code>0x17</code></dt>
+          <dd>Password vencida.</dd>
+        </div>
+      </dl>
+      <p>No se genera para cuentas con “Do not require Kerberos preauthentication”.</p>
+    </section>
+
+    <section>
+      <h2>Evento 4769: se pidió un ticket de servicio</h2>
+      <h3>Campos clave</h3>
+      <dl class="term-list">
+        <div>
+          <dt>Account Name</dt>
+          <dd>Quien pide, en formato UPN (por ejemplo, <code>usuario@techcorp.local</code>).</dd>
+        </div>
+        <div>
+          <dt>Service Name</dt>
+          <dd>La cuenta o equipo para el que se pide el ticket.</dd>
+        </div>
+        <div>
+          <dt>Client Address</dt>
+          <dd>La IP de origen.</dd>
+        </div>
+        <div>
+          <dt>Ticket Encryption Type</dt>
+          <dd>El cifrado del ticket emitido.</dd>
+        </div>
+        <div>
+          <dt>Failure Code</dt>
+          <dd><code>0x0</code> = éxito.</dd>
+        </div>
+        <div>
+          <dt>Logon GUID</dt>
+          <dd>Permite correlacionar con el 4624.</dd>
+        </div>
+      </dl>
+
+      <h3>Códigos de falla frecuentes</h3>
+      <dl class="term-list">
+        <div>
+          <dt><code>0x7</code></dt>
+          <dd>El servicio no existe en AD.</dd>
+        </div>
+        <div>
+          <dt><code>0x12</code></dt>
+          <dd>Cuenta deshabilitada, vencida o bloqueada.</dd>
+        </div>
+        <div>
+          <dt><code>0x20</code></dt>
+          <dd>Ticket vencido. Es muy común y tiene poca relevancia de seguridad.</dd>
+        </div>
+        <div>
+          <dt><code>0x25</code></dt>
+          <dd>Diferencia de hora mayor a la tolerancia (ver 03.2).</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Tipos de cifrado en los eventos</h2>
+      <dl class="term-list">
+        <div>
+          <dt><code>0x12</code></dt>
+          <dd>AES256. Valor esperado en un entorno moderno.</dd>
+        </div>
+        <div>
+          <dt><code>0x11</code></dt>
+          <dd>AES128. Valor esperado en un entorno moderno.</dd>
+        </div>
+        <div>
+          <dt><code>0x17</code></dt>
+          <dd>RC4. Era el cifrado por defecto antes de Windows Server 2008 y Vista.</dd>
+        </div>
+        <div>
+          <dt><code>0x1</code> y <code>0x3</code></dt>
+          <dd>DES. No deberían aparecer.</dd>
+        </div>
+      </dl>
+      <ul>
+        <li><strong class="highlight">Relevante:</strong> Microsoft recomienda marcar cualquier tipo que no sea <code>0x11</code> o <code>0x12</code> en entornos modernos (ver 02.9).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Eventos 4624 y 4625: la sesión en el equipo</h2>
+      <h3>Campos clave del 4624</h3>
+      <dl class="term-list">
+        <div>
+          <dt>Logon Type</dt>
+          <dd>El tipo de inicio de sesión (lista abajo).</dd>
+        </div>
+        <div>
+          <dt>Authentication Package</dt>
+          <dd><code>Kerberos</code>, <code>NTLM</code> o <code>Negotiate</code>.</dd>
+        </div>
+        <div>
+          <dt>Package Name (NTLM only)</dt>
+          <dd><code>NTLM V1</code>, <code>NTLM V2</code> o <code>LM</code>. Solo se completa si el paquete es NTLM.</dd>
+        </div>
+        <div>
+          <dt>Key Length</dt>
+          <dd>Siempre <code>0</code> para Kerberos.</dd>
+        </div>
+        <div>
+          <dt>Source Network Address</dt>
+          <dd>La IP del cliente.</dd>
+        </div>
+      </dl>
+      <p>El 4625 tiene Logon Type, Authentication Package, Source Network Address, Workstation Name, y los códigos Status y Sub Status.</p>
+
+      <h3>Logon Type</h3>
+      <dl class="term-list">
+        <div>
+          <dt>2, Interactive</dt>
+          <dd>Alguien inició sesión en el equipo.</dd>
+        </div>
+        <div>
+          <dt>3, Network</dt>
+          <dd>Acceso por la red, por ejemplo a un share.</dd>
+        </div>
+        <div>
+          <dt>4, Batch</dt>
+          <dd>Tareas programadas, sin intervención del usuario.</dd>
+        </div>
+        <div>
+          <dt>5, Service</dt>
+          <dd>El Service Control Manager inició un servicio.</dd>
+        </div>
+        <div>
+          <dt>7, Unlock</dt>
+          <dd>Se desbloqueó el equipo.</dd>
+        </div>
+        <div>
+          <dt>8, NetworkCleartext</dt>
+          <dd>Logon de red con la password sin hashear.</dd>
+        </div>
+        <div>
+          <dt>9, NewCredentials</dt>
+          <dd>Credenciales distintas para conexiones salientes.</dd>
+        </div>
+        <div>
+          <dt>10, RemoteInteractive</dt>
+          <dd>Escritorio Remoto o Terminal Services.</dd>
+        </div>
+        <div>
+          <dt>11, CachedInteractive</dt>
+          <dd>Credenciales en caché; no se contactó a un DC (ver 03.1).</dd>
+        </div>
+      </dl>
+
+      <h3>Códigos de falla del 4625</h3>
+      <dl class="term-list">
+        <div>
+          <dt><code>0xC000006D</code></dt>
+          <dd>Usuario incorrecto o información de autenticación incorrecta.</dd>
+        </div>
+        <div>
+          <dt><code>0xC000006A</code></dt>
+          <dd>Password incorrecta.</dd>
+        </div>
+        <div>
+          <dt><code>0xC0000064</code></dt>
+          <dd>El usuario no existe. Varios seguidos pueden indicar enumeración.</dd>
+        </div>
+        <div>
+          <dt><code>0xC0000072</code></dt>
+          <dd>Cuenta deshabilitada.</dd>
+        </div>
+        <div>
+          <dt><code>0xC0000234</code></dt>
+          <dd>Cuenta bloqueada.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>¿Kerberos o NTLM en un 4624?</h2>
+      <p>El campo Authentication Package no siempre alcanza por sí solo:</p>
+      <dl class="term-list">
+        <div>
+          <dt>Kerberos</dt>
+          <dd>Se usó Kerberos.</dd>
+        </div>
+        <div>
+          <dt>NTLM</dt>
+          <dd>Se usó NTLM, y el campo Package Name dice qué versión.</dd>
+        </div>
+        <div>
+          <dt>Negotiate</dt>
+          <dd>Windows eligió entre Kerberos y NTLM, y el 4624 solo no siempre lo aclara. Si hay un 4768 o 4769 correspondiente en el DC, se usó Kerberos. Si no hay, no se puede asegurar, porque el ticket puede estar en caché.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Cómo se ve en los logs</h2>
+      <p>Cada línea es un escenario típico, con el DC y el equipo:</p>
+      <dl class="term-list">
+        <div>
+          <dt>Logon interactivo exitoso</dt>
+          <dd>4768 en el DC, y suele verse también un 4769 para el propio equipo. En el equipo, 4624 tipo 2.</dd>
+        </div>
+        <div>
+          <dt>Acceso a un share</dt>
+          <dd>4769 en el DC (si el ticket de servicio no estaba en caché) y 4624 tipo 3 en el servidor. El Logon GUID del 4769 permite correlacionarlos.</dd>
+        </div>
+        <div>
+          <dt>Password incorrecta en el logon</dt>
+          <dd>4771 con <code>0x18</code> en el DC y 4625 en el equipo.</dd>
+        </div>
+        <div>
+          <dt>Usuario inexistente</dt>
+          <dd>4768 con <code>0x6</code> en el DC y 4625 en el equipo.</dd>
+        </div>
+        <div>
+          <dt>Sin DC alcanzable</dt>
+          <dd>4624 tipo 11 en el equipo, sin ningún evento de Kerberos en los DCs.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Señales para vigilar</h2>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> muchos 4771 con <code>0x18</code> en poco tiempo contra una cuenta importante: posible fuerza bruta.</li>
+        <li><strong class="highlight">Riesgo:</strong> 4768 con <code>0x6</code> o 4625 con <code>0xC0000064</code> repetidos: posible enumeración de cuentas.</li>
+        <li><strong class="highlight">Riesgo:</strong> 4625 con <code>0xC000006D</code> o <code>0xC000006A</code> en ráfagas contra cuentas críticas o de servicio.</li>
+        <li><strong class="highlight">Riesgo:</strong> un 4769 con cifrado RC4 (<code>0x17</code>) para una cuenta de servicio, en un entorno que ya usa AES. Es la señal que suele usarse para detectar Kerberoasting (ver 02.4). Tiene falsos positivos con servicios viejos que solo soportan RC4.</li>
+        <li><strong class="highlight">Riesgo:</strong> cifrado DES (<code>0x1</code> o <code>0x3</code>) en cualquier evento.</li>
+        <li><strong class="highlight">Riesgo:</strong> Authentication Package NTLM donde NTLM no debería usarse.</li>
+        <li><strong class="highlight">Relevante:</strong> IPs de origen fuera de los rangos internos, o <code>::1</code> en un DC para cuentas que no deberían iniciar sesión ahí.</li>
+        <li><strong class="highlight">Relevante:</strong> el <code>0x25</code> indica problema de hora, no un ataque.</li>
+        <li><strong class="highlight">Relevante:</strong> el <code>0x20</code> es ruido normal.</li>
+        <li><strong class="highlight">Relevante:</strong> una cuenta administrativa con Logon Type 4 o 5 es una combinación inusual.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Nombres de campo en el XML</h2>
+      <p>Para consultas en el SIEM, el XML usa otros nombres: <code>TargetUserName</code>, <code>ServiceName</code>, <code>IpAddress</code>, <code>IpPort</code>, <code>Status</code>, <code>SubStatus</code>, <code>TicketEncryptionType</code>, <code>PreAuthType</code>, <code>LogonType</code>, <code>AuthenticationPackageName</code>, <code>WorkstationName</code>.</p>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Un 4768 es un acceso a un recurso</span>: no. Es el pedido de un TGT, normalmente al iniciar sesión. El acceso a un servicio se ve en el 4769.</li>
+        <li><span class="error-mark">Un 4769 exitoso significa que el servicio aceptó al usuario</span>: no. Significa que el KDC emitió el ticket. La decisión de acceso la toma el servicio (ver 03.2).</li>
+        <li><span class="error-mark">4624 es el evento de Kerberos</span>: no. Es la sesión creada, con Kerberos o con NTLM.</li>
+        <li><span class="error-mark">Un 4624 tipo 3 implica Kerberos</span>: no. Hay que mirar el Authentication Package.</li>
+        <li><span class="error-mark">Cada acceso a un servicio deja un 4769</span>: no necesariamente. Mientras el ticket de servicio siga en la caché del cliente y no venza (ver 03.2), se reutiliza sin volver a pedirlo.</li>
+        <li><span class="error-mark">Si no hay 4768, no hubo inicio de sesión</span>: no. El logon con credenciales en caché deja un 4624 tipo 11 sin ningún evento de Kerberos.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>kerberos</li>
+      <li>logs</li>
+      <li>event id</li>
+      <li>4768</li>
+      <li>4769</li>
+      <li>4771</li>
+      <li>4624</li>
+      <li>4625</li>
+      <li>logon type</li>
+      <li>authentication package</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="03.2-ad-kerberos-proceso.html">← 03.2 - Kerberos, el proceso paso a paso</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
