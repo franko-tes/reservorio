@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: NTLM y hashes</title>
+<meta name="description" content="NTLM y los hashes de Windows: la diferencia entre el hash NT, el hash LM y el protocolo NTLM, cómo funciona el desafío y la respuesta, las versiones, la comparación con Kerberos y los eventos que deja en los logs.">
+<meta name="keywords" content="active directory, NTLM, NTLMv1, NTLMv2, hash NT, hash LM, pass-the-hash, relay, credenciales en caché, MSCache2, 4776, desafío y respuesta, Kerberos">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: NTLM y hashes">
+<meta property="og:description" content="La diferencia entre un hash guardado y el protocolo NTLM, cómo funciona y qué deja en los logs.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: NTLM y hashes",
+  "description": "La diferencia entre un hash guardado y el protocolo NTLM, cómo funciona y qué deja en los logs.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Protocolos"
+  },
+  "position": 4
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>NTLM y hashes</h1>
+      <p class="ficha__subtitle">Protocolos</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>En Windows hay tres cosas con nombres parecidos que se confunden:</p>
+      <ul>
+        <li><strong>Hashes guardados (LM y NT):</strong> el resultado de aplicarle un algoritmo de hash a la password. Se guardan en AD y en las bases locales.</li>
+        <li><strong>NTLM:</strong> el protocolo de autenticación que usa el hash NT para probar quién es el usuario, con un desafío y una respuesta.</li>
+        <li><strong>Credenciales en caché:</strong> una copia local para poder entrar al equipo sin DC.</li>
+      </ul>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Un hash es un dato guardado. NTLM es un protocolo que usa ese dato. No son lo mismo. Por eso en estos contenidos se dice “hash NT” y no “hash NTLM”, que mezcla las dos cosas.</p>
+    </section>
+
+    <section>
+      <h2>Lo que se guarda</h2>
+
+      <h3>Hash NT</h3>
+      <ul>
+        <li>Es el resultado de aplicar el algoritmo MD4 a la password en UTF-16.</li>
+        <li>No usa salt: la misma password da el mismo hash en cualquier cuenta o equipo.</li>
+        <li>Con RC4, es la clave de Kerberos (ver 03.1).</li>
+        <li><strong class="highlight">Riesgo:</strong> quien obtenga un hash NT puede autenticarse con NTLM sin conocer la password (<em>pass-the-hash</em>), porque la respuesta NTLM se calcula a partir del hash.</li>
+      </ul>
+
+      <h3>Hash LM</h3>
+      <ul>
+        <li>Es el más viejo y débil: limita la password a 14 caracteres, la pasa a mayúsculas y la parte en dos mitades que se procesan por separado.</li>
+        <li>Hoy no se guarda por defecto.</li>
+        <li><strong class="highlight">Riesgo:</strong> los hashes LM que ya existían siguen guardados hasta que la cuenta cambie su password.</li>
+      </ul>
+
+      <h3>Credenciales en caché (MSCache2)</h3>
+      <ul>
+        <li>El equipo guarda una verificación de la password de los últimos 10 usuarios del domain que iniciaron sesión, para poder entrar sin DC (ver 03.1).</li>
+        <li>No es el hash NT, y no sirve para <em>pass-the-hash</em>.</li>
+        <li><strong class="highlight">Riesgo:</strong> quien acceda al equipo puede intentar descubrir las passwords por fuerza bruta. Microsoft menciona como contramedida poner el valor en 0, a costa de que no se pueda entrar sin DC.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>NTLM paso a paso</h2>
+      <p>NTLM prueba que el usuario conoce la password, sin enviarla, con un desafío y una respuesta.</p>
+      <dl class="term-list">
+        <div>
+          <dt>1. NEGOTIATE</dt>
+          <dd>Cliente → servidor. El cliente indica qué soporta.</dd>
+        </div>
+        <div>
+          <dt>2. CHALLENGE</dt>
+          <dd>Servidor → cliente. Envía un número aleatorio, el desafío.</dd>
+        </div>
+        <div>
+          <dt>3. AUTHENTICATE</dt>
+          <dd>Cliente → servidor. Devuelve una respuesta calculada con el hash NT y el desafío.</dd>
+        </div>
+        <div>
+          <dt>4. Validación</dt>
+          <dd>Si la cuenta es del domain, el servidor no puede verificarla solo, porque no tiene el hash. Envía el desafío y la respuesta al DC, que la comprueba con el hash guardado. Si la cuenta es local, se verifica contra la base local.</dd>
+        </div>
+      </dl>
+      <p>NTLM no usa tickets: cada autenticación repite el desafío y la respuesta. Y no tiene autenticación mutua: el servidor no prueba su identidad.</p>
+    </section>
+
+    <section>
+      <h2>Versiones</h2>
+      <ul>
+        <li><strong>NTLMv1:</strong> usa DES y es débil.</li>
+        <li><strong>NTLMv2:</strong> usa HMAC-MD5 e incluye un desafío del cliente, un timestamp y el nombre del domain. Es más resistente que NTLMv1: el timestamp y el desafío del cliente dificultan reutilizar una respuesta.</li>
+        <li><strong>Por defecto:</strong> Windows Server 2008 R2 y posteriores envían solo NTLMv2.</li>
+        <li><strong class="highlight">Riesgo:</strong> una respuesta capturada no sirve para <em>pass-the-hash</em>, pero se puede intentar descubrir la password por fuerza bruta, o reenviar la autenticación a otro servidor en tiempo real (<em>relay</em>).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>NTLM frente a Kerberos</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Cómo prueba la identidad</dt>
+          <dd>NTLM, con desafío y respuesta a partir del hash NT. Kerberos, con tickets (ver 03.2).</dd>
+        </div>
+        <div>
+          <dt>Quién valida</dt>
+          <dd>En NTLM, el DC en cada autenticación si la cuenta es del domain, o el propio equipo si es local. En Kerberos, el KDC emite tickets y el servicio los valida.</dd>
+        </div>
+        <div>
+          <dt>Autenticación mutua</dt>
+          <dd>NTLM no. Kerberos sí, cuando se pide.</dd>
+        </div>
+        <div>
+          <dt>Preferencia</dt>
+          <dd>Microsoft prefiere Kerberos en entornos AD y recomienda auditar y restringir NTLM. Sigue haciendo falta en equipos de workgroup, en el inicio de sesión con cuentas locales, y cuando no se puede usar Kerberos (ver 03.1).</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Eventos y señales</h2>
+
+      <h3>Evento 4776</h3>
+      <p>En el DC, cuando valida credenciales con NTLM (éxito o falla). Para cuentas locales, se genera en el propio equipo. Solo NTLM: no registra Kerberos (ver 03.3). Subcategoría: <em>Audit Credential Validation</em>.</p>
+      <dl class="term-list">
+        <div>
+          <dt>Logon Account</dt>
+          <dd>La cuenta cuyas credenciales se validaron.</dd>
+        </div>
+        <div>
+          <dt>Source Workstation</dt>
+          <dd>El equipo de origen. El destino no se registra.</dd>
+        </div>
+        <div>
+          <dt>Error Code</dt>
+          <dd><code>0x0</code> = éxito.</dd>
+        </div>
+      </dl>
+      <p>En el 4624 y el 4625, el campo Package Name indica <code>NTLM V1</code>, <code>NTLM V2</code> o <code>LM</code> (ver 03.3). Un 4624 con Negotiate más un 4776 correspondiente en el DC indican que se usó NTLM.</p>
+
+      <h3>Códigos de interés del 4776</h3>
+      <dl class="term-list">
+        <div>
+          <dt><code>0xC000006A</code></dt>
+          <dd>Password incorrecta.</dd>
+        </div>
+        <div>
+          <dt><code>0xC0000064</code></dt>
+          <dd>El usuario no existe.</dd>
+        </div>
+        <div>
+          <dt><code>0xC0000234</code></dt>
+          <dd>Cuenta bloqueada.</dd>
+        </div>
+      </dl>
+      <p>Escenario típico: un acceso a un share con NTLM deja un 4776 en el DC y un 4624 tipo 3 en el servidor, con Package Name <code>NTLM V2</code>.</p>
+
+      <h3>Señales</h3>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> ráfagas de 4776 con <code>0xC000006A</code> (posible fuerza bruta) o con <code>0xC0000064</code> (posible enumeración de cuentas).</li>
+        <li><strong class="highlight">Riesgo:</strong> Package Name <code>NTLM V1</code> o <code>LM</code> en un 4624.</li>
+        <li><strong class="highlight">Riesgo:</strong> NTLM para cuentas o sistemas que no deberían usarlo.</li>
+        <li><strong class="highlight">Relevante:</strong> el 4776 no registra el destino. Para saber a qué equipo se accedió, hay que mirar el 4624.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">“Hash NTLM” y “hash NT” son lo mismo</span>: no del todo. El hash NT es el dato guardado. NTLM es el protocolo.</li>
+        <li><span class="error-mark">NTLM envía el hash NT</span>: no. Envía una respuesta calculada con el hash y el desafío.</li>
+        <li><span class="error-mark">Una respuesta NTLM capturada sirve para <em>pass-the-hash</em></span>: no. Sirve para intentar descubrir la password por fuerza bruta, o para <em>relay</em>.</li>
+        <li><span class="error-mark">NTLM ya no se usa</span>: no. Sigue haciendo falta en workgroups y en inicios de sesión con cuentas locales.</li>
+        <li><span class="error-mark">Las credenciales en caché permiten <em>pass-the-hash</em></span>: no. No son el hash NT.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>NTLM</li>
+      <li>hash NT</li>
+      <li>hash LM</li>
+      <li>NTLMv2</li>
+      <li>pass-the-hash</li>
+      <li>relay</li>
+      <li>MSCache2</li>
+      <li>4776</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="03.3-ad-kerberos-logs.html">← 03.3 - Kerberos en los logs</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
