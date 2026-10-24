@@ -230,7 +230,7 @@
         </div>
       </dl>
       <ul>
-        <li><strong class="highlight">Relevante:</strong> Microsoft recomienda marcar cualquier tipo que no sea <code>0x11</code> o <code>0x12</code> en entornos modernos (ver 02.9).</li>
+        <li><strong class="highlight">Relevante:</strong> en un entorno moderno, lo esperable es AES (<code>0x11</code> o <code>0x12</code>). Cualquier otro valor merece revisarse, porque indica un cifrado más débil o un equipo o servicio antiguo (ver 02.9). Microsoft recomienda alertar ante esos valores.</li>
       </ul>
     </section>
 
@@ -328,7 +328,7 @@
 
     <section>
       <h2>¿Kerberos o NTLM en un 4624?</h2>
-      <p>El campo Authentication Package no siempre alcanza por sí solo:</p>
+      <p>El campo Authentication Package dice qué paquete se usó. Con <code>Kerberos</code> o <code>NTLM</code> queda claro, pero con <code>Negotiate</code> no siempre se puede saber cuál de los dos se usó:</p>
       <dl class="term-list">
         <div>
           <dt>Kerberos</dt>
@@ -396,7 +396,7 @@
     <section>
       <h2>Para no confundirse</h2>
       <ul>
-        <li><span class="error-mark">Un 4768 es un acceso a un recurso</span>: no. Es el pedido de un TGT, normalmente al iniciar sesión. El acceso a un servicio se ve en el 4769.</li>
+        <li><span class="error-mark">Un 4768 es un acceso a un recurso</span>: no. Es el pedido de un TGT, normalmente al iniciar sesión, y el TGT solo sirve para pedir tickets de servicio.</li>
         <li><span class="error-mark">Un 4769 exitoso significa que el servicio aceptó al usuario</span>: no. Significa que el KDC emitió el ticket. La decisión de acceso la toma el servicio (ver 03.2).</li>
         <li><span class="error-mark">4624 es el evento de Kerberos</span>: no. Es la sesión creada, con Kerberos o con NTLM.</li>
         <li><span class="error-mark">Un 4624 tipo 3 implica Kerberos</span>: no. Hay que mirar el Authentication Package.</li>
