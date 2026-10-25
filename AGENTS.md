@@ -32,6 +32,7 @@ dependencias externas.
 docs/
   index.html                        portada: solo muestra áreas
   estilo.css                        hoja única compartida
+  favicon.svg                       ícono de pestaña («F_», el mismo de la portada franko-tes.github.io)
   <area>/
     index.html                      índice del área: sus temas y contenidos
     NN-<tema>/                      una carpeta por tema
@@ -140,8 +141,9 @@ BEM: `.ficha__header`, `.topic__summary`).
 - **Paginación:** `← 01.1 - Título` y `01.2 - Título →`. Cruza de un tema a otro,
   y en ese caso el enlace lleva el nombre del tema: `02.1 - Fundamental:
   Estructura jerárquica →`. El "siguiente" va siempre a la derecha.
-- **Rutas:** la hoja de estilos es `../../estilo.css` y el pie vuelve al índice
-  del área con `../index.html`. Los enlaces a otro tema llevan la carpeta:
+- **Rutas:** la hoja de estilos es `../../estilo.css`, el ícono
+  `../../favicon.svg` (`<link rel="icon" … type="image/svg+xml">`, justo antes
+  de la hoja) y el pie vuelve al índice del área con `../index.html`. Los enlaces a otro tema llevan la carpeta:
   `../02-fundamental/02.1-ad-estructura.html`.
 - **Pie:** vuelve al **área** y sube al inicio de la página.
 - **Etiquetas** (`ul.tags`) al final de cada contenido; no se muestran en los
@@ -206,7 +208,7 @@ los HTML siguen el mismo formato.
 
 1. Crear `NN.N-<abreviatura>-<nombre>.html` en la carpeta de su tema
    (`docs/<área>/NN-<tema>/`) a partir del formato de otro, con las rutas
-   `../../estilo.css` y `../index.html`.
+   `../../estilo.css`, `../../favicon.svg` y `../index.html`.
 2. Índice del área: sumar la entrada dentro de su tema y actualizar el contador
    de contenidos de ese tema.
 3. Paginación: completar "anterior" en el nuevo y el "siguiente" del contenido
