@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Active Directory: DNS y LDAP</title>
-<meta name="description" content="DNS y LDAP en Active Directory: cómo los registros SRV permiten encontrar un DC, los puertos de LDAP, la anatomía de una consulta, los tipos de bind, el firmado y el channel binding, y los eventos que dejan en los logs.">
-<meta name="keywords" content="active directory, DNS, SRV, LDAP, LDAPS, STARTTLS, bind simple, SASL, LDAP signing, channel binding, global catalog, 2889, 3039">
+<meta name="description" content="DNS y LDAP en Active Directory: cómo los registros SRV permiten encontrar un DC, los puertos de LDAP, la anatomía de una consulta, los tipos de bind, el firmado, el sealing y el channel binding.">
+<meta name="keywords" content="active directory, DNS, SRV, LDAP, LDAPS, STARTTLS, bind simple, SASL, LDAP signing, channel binding, global catalog">
 <meta name="robots" content="index, follow">
 
 <!-- Open Graph -->
 <meta property="og:type" content="article">
 <meta property="og:title" content="Active Directory: DNS y LDAP">
-<meta property="og:description" content="Cómo se encuentra un DC con DNS, cómo se consulta el directorio con LDAP y qué dejan en los logs el firmado y el channel binding.">
+<meta property="og:description" content="Cómo se encuentra un DC con DNS, cómo se consulta el directorio con LDAP y cómo se protege la conexión.">
 <meta property="og:locale" content="es_AR">
 <!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
 
@@ -23,7 +23,7 @@
   "@context": "https://schema.org",
   "@type": "TechArticle",
   "headline": "Active Directory: DNS y LDAP",
-  "description": "Cómo se encuentra un DC con DNS, cómo se consulta el directorio con LDAP y qué dejan en los logs el firmado y el channel binding.",
+  "description": "Cómo se encuentra un DC con DNS, cómo se consulta el directorio con LDAP y cómo se protege la conexión.",
   "inLanguage": "es",
   "isPartOf": {
     "@type": "CreativeWorkSeries",
@@ -62,6 +62,7 @@
         <li>Los DC registran en DNS registros <strong>SRV</strong>, que asocian un servicio con los equipos que lo ofrecen.</li>
         <li>Nombre del registro: <code>_servicio._protocolo.dominio</code>. Por ejemplo, este devuelve los DC del domain:
           <pre class="code-block" tabindex="0"><code>_ldap._tcp.dc._msdcs.techcorp.local</code></pre>
+          <p>Ahí, <code>_ldap</code> es el servicio, <code>_tcp</code> el protocolo y <code>dc._msdcs.techcorp.local</code> el dominio: <code>_msdcs</code> es la zona donde AD publica sus registros propios y <code>dc</code> agrupa los de los DC.</p>
         </li>
         <li>El registro lo hace el servicio Netlogon del DC al iniciar, con actualizaciones dinámicas.</li>
         <li>Hay registros SRV para LDAP, para Kerberos (<code>_kerberos._tcp</code>, puerto 88) y para el Global Catalog.</li>
@@ -102,7 +103,7 @@
       <dl class="term-list">
         <div>
           <dt>389</dt>
-          <dd>LDAP. Puede cifrarse con STARTTLS.</dd>
+          <dd>LDAP. Puede cifrarse con STARTTLS (<em>Start TLS</em>, iniciar TLS; TLS es <em>Transport Layer Security</em>): la conexión empieza sin cifrar y el cliente pide pasar a TLS dentro de la misma conexión.</dd>
         </div>
         <div>
           <dt>636</dt>
@@ -140,7 +141,7 @@
 
     <section>
       <h2>Cómo se autentica (bind)</h2>
-      <p>Antes de consultar, el cliente hace un <strong>bind</strong>:</p>
+      <p>Antes de consultar, el cliente hace un <strong>bind</strong>: se autentica ante el DC, y las consultas de esa conexión se hacen con esa identidad y sus permisos. Hay tres clases de bind:</p>
       <dl class="term-list">
         <div>
           <dt>Anónimo</dt>
@@ -152,62 +153,21 @@
         </div>
         <div>
           <dt>SASL</dt>
-          <dd>Usa un mecanismo de autenticación: Negotiate, Kerberos, NTLM o Digest. Con Kerberos o NTLM, la password no viaja (ver 03.1 a 03.4).</dd>
+          <dd><em>Simple Authentication and Security Layer</em>. Es un marco que delega la autenticación en un mecanismo: Negotiate, Kerberos, NTLM o Digest. Con Kerberos o NTLM, la password no viaja (ver 03.1 a 03.4).</dd>
         </div>
       </dl>
     </section>
 
     <section>
       <h2>Firmado y channel binding</h2>
+      <p>Son protecciones que se suman a una conexión LDAP para que no se puedan alterar los mensajes, leerlos ni reenviar la autenticación por otra sesión:</p>
       <ul>
         <li><strong>LDAP signing:</strong> firma los mensajes para detectar que no fueron alterados.</li>
-        <li>Si el DC lo exige, rechaza los bind SASL que no piden firma y los bind simples por conexiones no cifradas.</li>
+        <li><strong>LDAP sealing:</strong> además de firmar, cifra los mensajes. Lo hace el mecanismo SASL, por ejemplo Kerberos, sin necesidad de TLS.</li>
+        <li>Si el DC exige el firmado, rechaza los bind SASL que no piden firma y los bind simples por conexiones no cifradas.</li>
         <li><strong>Channel binding:</strong> liga la autenticación SASL a la sesión SSL/TLS. Importa sobre todo con NTLM, para evitar que la autenticación se reenvíe por otra sesión. No aplica al bind simple.</li>
+        <li><strong>Opciones del channel binding:</strong> con “Never”, el DC no lo valida; con “When supported”, se lo exige a los clientes que lo soportan y sigue aceptando a los que no; con “Always”, rechaza a los clientes que no lo envían.</li>
         <li><strong>Valores por defecto:</strong> el channel binding está en “Never” hasta Windows Server 2022, y el firmado es opcional hasta Windows Server 2019. En los despliegues nuevos de Windows Server 2025, el firmado se exige y el channel binding está en “When supported”. Las actualizaciones in situ mantienen la configuración que tenían.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Eventos y señales</h2>
-
-      <h3>Eventos</h3>
-      <p>Se registran en el log Directory Service del DC.</p>
-      <dl class="term-list">
-        <div>
-          <dt>2886</dt>
-          <dd>Advertencia al iniciar si el DC no exige firmado.</dd>
-        </div>
-        <div>
-          <dt>2887</dt>
-          <dd>Una vez cada 24 h, si hubo binds sin firma o simples sin cifrar permitidos. Muestra cantidades.</dd>
-        </div>
-        <div>
-          <dt>2888</dt>
-          <dd>Una vez cada 24 h, si esos binds fueron rechazados. Muestra cantidades.</dd>
-        </div>
-        <div>
-          <dt>2889</dt>
-          <dd>Un evento por cada cliente que hizo ese tipo de bind. Registra IP, cuenta y tipo (<code>0</code> = SASL sin firma, <code>1</code> = simple sin cifrar). Requiere subir “16 LDAP Interface Events” a 2.</dd>
-        </div>
-        <div>
-          <dt>3039</dt>
-          <dd>Solo con el channel binding en “When supported” o “Always”. Un evento por cada cliente que hace bind sobre SSL/TLS y falla la validación. Requiere nivel de diagnóstico 2.</dd>
-        </div>
-        <div>
-          <dt>3040</dt>
-          <dd>Con el channel binding en “Never”, resumen cada 24 h de los binds LDAPS sin protección.</dd>
-        </div>
-        <div>
-          <dt>3041</dt>
-          <dd>Con el channel binding en “Never”, recordatorio al iniciar o cada 24 h para exigirlo.</dd>
-        </div>
-      </dl>
-
-      <h3>Señales</h3>
-      <ul>
-        <li><strong class="highlight">Riesgo:</strong> 2889 con tipo <code>1</code>: password enviada en claro por la red.</li>
-        <li><strong class="highlight">Riesgo:</strong> 2889 con tipo <code>0</code>: autenticación sin firma, expuesta a manipulación o relay.</li>
-        <li><strong class="highlight">Relevante:</strong> el 2889 sirve para saber qué clientes se rompen antes de exigir el firmado.</li>
       </ul>
     </section>
 
@@ -231,7 +191,6 @@
       <li>bind</li>
       <li>LDAP signing</li>
       <li>channel binding</li>
-      <li>2889</li>
     </ul>
 
     <nav class="ficha__pagination" aria-label="Paginación del contenido">
