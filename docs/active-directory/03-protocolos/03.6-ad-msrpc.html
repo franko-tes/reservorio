@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: MSRPC</title>
+<meta name="description" content="MSRPC en Active Directory: qué es una llamada RPC, cómo se llega al servicio (endpoint mapper, puertos dinámicos y named pipes), las interfaces lsarpc, netlogon, samr y drsuapi, los derechos de replicación y el evento 4662.">
+<meta name="keywords" content="active directory, MSRPC, RPC, endpoint mapper, puerto 135, named pipes, lsarpc, netlogon, samr, drsuapi, replicación, DCSync, 4662">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: MSRPC">
+<meta property="og:description" content="Las llamadas RPC de Active Directory: cómo se llega al servicio, qué interfaces importan y qué dejan en los logs los derechos de replicación.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: MSRPC",
+  "description": "Las llamadas RPC de Active Directory: cómo se llega al servicio, qué interfaces importan y qué dejan en los logs los derechos de replicación.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Protocolos"
+  },
+  "position": 6
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>MSRPC</h1>
+      <p class="ficha__subtitle">Protocolos</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>RPC (<em>Remote Procedure Call</em>) permite que un programa llame a una función que se ejecuta en otro equipo. MSRPC es la implementación de Microsoft. Muchas operaciones remotas de AD son llamadas RPC:</p>
+      <ul>
+        <li>consultar cuentas,</li>
+        <li>establecer el canal seguro entre un equipo y el DC,</li>
+        <li>replicar el directorio entre DC.</li>
+      </ul>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>RPC es el mecanismo para hacer la llamada. Cada <strong>interfaz</strong> define qué funciones se pueden llamar. Lo que importa en AD son las interfaces.</p>
+    </section>
+
+    <section>
+      <h2>Cómo se llega al servicio</h2>
+      <ul>
+        <li><strong>Endpoint mapper (puerto 135, TCP):</strong> el cliente le pregunta en qué puerto está la interfaz que quiere, y el servidor le responde con un puerto asignado dinámicamente.</li>
+        <li><strong>Puertos dinámicos:</strong> desde Windows Server 2008, el rango por defecto es 49152 a 65535.</li>
+        <li><strong>Named pipes sobre SMB (puerto 445):</strong> otra forma de llegar a las mismas interfaces. El endpoint mapper también ofrece su servicio por named pipes.</li>
+        <li><strong class="highlight">Relevante:</strong> no todo RPC pasa por el 135. Según la interfaz, puede ir por un puerto dinámico o por SMB.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Las interfaces que importan en AD</h2>
+      <dl class="term-list">
+        <div>
+          <dt><code>lsarpc</code></dt>
+          <dd>Consulta de políticas de seguridad y traducción entre nombres y SIDs.</dd>
+        </div>
+        <div>
+          <dt><code>netlogon</code></dt>
+          <dd>El canal seguro entre un equipo y el DC. Es la base de la validación NTLM de cuentas del domain (ver 03.4). En un equipo miembro usa named pipes; en un DC también usa RPC sobre TCP.</dd>
+        </div>
+        <div>
+          <dt><code>samr</code></dt>
+          <dd>Administración remota de usuarios, grupos y equipos.</dd>
+        </div>
+        <div>
+          <dt><code>drsuapi</code></dt>
+          <dd>Replicación entre DC. Un DC pide a otro los cambios de una partición del directorio.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Autenticación</h2>
+      <p>Una llamada RPC se autentica, en general, con Kerberos o NTLM (ver 03.1 a 03.4). <code>netlogon</code> es la excepción: usa su propio mecanismo, el del canal seguro.</p>
+    </section>
+
+    <section>
+      <h2>Replicación y derechos</h2>
+      <ul>
+        <li>Un DC replica pidiendo los cambios a otro DC mediante <code>drsuapi</code>.</li>
+        <li>Para pedir replicación hace falta tener sobre el domain los derechos <strong>Replicating Directory Changes</strong> y <strong>Replicating Directory Changes All</strong>. Este segundo permite obtener atributos sensibles, como los hashes de las passwords.</li>
+        <li>Los DC de escritura tienen estos derechos. También los tienen algunas cuentas de servicio, como la que usa Microsoft Entra Connect para sincronizar passwords.</li>
+        <li><strong class="highlight">Riesgo:</strong> una cuenta que no es un DC pero tiene estos derechos puede pedir la replicación y obtener los hashes de cualquier cuenta. Esa técnica se llama DCSync.</li>
+        <li>Si no se usa la sincronización de passwords, Microsoft recomienda quitarle estos permisos a la cuenta de Entra Connect.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Eventos y señales</h2>
+
+      <h3>Evento 4662</h3>
+      <p>Una operación sobre un objeto de AD. Subcategoría: <em>Audit Directory Service Access</em>.</p>
+      <dl class="term-list">
+        <div>
+          <dt>Properties</dt>
+          <dd>Muestra los GUID de los derechos o clases involucrados. Los de replicación son <code>1131f6aa-9c07-11d1-f79f-00c04fc2dcd2</code> (Replicating Directory Changes) y <code>1131f6ad-9c07-11d1-f79f-00c04fc2dcd2</code> (Replicating Directory Changes All).</dd>
+        </div>
+      </dl>
+
+      <h3>Señales</h3>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> un 4662 con el GUID de Replicating Directory Changes All hecho por una cuenta que no es de un DC.</li>
+        <li><strong class="highlight">Relevante:</strong> se genera solo si esa subcategoría está activada en los DC y el objeto tiene una SACL que cubra la operación. Sin las dos, no hay evento.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">DCSync copia el archivo NTDS.dit</span>: no. Pide la replicación al DC con <code>drsuapi</code>, usando los derechos de replicación.</li>
+        <li><span class="error-mark">RPC siempre usa el puerto 135</span>: no. El 135 solo sirve para averiguar el puerto. La llamada puede ir por un puerto dinámico o por SMB (445).</li>
+        <li><span class="error-mark">RPC es un protocolo de autenticación</span>: no. Es el mecanismo de llamada. La autenticación la hace otro protocolo, en general Kerberos o NTLM.</li>
+        <li><span class="error-mark">Solo los DC pueden pedir replicación</span>: no. Cualquier cuenta con los derechos de replicación puede hacerlo.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>MSRPC</li>
+      <li>endpoint mapper</li>
+      <li>named pipes</li>
+      <li>netlogon</li>
+      <li>samr</li>
+      <li>drsuapi</li>
+      <li>DCSync</li>
+      <li>4662</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="03.5-ad-dns-ldap.html">← 03.5 - DNS y LDAP</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
