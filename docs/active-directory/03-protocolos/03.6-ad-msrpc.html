@@ -46,14 +46,32 @@
 
     <section>
       <h2>De qué trata</h2>
-      <p>RPC (<em>Remote Procedure Call</em>) permite que un programa llame a una función que se ejecuta en otro equipo. MSRPC es la implementación de Microsoft. Muchas operaciones remotas de AD son llamadas RPC:</p>
+      <p>RPC (<em>Remote Procedure Call</em>) permite que un programa llame a una función que se ejecuta en otro equipo, como si fuera local. El programa hace la llamada con sus parámetros; RPC los envía por la red, el otro equipo ejecuta la función y le devuelve el resultado.</p>
+      <p>MSRPC es la implementación de Microsoft. En una llamada hay tres niveles, de lo general a lo concreto:</p>
+      <dl class="term-list">
+        <div>
+          <dt>RPC</dt>
+          <dd>El mecanismo: lleva una llamada de un equipo a otro y trae la respuesta. Es siempre el mismo.</dd>
+        </div>
+        <div>
+          <dt>Interfaz</dt>
+          <dd>Un grupo de funciones sobre un mismo tema que ofrece un servidor, con sus parámetros y resultados. Por ejemplo, <code>samr</code>, con las funciones sobre cuentas.</dd>
+        </div>
+        <div>
+          <dt>Función</dt>
+          <dd>Una operación concreta dentro de la interfaz. Por ejemplo, en <code>samr</code>, devolver los miembros de un grupo.</dd>
+        </div>
+      </dl>
+      <p>Por ejemplo, para ver los miembros de Domain Admins, el equipo llama por RPC a la función de <code>samr</code> del DC que devuelve los miembros de un grupo. El DC la ejecuta y RPC trae la lista de vuelta.</p>
+
+      <p>AD usa MSRPC para muchas operaciones remotas, cada una por una interfaz distinta:</p>
       <ul>
-        <li>consultar cuentas,</li>
-        <li>establecer el canal seguro entre un equipo y el DC,</li>
-        <li>replicar el directorio entre DC.</li>
+        <li>consultar y administrar cuentas (<code>samr</code>) o traducir nombres y SIDs (<code>lsarpc</code>),</li>
+        <li>establecer el canal seguro entre un equipo y el DC (<code>netlogon</code>),</li>
+        <li>replicar el directorio entre DC (<code>drsuapi</code>).</li>
       </ul>
 
-      <p class="callout--key"><span class="sr-only">Idea clave: </span>RPC es el mecanismo para hacer la llamada. Cada <strong>interfaz</strong> define qué funciones se pueden llamar. Lo que importa en AD son las interfaces.</p>
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>RPC es el mecanismo para hacer la llamada. Cada <strong>interfaz</strong> define qué funciones se pueden llamar. Lo que importa en AD son las interfaces: pedir los miembros de un grupo con <code>samr</code> no es lo mismo que pedir los hashes de las passwords con <code>drsuapi</code>, aunque las dos llamadas viajen por RPC.</p>
     </section>
 
     <section>
@@ -75,7 +93,7 @@
         </div>
         <div>
           <dt><code>netlogon</code></dt>
-          <dd>El canal seguro entre un equipo y el DC. Es la base de la validación NTLM de cuentas del domain (ver 03.4). En un equipo miembro usa named pipes; en un DC también usa RPC sobre TCP.</dd>
+          <dd>El canal seguro entre un equipo y el DC. Por ese canal, un servidor le pasa al DC las validaciones NTLM de cuentas del domain (ver 03.4). En un equipo miembro usa named pipes; en un DC también usa RPC sobre TCP.</dd>
         </div>
         <div>
           <dt><code>samr</code></dt>
@@ -86,11 +104,16 @@
           <dd>Replicación entre DC. Un DC pide a otro los cambios de una partición del directorio.</dd>
         </div>
       </dl>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> con <code>samr</code>, un usuario con pocos privilegios puede enumerar usuarios, incluidas las cuentas privilegiadas, y grupos con sus miembros. Es un punto de partida para un atacante.</li>
+        <li>Por defecto, en los DC con Windows Server 2016 o posterior pueden consultar todos (Everyone). En los demás equipos, desde Windows 10 1607 y Windows Server 2016, solo el grupo Administrators local; en versiones anteriores no hay control.</li>
+        <li>La política “Network access: Restrict clients allowed to make remote calls to SAM” define quién puede consultar. Microsoft advierte que puede romper herramientas que enumeran cuentas, y ofrece un modo solo de auditoría para probarla.</li>
+      </ul>
     </section>
 
     <section>
       <h2>Autenticación</h2>
-      <p>Una llamada RPC se autentica, en general, con Kerberos o NTLM (ver 03.1 a 03.4). <code>netlogon</code> es la excepción: usa su propio mecanismo, el del canal seguro.</p>
+      <p>Una llamada RPC se autentica, en general, con Kerberos o NTLM (ver 03.1 a 03.4). <code>netlogon</code> es la excepción: el equipo y el DC se autentican con la password de la cuenta del equipo, que conocen los dos. Que transporte validaciones NTLM no quiere decir que se autentique con NTLM.</p>
     </section>
 
     <section>
@@ -126,7 +149,7 @@
     <section>
       <h2>Para no confundirse</h2>
       <ul>
-        <li><span class="error-mark">DCSync copia el archivo NTDS.dit</span>: no. Pide la replicación al DC con <code>drsuapi</code>, usando los derechos de replicación.</li>
+        <li><span class="error-mark">DCSync copia el archivo NTDS.dit</span>: no. Copiar NTDS.dit requiere acceso al propio DC. DCSync no lo toca: pide la replicación por la red con <code>drsuapi</code>, usando los derechos de replicación.</li>
         <li><span class="error-mark">RPC siempre usa el puerto 135</span>: no. El 135 solo sirve para averiguar el puerto. La llamada puede ir por un puerto dinámico o por SMB (445).</li>
         <li><span class="error-mark">RPC es un protocolo de autenticación</span>: no. Es el mecanismo de llamada. La autenticación la hace otro protocolo, en general Kerberos o NTLM.</li>
         <li><span class="error-mark">Solo los DC pueden pedir replicación</span>: no. Cualquier cuenta con los derechos de replicación puede hacerlo.</li>
