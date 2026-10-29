@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Cuentas de usuario y de equipo</title>
+<meta name="description" content="Cuentas de usuario y de equipo en Active Directory: la diferencia entre cuentas locales, del domain y de equipo, las cuentas predeterminadas (Administrator, Guest, SYSTEM, krbtgt) y qué cambia entre un equipo unido y uno que no está unido al domain.">
+<meta name="keywords" content="active directory, cuentas locales, cuentas del domain, cuenta de equipo, Administrator, Guest, DefaultAccount, SYSTEM, Network Service, Local Service, krbtgt, workgroup">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Cuentas de usuario y de equipo">
+<meta property="og:description" content="Qué tipos de cuentas existen en Active Directory, cuáles vienen predeterminadas y en qué se diferencian.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Cuentas de usuario y de equipo",
+  "description": "Qué tipos de cuentas existen en Active Directory, cuáles vienen predeterminadas y en qué se diferencian.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Cuentas y accesos"
+  },
+  "position": 1
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Cuentas de usuario y de equipo</h1>
+      <p class="ficha__subtitle">Cuentas y accesos</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Una cuenta permite a una persona, un programa o un equipo iniciar sesión y acceder a recursos. Hay tres familias:</p>
+      <ul>
+        <li><strong>Locales:</strong> existen solo en un equipo.</li>
+        <li><strong>Del domain:</strong> existen en AD.</li>
+        <li><strong>De equipo:</strong> también están en AD, pero son las de los equipos unidos al domain.</li>
+      </ul>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Una cuenta local solo vale en el equipo donde se creó. Una cuenta del domain la reconoce AD y puede usarse en los equipos del domain.</p>
+    </section>
+
+    <section>
+      <h2>Cuentas locales</h2>
+      <ul>
+        <li>Se definen en el equipo, y el equipo es quien las autentica.</li>
+        <li>Son <em>security principals</em>: sus derechos y permisos valen solo en ese equipo.</li>
+      </ul>
+
+      <h3>Cuentas predeterminadas</h3>
+      <dl class="term-list">
+        <div>
+          <dt>Administrator</dt>
+          <dd>SID que termina en <code>500</code>. No se puede eliminar ni bloquear, pero sí renombrar o deshabilitar. La instalación de Windows la deshabilita y crea otra cuenta local en el grupo Administrators. Si se renombra, conserva el mismo SID.</dd>
+        </div>
+        <div>
+          <dt>Guest</dt>
+          <dd>SID que termina en <code>501</code>. Viene deshabilitada y con la password en blanco. <strong class="highlight">Riesgo:</strong> puede dar acceso anónimo, por eso se recomienda dejarla deshabilitada.</dd>
+        </div>
+        <div>
+          <dt>DefaultAccount</dt>
+          <dd>SID que termina en <code>503</code>. Viene deshabilitada en las ediciones de escritorio y en los servidores con experiencia de escritorio. Microsoft recomienda dejarla así.</dd>
+        </div>
+        <div>
+          <dt>SYSTEM</dt>
+          <dd><code>S-1-5-18</code>. La usan el sistema operativo y los servicios. No aparece en el administrador de usuarios y no se puede agregar a grupos. En la red actúa como el propio equipo.</dd>
+        </div>
+        <div>
+          <dt>Network Service</dt>
+          <dd><code>S-1-5-20</code>. Presenta las credenciales del equipo a servidores remotos.</dd>
+        </div>
+        <div>
+          <dt>Local Service</dt>
+          <dd><code>S-1-5-19</code>. Tiene privilegios mínimos en el equipo y presenta credenciales anónimas en la red.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Cuentas del domain</h2>
+      <ul>
+        <li>Se crean en AD y reciben derechos del domain: por su cuenta o por los grupos a los que pertenecen.</li>
+        <li>Pueden iniciar sesión en las estaciones de trabajo y servidores del domain, salvo que una política lo restrinja. En los DC, por defecto solo pueden los administradores y algunos grupos de operadores.</li>
+      </ul>
+
+      <h3>Cuentas predeterminadas</h3>
+      <dl class="term-list">
+        <div>
+          <dt>Administrator (500)</dt>
+          <dd>Igual que la local, no se puede eliminar ni bloquear. <strong class="highlight">Riesgo:</strong> aunque esté deshabilitada, se puede usar para acceder a un DC en modo seguro (<em>safe mode</em>).</dd>
+        </div>
+        <div>
+          <dt>Guest (501)</dt>
+          <dd>Deshabilitada por defecto.</dd>
+        </div>
+        <div>
+          <dt><code>krbtgt</code> (502)</dt>
+          <dd>La cuenta del KDC (ver 02.3 y 03.1). No se puede eliminar, renombrar ni habilitar. Su password se asigna automáticamente y Microsoft recomienda cambiarla periódicamente. <strong class="highlight">Riesgo:</strong> quien tenga la clave de <code>krbtgt</code> puede falsificar tickets (ver 03.2).</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>En un entorno real</h2>
+      <ul>
+        <li>Una persona puede tener más de una cuenta. Por ejemplo, un administrador de TI con una cuenta de uso diario y otra con privilegios.</li>
+        <li>Hay muchas cuentas de servicio, que ejecutan aplicaciones en segundo plano.</li>
+        <li>Es común encontrar cuentas deshabilitadas de ex empleados, a veces en una OU aparte, que se conservan por auditoría.</li>
+        <li><strong class="highlight">Riesgo:</strong> una cuenta deshabilitada que conserva privilegios o membresías sigue siendo un problema si alguien la vuelve a habilitar.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Cuentas de equipo</h2>
+      <ul>
+        <li>Cada equipo unido al domain tiene una cuenta en AD.</li>
+        <li>El equipo cambia su password automáticamente cada 30 días por defecto.</li>
+        <li>Los servicios que corren como SYSTEM, Network Service o Local Service usan la cuenta de equipo para identificarse en la red (ver 02.8).</li>
+        <li><strong class="highlight">Riesgo:</strong> con acceso SYSTEM a un equipo unido, se puede consultar gran parte del directorio sin tener las credenciales de ningún usuario (ver 02.8).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Equipo unido y no unido al domain</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Unido</dt>
+          <dd>Lo administra el domain (políticas de grupo, DC como punto central). Un usuario del domain puede iniciar sesión en los equipos unidos, con las limitaciones de los DC.</dd>
+        </div>
+        <div>
+          <dt>No unido (workgroup)</dt>
+          <dd>Las cuentas existen solo en ese equipo. NTLM sigue haciendo falta en estos equipos (ver 03.4).</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Identificadores de una cuenta</h2>
+      <p>El GUID, el SID, <code>sAMAccountName</code> y el UPN se explican en 02.2. El <code>sIDHistory</code> está en 02.5.</p>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">La cuenta Administrator integrada se puede eliminar o bloquear</span>: no. Solo se puede renombrar o deshabilitar.</li>
+        <li><span class="error-mark">Renombrar Administrator la oculta</span>: no. Conserva el mismo SID.</li>
+        <li><span class="error-mark">Una cuenta local sirve en todo el domain</span>: no. Solo vale en su equipo.</li>
+        <li><span class="error-mark">SYSTEM es un usuario más, que se puede agregar a grupos</span>: no. No aparece en el administrador de usuarios ni se agrega a grupos.</li>
+        <li><span class="error-mark">Network Service y Local Service son lo mismo</span>: no. El primero presenta las credenciales del equipo; el segundo, credenciales anónimas.</li>
+        <li><span class="error-mark"><code>krbtgt</code> se puede habilitar para iniciar sesión</span>: no. No se puede habilitar.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>cuentas locales</li>
+      <li>cuentas del domain</li>
+      <li>cuenta de equipo</li>
+      <li>Administrator</li>
+      <li>Guest</li>
+      <li>SYSTEM</li>
+      <li>krbtgt</li>
+      <li>workgroup</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="../03-protocolos/03.6-ad-msrpc.html">← 03.6 - Protocolos: MSRPC</a>
+      <a href="04.2-ad-grupos.html">04.2 - Grupos →</a>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>

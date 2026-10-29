@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Grupos</title>
+<meta name="description" content="Grupos en Active Directory: la diferencia entre tipo (seguridad y distribución) y ámbito (domain local, global y universal), quién puede ser miembro de quién, cómo se cambia el ámbito, los grupos integrados, los grupos anidados y los atributos principales.">
+<meta name="keywords" content="active directory, grupos, grupo de seguridad, grupo de distribución, domain local, global, universal, grupos anidados, memberOf, member, groupType, Global Catalog, AGDLP">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Grupos">
+<meta property="og:description" content="Tipos y ámbitos de grupo en Active Directory, quién puede ser miembro de quién y qué riesgos trae el anidamiento.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Grupos",
+  "description": "Tipos y ámbitos de grupo en Active Directory, quién puede ser miembro de quién y qué riesgos trae el anidamiento.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Cuentas y accesos"
+  },
+  "position": 2
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Grupos</h1>
+      <p class="ficha__subtitle">Cuentas y accesos</p>
+    </header>
+
+    <section>
+      <h2>De qué trata</h2>
+      <p>Un grupo reúne cuentas (y otros grupos) para asignar permisos y derechos en bloque, en lugar de uno por uno. Si un permiso cambia, se modifica el grupo y no cada cuenta. Todo grupo tiene dos características: <strong>tipo</strong> y <strong>ámbito</strong>.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>El tipo dice para qué sirve el grupo. El ámbito dice quién puede ser miembro y dónde se pueden dar permisos.</p>
+    </section>
+
+    <section>
+      <h2>Tipos</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Seguridad</dt>
+          <dd>Se usan para asignar permisos a recursos compartidos. Pueden figurar en una DACL.</dd>
+        </div>
+        <div>
+          <dt>Distribución</dt>
+          <dd>Sirven para crear listas de correo (por ejemplo, con Exchange). No están habilitados para seguridad, así que no se pueden usar en una DACL.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Ámbitos</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Domain local</dt>
+          <dd>Puede tener como miembros cuentas y grupos globales de cualquier domain (o de uno en trust), grupos universales del forest y otros domain local del mismo domain. Solo da permisos dentro de su domain.</dd>
+        </div>
+        <div>
+          <dt>Global</dt>
+          <dd>Solo puede tener cuentas y otros grupos globales del mismo domain. Puede dar permisos en cualquier domain del forest o en domains y forests que confíen.</dd>
+        </div>
+        <div>
+          <dt>Universal</dt>
+          <dd>Puede tener cuentas, grupos globales y otros universales de cualquier domain del forest. Puede dar permisos en cualquier domain del forest o de forests que confíen.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Quién puede ser miembro de quién</h2>
+      <ul>
+        <li>Un grupo <strong>global</strong> puede estar en otro global del mismo domain, en un universal de cualquier domain del forest, o en un domain local.</li>
+        <li>Un grupo <strong>domain local</strong> puede estar en otro domain local del mismo domain. No puede estar en un grupo global ni en uno universal.</li>
+        <li>Un grupo <strong>universal</strong> puede estar en otro universal o en un domain local.</li>
+        <li><strong>Patrón habitual:</strong> cuentas en grupos globales, estos en grupos domain local, y los permisos se dan al domain local (AGDLP).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Grupos universales y el Global Catalog</h2>
+      <ul>
+        <li>Los grupos universales, y sus miembros, se listan en el Global Catalog (ver 02.3). Los globales y domain local también figuran, pero sin sus miembros.</li>
+        <li>Cada cambio de membresía de un universal se replica al Global Catalog.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Cambiar el ámbito</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Global → Universal</dt>
+          <dd>Solo si no es miembro de otro grupo global.</dd>
+        </div>
+        <div>
+          <dt>Domain local → Universal</dt>
+          <dd>Solo si no contiene otro grupo domain local.</dd>
+        </div>
+        <div>
+          <dt>Universal → Global</dt>
+          <dd>Solo si no contiene otro grupo universal.</dd>
+        </div>
+        <div>
+          <dt>Universal → Domain local</dt>
+          <dd>Solo si no es miembro de otro grupo universal.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Grupos integrados y personalizados</h2>
+      <ul>
+        <li>Los grupos integrados están en los contenedores Builtin y Users.</li>
+        <li>Los de Builtin tienen ámbito domain local; Microsoft lo llama <em>Builtin Local</em> y no se puede cambiar.</li>
+        <li>Los de Users son globales o domain local, salvo <code>Enterprise Admins</code> y <code>Schema Admins</code>, que son universales.</li>
+        <li><code>Domain Admins</code> es global. <code>Enterprise Admins</code> y <code>Schema Admins</code> existen solo en el domain raíz del forest.</li>
+        <li>Los integrados sí aceptan grupos como miembros: por defecto, <code>Domain Admins</code> y <code>Enterprise Admins</code> están dentro de <code>Administrators</code>.</li>
+        <li>Además de los integrados, cada organización crea los suyos. Algunos programas, como Exchange, también agregan grupos propios.</li>
+        <li><strong class="highlight">Riesgo:</strong> cada cuenta de más en un grupo privilegiado es una cuenta más que, si se compromete, da esos privilegios.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Grupos anidados</h2>
+      <ul>
+        <li>Un usuario hereda lo que tiene el grupo que contiene a su grupo, aunque no se lo hayan dado directamente.</li>
+        <li><strong class="highlight">Riesgo:</strong> esto puede dar privilegios que nadie previó, difíciles de ver sin revisar toda la cadena (ver 02.8).</li>
+        <li><strong class="highlight">Relevante:</strong> el atributo <code>memberOf</code> lista solo los grupos directos, no la cadena completa. Herramientas como BloodHound recorren la cadena y muestran qué privilegios hereda una cuenta (ver 02.8).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Atributos importantes</h2>
+      <dl class="term-list">
+        <div>
+          <dt><code>cn</code></dt>
+          <dd>El nombre del grupo.</dd>
+        </div>
+        <div>
+          <dt><code>member</code></dt>
+          <dd>La lista de DN de los usuarios, grupos y contactos que son miembros.</dd>
+        </div>
+        <div>
+          <dt><code>memberOf</code></dt>
+          <dd>Los grupos que contienen a este grupo. Solo los directos.</dd>
+        </div>
+        <div>
+          <dt><code>groupType</code></dt>
+          <dd>Un entero con flags. Tres indican el ámbito y uno indica si es un grupo de seguridad.</dd>
+        </div>
+        <div>
+          <dt><code>objectSid</code></dt>
+          <dd>El SID del grupo, que lo identifica como <em>security principal</em> (ver 02.2).</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Un grupo de distribución sirve para dar permisos</span>: no. No se puede usar en una DACL.</li>
+        <li><span class="error-mark">Un grupo domain local solo tiene miembros de su domain</span>: no. Puede tener cuentas y grupos globales de cualquier domain, o de uno en trust.</li>
+        <li><span class="error-mark">Un grupo global puede tener cuentas de cualquier domain</span>: no. Solo del mismo domain.</li>
+        <li><span class="error-mark"><code>memberOf</code> muestra todos los grupos, incluidos los anidados</span>: no. Muestra solo los directos.</li>
+        <li><span class="error-mark">Los grupos integrados solo aceptan cuentas de usuario</span>: no. <code>Domain Admins</code> es miembro de <code>Administrators</code>.</li>
+        <li><span class="error-mark">Un grupo y una OU son lo mismo</span>: no. El grupo da permisos; la OU organiza y aplica políticas (ver 02.8).</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>grupos</li>
+      <li>domain local</li>
+      <li>global</li>
+      <li>universal</li>
+      <li>grupos anidados</li>
+      <li>memberOf</li>
+      <li>groupType</li>
+      <li>Global Catalog</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="04.1-ad-cuentas.html">← 04.1 - Cuentas de usuario y de equipo</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
