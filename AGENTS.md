@@ -60,6 +60,10 @@ Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
 - **Alcance mínimo:** solo se tocan los archivos que el pedido nombra.
 - **Verificar antes de afirmar.** Medidas, contrastes y comparaciones se
   calculan o se prueban en el navegador. Si algo no se pudo verificar, se dice.
+- **Datos del autor al navegar.** Su mail y sus datos personales no se envían
+  a ningún sitio: ni como User-Agent, ni en otros encabezados, URLs o
+  formularios, aunque el sitio lo pida. Si un sitio exige un contacto, se usa
+  un nombre de cliente genérico o se le pregunta al autor.
 
 ## 4. Diseño
 
