@@ -45,12 +45,12 @@
     </header>
 
     <section>
-      <h2>De qué trata</h2>
+      <h2>1. De qué trata</h2>
       <p>Dos configuraciones de AD que no agrupan objetos, como hacen las OUs o los grupos, y responden a preguntas distintas.</p>
 
       <div class="two-col">
         <div class="two-col__col">
-          <h3>Sites</h3>
+          <h3>1.1. Sites</h3>
           <ul>
             <li>Topología física de la red</li>
             <li>Qué subredes están bien conectadas</li>
@@ -58,7 +58,7 @@
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>Niveles funcionales</h3>
+          <h3>1.2. Niveles funcionales</h3>
           <ul>
             <li>Un valor por domain y otro por forest</li>
             <li>Qué funciones de AD están disponibles</li>
@@ -71,7 +71,7 @@
     </section>
 
     <section>
-      <h2>Sites</h2>
+      <h2>2. Sites</h2>
       <p>Un site es un conjunto de <strong>subredes IP bien conectadas entre sí</strong>, con enlaces rápidos. Sirve para dos cosas:</p>
       <ul>
         <li><strong>Ordenar la replicación entre DCs.</strong> Dentro de un site es rápida; entre sites es programada, para cuidar los enlaces lentos.</li>
@@ -85,19 +85,19 @@
     </section>
 
     <section>
-      <h2>Niveles funcionales</h2>
+      <h2>3. Niveles funcionales</h2>
       <p>Un nivel funcional define <strong>qué funciones de AD están disponibles</strong> y <strong>qué versiones de Windows Server pueden ser DC</strong>.</p>
 
       <div class="two-col">
         <div class="two-col__col">
-          <h3>Nivel del domain</h3>
+          <h3>3.1. Nivel del domain</h3>
           <ul>
             <li>Uno por cada domain</li>
             <li>Habilita las funciones de ese domain</li>
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>Nivel del forest</h3>
+          <h3>3.2. Nivel del forest</h3>
           <ul>
             <li>Uno por todo el forest</li>
             <li>Habilita las funciones que abarcan todo el forest</li>
@@ -111,7 +111,7 @@
         <li><strong class="highlight">Riesgo:</strong> cualquier usuario del domain puede ver el nivel funcional. Un nivel bajo puede indicar DCs viejos y protecciones que faltan.</li>
       </ul>
 
-      <h3>Funciones con valor de seguridad</h3>
+      <h3>3.3. Funciones con valor de seguridad</h3>
       <dl class="term-list">
         <div>
           <dt>2003</dt>
@@ -145,7 +145,7 @@
     </section>
 
     <section>
-      <h2>Para no confundirse</h2>
+      <h2>4. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Subir el nivel funcional actualiza los DCs</span>: no. Solo habilita funciones; los DCs se actualizan aparte.</li>
         <li><span class="error-mark">Un site es un domain</span>: no. El site es topología física; el domain es un agrupamiento lógico.</li>

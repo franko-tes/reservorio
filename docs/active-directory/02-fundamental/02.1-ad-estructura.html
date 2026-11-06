@@ -45,10 +45,10 @@
     </header>
 
     <section>
-      <h2>De qué trata</h2>
+      <h2>1. De qué trata</h2>
       <p>Todo lo que AD administra es un <strong>objeto</strong>, y los objetos no están sueltos: viven dentro de una jerarquía. Acá respondemos dos preguntas: <em>qué puede existir</em> (Object, Attributes, Schema) y <em>dónde vive</em> (Forest, Tree, Domain, Container, OU, Leaf).</p>
 
-      <h3>La jerarquía, de mayor a menor</h3>
+      <h3>1.1. La jerarquía, de mayor a menor</h3>
       <ul class="tree">
         <li>Forest <span class="muted-detail">— el país: el contenedor más grande</span>
           <ul>
@@ -87,7 +87,7 @@
     </section>
 
     <section>
-      <h2>Conceptos</h2>
+      <h2>2. Conceptos</h2>
 
       <article class="concept" id="object">
         <div class="concept__head">
@@ -219,7 +219,7 @@
     </section>
 
     <section>
-      <h2>Para no confundirse</h2>
+      <h2>3. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un domain tiene un solo DC</span>: no es así, un domain puede tener varios DCs. Cada DC guarda la copia completa de los datos de su propio domain y nada de los datos de los demás domains (salvo que sea Global Catalog, que guarda una copia parcial).</li>
         <li><span class="error-mark">Users y Computers son OUs</span>: no. Son containers por defecto. La única OU que viene creada en un domain es <code>Domain Controllers</code>.</li>

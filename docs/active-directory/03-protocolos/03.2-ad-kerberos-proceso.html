@@ -45,7 +45,7 @@
     </header>
 
     <section>
-      <h2>De qué trata</h2>
+      <h2>1. De qué trata</h2>
       <p>Kerberos funciona en <strong>tres intercambios</strong>, cada uno con un pedido y una respuesta. En cada uno cambia quién habla con quién y con qué clave se cifra lo que viaja (ver 03.1 para las piezas).</p>
       <ul>
         <li><strong>AS (mensajes 1 y 2):</strong> el cliente prueba quién es y recibe un TGT.</li>
@@ -89,12 +89,12 @@
     </section>
 
     <section>
-      <h2>Antes de empezar</h2>
+      <h2>2. Antes de empezar</h2>
       <p>El usuario escribe su password al iniciar sesión. El equipo la convierte en una clave (la <strong>clave del usuario</strong>) y la guarda en memoria. Esa clave es la que se usa en el primer intercambio. La password en sí no se envía.</p>
     </section>
 
     <section>
-      <h2>Intercambio 1: AS (el TGT)</h2>
+      <h2>3. Intercambio 1: AS (el TGT)</h2>
       <dl class="term-list">
         <div>
           <dt>1. AS-REQ</dt>
@@ -116,7 +116,7 @@
     </section>
 
     <section>
-      <h2>Intercambio 2: TGS (el ticket de servicio)</h2>
+      <h2>4. Intercambio 2: TGS (el ticket de servicio)</h2>
       <dl class="term-list">
         <div>
           <dt>3. TGS-REQ</dt>
@@ -138,7 +138,7 @@
     </section>
 
     <section>
-      <h2>Intercambio 3: AP (el servicio)</h2>
+      <h2>5. Intercambio 3: AP (el servicio)</h2>
       <dl class="term-list">
         <div>
           <dt>5. AP-REQ</dt>
@@ -156,7 +156,7 @@
     </section>
 
     <section>
-      <h2>Las dos session keys</h2>
+      <h2>6. Las dos session keys</h2>
       <dl class="term-list">
         <div>
           <dt>Logon session key</dt>
@@ -171,7 +171,7 @@
     </section>
 
     <section>
-      <h2>Por qué hay preautenticación</h2>
+      <h2>7. Por qué hay preautenticación</h2>
       <p>Sin ella, cualquiera podría pedir al KDC una respuesta AS-REP para el usuario que quisiera, y esa respuesta ya vendría cifrada con la clave de ese usuario. Con eso se podría intentar adivinar la password sin conectarse más. Con preautenticación, el KDC solo responde si el pedido ya viene cifrado con esa clave.</p>
       <ul>
         <li><strong class="highlight">Riesgo:</strong> existe una opción de cuenta que la desactiva (“Do not require Kerberos preauthentication”). Una cuenta así deja de tener esa protección.</li>
@@ -179,12 +179,12 @@
     </section>
 
     <section>
-      <h2>La hora y los timestamps</h2>
+      <h2>8. La hora y los timestamps</h2>
       <p>Los authenticators llevan timestamp y sirven también contra repeticiones: un mensaje copiado y reenviado lleva una hora vieja. Si la diferencia entre el reloj del cliente y el del DC supera la tolerancia, la autenticación falla. El valor por defecto es <strong>5 minutos</strong>. Por eso la hora de los equipos del domain se sincroniza con la jerarquía del domain, que parte del PDC Emulator (ver 02.3).</p>
     </section>
 
     <section>
-      <h2>Cuánto duran los tickets</h2>
+      <h2>9. Cuánto duran los tickets</h2>
       <p>Por defecto, en la política de Kerberos del domain:</p>
       <dl class="term-list">
         <div>
@@ -203,12 +203,12 @@
     </section>
 
     <section>
-      <h2>Los datos de autorización</h2>
+      <h2>10. Los datos de autorización</h2>
       <p>Los dos tickets llevan los datos de autorización del usuario, que el KDC copia del TGT al ticket de servicio. Con ellos el servicio sabe quién es el usuario y de qué grupos es miembro. Por eso un cambio de grupos se refleja recién cuando el usuario obtiene un TGT nuevo, por ejemplo al volver a iniciar sesión.</p>
     </section>
 
     <section>
-      <h2>Dónde encajan los ataques</h2>
+      <h2>11. Dónde encajan los ataques</h2>
       <ul>
         <li><strong class="highlight">Riesgo, Kerberoasting:</strong> se pide un ticket de servicio (mensaje 3) y el que llega en el mensaje 4 se intenta descifrar sin conexión, porque está cifrado con la clave de la cuenta del servicio (ver 02.4).</li>
         <li><strong class="highlight">Riesgo, tickets falsificados:</strong> quien tenga la clave de <code>krbtgt</code> puede fabricar un TGT, y quien tenga la clave de un servicio, un ticket de servicio.</li>
@@ -216,12 +216,12 @@
     </section>
 
     <section>
-      <h2>Qué deja en los logs</h2>
+      <h2>12. Qué deja en los logs</h2>
       <p>Los intercambios AS y TGS dejan eventos en los DCs: uno cuando se pide un TGT y otro cuando se pide un ticket de servicio.</p>
     </section>
 
     <section>
-      <h2>Para no confundirse</h2>
+      <h2>13. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">El KDC decide si el usuario puede acceder al servicio</span>: en general, no. Autentica y entrega el ticket; la decisión de acceso la toma el servicio, con los permisos. Las authentication policies pueden hacer que el KDC niegue un ticket (ver 02.9).</li>
         <li><span class="error-mark">La session key viaja en claro</span>: no. Siempre viaja cifrada: una copia con una clave que lee el cliente y otra dentro de un ticket que no lee.</li>

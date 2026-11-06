@@ -45,13 +45,13 @@
     </header>
 
     <section>
-      <h2>Qué es</h2>
+      <h2>1. Qué es</h2>
       <p>Servicio de directorio de Microsoft, distribuido y jerárquico, que centraliza la administración de identidades y recursos de una organización: usuarios, grupos, equipos, impresoras, dispositivos de red, políticas y relaciones de confianza (<em>trusts</em>) entre dominios.</p>
       <p>Toda esa información vive en una base de datos jerárquica (el directorio) que sirven los Domain Controllers.</p>
     </section>
 
     <section>
-      <h2>Para qué sirve</h2>
+      <h2>2. Para qué sirve</h2>
       <ul>
         <li><strong>Autenticación:</strong> verificar quién es cada usuario (un solo login válido en todo el dominio).</li>
         <li><strong>Autorización:</strong> decidir a qué puede acceder (grupos, permisos, ACLs).</li>
@@ -60,7 +60,7 @@
     </section>
 
     <section>
-      <h2>Cómo funciona</h2>
+      <h2>3. Cómo funciona</h2>
       <dl class="term-list">
         <div>
           <dt><code>Domain Controller (DC)</code></dt>
@@ -86,10 +86,10 @@
     </section>
 
     <section>
-      <h2>Estructura</h2>
+      <h2>4. Estructura</h2>
       <p><code>Forest &gt; Tree &gt; Domain &gt; OU (container) &gt; objetos (leaf)</code></p>
 
-      <h3>Ejemplo mental (TechCorp)</h3>
+      <h3>4.1. Ejemplo mental (TechCorp)</h3>
       <ul class="tree">
         <li>Forest: techcorp.local
           <ul>

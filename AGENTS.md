@@ -142,6 +142,11 @@ BEM: `.ficha__header`, `.topic__summary`).
 </footer>
 ```
 
+- **Numeración de títulos:** los `h2` llevan `1.`, `2.`… y los `h3`, el número
+  de su `h2` más el propio (`2.1.`), escritos en el HTML. En las fichas de
+  glosario, el `h3` de cada concepto (`.concept`) no se numera: ya tiene el suyo
+  en `.concept__id`. Si se agrega, quita o mueve una sección, se renumera lo que
+  sigue.
 - **Paginación:** `← 01.1 - Título` y `01.2 - Título →`. Cruza de un tema a otro,
   y en ese caso el enlace lleva el nombre del tema: `02.1 - Fundamental:
   Estructura jerárquica →`. El "siguiente" va siempre a la derecha.

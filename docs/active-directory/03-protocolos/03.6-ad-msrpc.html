@@ -45,7 +45,7 @@
     </header>
 
     <section>
-      <h2>De qué trata</h2>
+      <h2>1. De qué trata</h2>
       <p>RPC (<em>Remote Procedure Call</em>) permite que un programa llame a una función que se ejecuta en otro equipo, como si fuera local. El programa hace la llamada con sus parámetros; RPC los envía por la red, el otro equipo ejecuta la función y le devuelve el resultado.</p>
       <p>MSRPC es la implementación de Microsoft. En una llamada hay tres niveles, de lo general a lo concreto:</p>
       <dl class="term-list">
@@ -75,7 +75,7 @@
     </section>
 
     <section>
-      <h2>Cómo se llega al servicio</h2>
+      <h2>2. Cómo se llega al servicio</h2>
       <ul>
         <li><strong>Endpoint mapper (puerto 135, TCP):</strong> el cliente le pregunta en qué puerto está la interfaz que quiere, y el servidor le responde con un puerto asignado dinámicamente.</li>
         <li><strong>Puertos dinámicos:</strong> desde Windows Server 2008, el rango por defecto es 49152 a 65535.</li>
@@ -85,7 +85,7 @@
     </section>
 
     <section>
-      <h2>Las interfaces que importan en AD</h2>
+      <h2>3. Las interfaces que importan en AD</h2>
       <dl class="term-list">
         <div>
           <dt><code>lsarpc</code></dt>
@@ -112,12 +112,12 @@
     </section>
 
     <section>
-      <h2>Autenticación</h2>
+      <h2>4. Autenticación</h2>
       <p>Una llamada RPC se autentica, en general, con Kerberos o NTLM (ver 03.1 a 03.4). <code>netlogon</code> es la excepción: el equipo y el DC se autentican con la password de la cuenta del equipo, que conocen los dos. Que transporte validaciones NTLM no quiere decir que se autentique con NTLM.</p>
     </section>
 
     <section>
-      <h2>Replicación y derechos</h2>
+      <h2>5. Replicación y derechos</h2>
       <ul>
         <li>Un DC replica pidiendo los cambios a otro DC mediante <code>drsuapi</code>.</li>
         <li>Para pedir replicación hace falta tener sobre el domain los derechos <strong>Replicating Directory Changes</strong> y <strong>Replicating Directory Changes All</strong>. Este segundo permite obtener atributos sensibles, como los hashes de las passwords.</li>
@@ -128,9 +128,9 @@
     </section>
 
     <section>
-      <h2>Eventos y señales</h2>
+      <h2>6. Eventos y señales</h2>
 
-      <h3>Evento 4662</h3>
+      <h3>6.1. Evento 4662</h3>
       <p>Una operación sobre un objeto de AD. Subcategoría: <em>Audit Directory Service Access</em>.</p>
       <dl class="term-list">
         <div>
@@ -139,7 +139,7 @@
         </div>
       </dl>
 
-      <h3>Señales</h3>
+      <h3>6.2. Señales</h3>
       <ul>
         <li><strong class="highlight">Riesgo:</strong> un 4662 con el GUID de Replicating Directory Changes All hecho por una cuenta que no es de un DC.</li>
         <li><strong class="highlight">Relevante:</strong> se genera solo si esa subcategoría está activada en los DC y el objeto tiene una SACL que cubra la operación. Sin las dos, no hay evento.</li>
@@ -147,7 +147,7 @@
     </section>
 
     <section>
-      <h2>Para no confundirse</h2>
+      <h2>7. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">DCSync copia el archivo NTDS.dit</span>: no. Copiar NTDS.dit requiere acceso al propio DC. DCSync no lo toca: pide la replicación por la red con <code>drsuapi</code>, usando los derechos de replicación.</li>
         <li><span class="error-mark">RPC siempre usa el puerto 135</span>: no. El 135 solo sirve para averiguar el puerto. La llamada puede ir por un puerto dinámico o por SMB (445).</li>

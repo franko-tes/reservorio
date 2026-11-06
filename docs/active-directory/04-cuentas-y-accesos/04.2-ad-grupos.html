@@ -45,14 +45,14 @@
     </header>
 
     <section>
-      <h2>De qué trata</h2>
+      <h2>1. De qué trata</h2>
       <p>Un grupo reúne cuentas (y otros grupos) para asignar permisos y derechos en bloque, en lugar de uno por uno. Si un permiso cambia, se modifica el grupo y no cada cuenta. Todo grupo tiene dos características: <strong>tipo</strong> y <strong>ámbito</strong>.</p>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>El tipo dice para qué sirve el grupo. El ámbito dice quién puede ser miembro y dónde se pueden dar permisos.</p>
     </section>
 
     <section>
-      <h2>Tipos</h2>
+      <h2>2. Tipos</h2>
       <dl class="term-list">
         <div>
           <dt>Seguridad</dt>
@@ -66,7 +66,7 @@
     </section>
 
     <section>
-      <h2>Ámbitos</h2>
+      <h2>3. Ámbitos</h2>
       <dl class="term-list">
         <div>
           <dt>Domain local</dt>
@@ -84,7 +84,7 @@
     </section>
 
     <section>
-      <h2>Quién puede ser miembro de quién</h2>
+      <h2>4. Quién puede ser miembro de quién</h2>
       <ul>
         <li>Un grupo <strong>global</strong> puede estar en otro global del mismo domain, en un universal de cualquier domain del forest, o en un domain local.</li>
         <li>Un grupo <strong>domain local</strong> puede estar en otro domain local del mismo domain. No puede estar en un grupo global ni en uno universal.</li>
@@ -94,7 +94,7 @@
     </section>
 
     <section>
-      <h2>Grupos universales y el Global Catalog</h2>
+      <h2>5. Grupos universales y el Global Catalog</h2>
       <ul>
         <li>Los grupos universales, y sus miembros, se listan en el Global Catalog (ver 02.3). Los globales y domain local también figuran, pero sin sus miembros.</li>
         <li>Cada cambio de membresía de un universal se replica al Global Catalog.</li>
@@ -102,7 +102,7 @@
     </section>
 
     <section>
-      <h2>Cambiar el ámbito</h2>
+      <h2>6. Cambiar el ámbito</h2>
       <dl class="term-list">
         <div>
           <dt>Global → Universal</dt>
@@ -124,7 +124,7 @@
     </section>
 
     <section>
-      <h2>Grupos integrados y personalizados</h2>
+      <h2>7. Grupos integrados y personalizados</h2>
       <ul>
         <li>Los grupos integrados están en los contenedores Builtin y Users.</li>
         <li>Los de Builtin tienen ámbito domain local; Microsoft lo llama <em>Builtin Local</em> y no se puede cambiar.</li>
@@ -137,7 +137,7 @@
     </section>
 
     <section>
-      <h2>Grupos anidados</h2>
+      <h2>8. Grupos anidados</h2>
       <ul>
         <li>Un usuario hereda lo que tiene el grupo que contiene a su grupo, aunque no se lo hayan dado directamente.</li>
         <li><strong class="highlight">Riesgo:</strong> esto puede dar privilegios que nadie previó, difíciles de ver sin revisar toda la cadena (ver 02.8).</li>
@@ -146,7 +146,7 @@
     </section>
 
     <section>
-      <h2>Atributos importantes</h2>
+      <h2>9. Atributos importantes</h2>
       <dl class="term-list">
         <div>
           <dt><code>cn</code></dt>
@@ -172,7 +172,7 @@
     </section>
 
     <section>
-      <h2>Para no confundirse</h2>
+      <h2>10. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un grupo de distribución sirve para dar permisos</span>: no. No se puede usar en una DACL.</li>
         <li><span class="error-mark">Un grupo domain local solo tiene miembros de su domain</span>: no. Puede tener cuentas y grupos globales de cualquier domain, o de uno en trust.</li>

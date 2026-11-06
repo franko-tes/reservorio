@@ -45,7 +45,7 @@
     </header>
 
     <section>
-      <h2>De qué trata</h2>
+      <h2>1. De qué trata</h2>
       <p>Una cuenta permite a una persona, un programa o un equipo iniciar sesión y acceder a recursos. Hay tres familias:</p>
       <ul>
         <li><strong>Locales:</strong> existen solo en un equipo.</li>
@@ -57,13 +57,13 @@
     </section>
 
     <section>
-      <h2>Cuentas locales</h2>
+      <h2>2. Cuentas locales</h2>
       <ul>
         <li>Se definen en el equipo, y el equipo es quien las autentica.</li>
         <li>Son <em>security principals</em>: sus derechos y permisos valen solo en ese equipo.</li>
       </ul>
 
-      <h3>Cuentas predeterminadas</h3>
+      <h3>2.1. Cuentas predeterminadas</h3>
       <dl class="term-list">
         <div>
           <dt>Administrator</dt>
@@ -93,13 +93,13 @@
     </section>
 
     <section>
-      <h2>Cuentas del domain</h2>
+      <h2>3. Cuentas del domain</h2>
       <ul>
         <li>Se crean en AD y reciben derechos del domain: por su cuenta o por los grupos a los que pertenecen.</li>
         <li>Pueden iniciar sesión en las estaciones de trabajo y servidores del domain, salvo que una política lo restrinja. En los DC, por defecto solo pueden los administradores y algunos grupos de operadores.</li>
       </ul>
 
-      <h3>Cuentas predeterminadas</h3>
+      <h3>3.1. Cuentas predeterminadas</h3>
       <dl class="term-list">
         <div>
           <dt>Administrator (500)</dt>
@@ -117,7 +117,7 @@
     </section>
 
     <section>
-      <h2>En un entorno real</h2>
+      <h2>4. En un entorno real</h2>
       <ul>
         <li>Una persona puede tener más de una cuenta. Por ejemplo, un administrador de TI con una cuenta de uso diario y otra con privilegios.</li>
         <li>Hay muchas cuentas de servicio, que ejecutan aplicaciones en segundo plano.</li>
@@ -127,7 +127,7 @@
     </section>
 
     <section>
-      <h2>Cuentas de equipo</h2>
+      <h2>5. Cuentas de equipo</h2>
       <ul>
         <li>Cada equipo unido al domain tiene una cuenta en AD.</li>
         <li>El equipo cambia su password automáticamente cada 30 días por defecto.</li>
@@ -137,7 +137,7 @@
     </section>
 
     <section>
-      <h2>Equipo unido y no unido al domain</h2>
+      <h2>6. Equipo unido y no unido al domain</h2>
       <dl class="term-list">
         <div>
           <dt>Unido</dt>
@@ -151,12 +151,12 @@
     </section>
 
     <section>
-      <h2>Identificadores de una cuenta</h2>
+      <h2>7. Identificadores de una cuenta</h2>
       <p>El GUID, el SID, <code>sAMAccountName</code> y el UPN se explican en 02.2. El <code>sIDHistory</code> está en 02.5.</p>
     </section>
 
     <section>
-      <h2>Para no confundirse</h2>
+      <h2>8. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">La cuenta Administrator integrada se puede eliminar o bloquear</span>: no. Solo se puede renombrar o deshabilitar.</li>
         <li><span class="error-mark">Renombrar Administrator la oculta</span>: no. Conserva el mismo SID.</li>
