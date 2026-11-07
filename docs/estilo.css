@@ -685,3 +685,30 @@ figure.diagram figcaption {
   font-size: var(--fs-sm);
   font-weight: 600;
 }
+
+/* ---------- 19. Diagrama de alcances (recuadros anidados) ----------
+   Uso: dentro de un figure.diagram (sección 18), como en la 04.2.
+   Complementa la sección 18 con recuadros anidados (domain, forest, trusts).
+   El recuadro hasta donde llega algo va con borde continuo y fondo; el que
+   no alcanza, punteado y sin fondo, así no depende del color. */
+.diagram__box {
+  fill: var(--color-bg-subtle);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.diagram__box--off {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-dasharray: 4 4;
+}
+
+.diagram__boxlabel {
+  fill: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+}
+
+.diagram__boxlabel--off {
+  fill: var(--color-text-muted);
+}

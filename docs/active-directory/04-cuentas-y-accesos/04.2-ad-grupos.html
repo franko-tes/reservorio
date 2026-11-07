@@ -67,34 +67,182 @@
 
     <section>
       <h2>3. Ámbitos</h2>
+
+      <h3>3.1. Hasta dónde llega cada ámbito</h3>
+      <figure class="diagram">
+      <svg viewBox="0 0 272 490" role="img" aria-labelledby="ambitos-titulo ambitos-desc">
+        <title id="ambitos-titulo">Alcance de cada ámbito de grupo</title>
+        <desc id="ambitos-desc">Para cada ámbito, dos dibujos de recuadros anidados: domain dentro de forest, y forest dentro de trusts. El primero muestra de dónde pueden venir los miembros y el segundo dónde da permisos; el recuadro más amplio con borde continuo marca hasta dónde llega. Domain local: miembros de todo, incluidos los trusts; permisos solo en su domain. Global: miembros solo de su domain; permisos en el forest y los trusts. Universal: miembros de todo el forest; permisos en el forest y los trusts.</desc>
+        <text class="diagram__actor" x="62" y="16" text-anchor="middle">Miembros de</text>
+        <text class="diagram__actor" x="210" y="16" text-anchor="middle">Permisos en</text>
+        <text class="diagram__actor" x="136" y="48" text-anchor="middle">Domain local</text>
+        <rect class="diagram__box" x="1" y="59" width="122" height="110" rx="4"/>
+        <text class="diagram__boxlabel" x="9" y="77" text-anchor="start">Trusts</text>
+        <rect class="diagram__box" x="9" y="85" width="106" height="76" rx="4"/>
+        <text class="diagram__boxlabel" x="17" y="103" text-anchor="start">Forest</text>
+        <rect class="diagram__box" x="17" y="111" width="90" height="42" rx="4"/>
+        <text class="diagram__boxlabel" x="62" y="137" text-anchor="middle">Domain</text>
+        <rect class="diagram__box diagram__box--off" x="149" y="59" width="122" height="110" rx="4"/>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="157" y="77" text-anchor="start">Trusts</text>
+        <rect class="diagram__box diagram__box--off" x="157" y="85" width="106" height="76" rx="4"/>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="165" y="103" text-anchor="start">Forest</text>
+        <rect class="diagram__box" x="165" y="111" width="90" height="42" rx="4"/>
+        <text class="diagram__boxlabel" x="210" y="137" text-anchor="middle">Domain</text>
+        <text class="diagram__actor" x="136" y="208" text-anchor="middle">Global</text>
+        <rect class="diagram__box diagram__box--off" x="1" y="219" width="122" height="110" rx="4"/>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="9" y="237" text-anchor="start">Trusts</text>
+        <rect class="diagram__box diagram__box--off" x="9" y="245" width="106" height="76" rx="4"/>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="17" y="263" text-anchor="start">Forest</text>
+        <rect class="diagram__box" x="17" y="271" width="90" height="42" rx="4"/>
+        <text class="diagram__boxlabel" x="62" y="297" text-anchor="middle">Domain</text>
+        <rect class="diagram__box" x="149" y="219" width="122" height="110" rx="4"/>
+        <text class="diagram__boxlabel" x="157" y="237" text-anchor="start">Trusts</text>
+        <rect class="diagram__box" x="157" y="245" width="106" height="76" rx="4"/>
+        <text class="diagram__boxlabel" x="165" y="263" text-anchor="start">Forest</text>
+        <rect class="diagram__box" x="165" y="271" width="90" height="42" rx="4"/>
+        <text class="diagram__boxlabel" x="210" y="297" text-anchor="middle">Domain</text>
+        <text class="diagram__actor" x="136" y="368" text-anchor="middle">Universal</text>
+        <rect class="diagram__box diagram__box--off" x="1" y="379" width="122" height="110" rx="4"/>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="9" y="397" text-anchor="start">Trusts</text>
+        <rect class="diagram__box" x="9" y="405" width="106" height="76" rx="4"/>
+        <text class="diagram__boxlabel" x="17" y="423" text-anchor="start">Forest</text>
+        <rect class="diagram__box" x="17" y="431" width="90" height="42" rx="4"/>
+        <text class="diagram__boxlabel" x="62" y="457" text-anchor="middle">Domain</text>
+        <rect class="diagram__box" x="149" y="379" width="122" height="110" rx="4"/>
+        <text class="diagram__boxlabel" x="157" y="397" text-anchor="start">Trusts</text>
+        <rect class="diagram__box" x="157" y="405" width="106" height="76" rx="4"/>
+        <text class="diagram__boxlabel" x="165" y="423" text-anchor="start">Forest</text>
+        <rect class="diagram__box" x="165" y="431" width="90" height="42" rx="4"/>
+        <text class="diagram__boxlabel" x="210" y="457" text-anchor="middle">Domain</text>
+      </svg>
+      <figcaption>Borde continuo: hasta dónde llega. Punteado: no llega. Trusts: domains y forests con los que hay una relación de confianza.</figcaption>
+      </figure>
+
+      <p>El domain local y el global son opuestos: el domain local acepta miembros de cualquier domain o trust, pero da permisos solo en su domain; el global acepta miembros solo de su domain, pero da permisos en todo el forest y los trusts. El universal abarca todo el forest.</p>
+
+      <h3>3.2. Qué acepta cada uno</h3>
       <dl class="term-list">
         <div>
           <dt>Domain local</dt>
-          <dd>Puede tener como miembros cuentas y grupos globales de cualquier domain (o de uno en trust), grupos universales del forest y otros domain local del mismo domain. Solo da permisos dentro de su domain.</dd>
+          <dd><strong>Acepta:</strong> cuentas y grupos globales de cualquier domain o de uno en trust, grupos universales del forest y otros domain local de su domain. <strong>Da permisos en:</strong> solo su domain.</dd>
         </div>
         <div>
           <dt>Global</dt>
-          <dd>Solo puede tener cuentas y otros grupos globales del mismo domain. Puede dar permisos en cualquier domain del forest o en domains y forests que confíen.</dd>
+          <dd><strong>Acepta:</strong> cuentas y otros grupos globales, solo de su domain. <strong>Da permisos en:</strong> cualquier domain del forest, y en domains y forests que confíen.</dd>
         </div>
         <div>
           <dt>Universal</dt>
-          <dd>Puede tener cuentas, grupos globales y otros universales de cualquier domain del forest. Puede dar permisos en cualquier domain del forest o de forests que confíen.</dd>
+          <dd><strong>Acepta:</strong> cuentas, grupos globales y otros universales de cualquier domain del forest. <strong>Da permisos en:</strong> cualquier domain del forest, y en forests que confíen.</dd>
         </div>
       </dl>
-    </section>
+      <p>Un grupo domain local no puede estar dentro de un global ni de un universal, porque ninguno de los dos lo acepta.</p>
 
-    <section>
-      <h2>4. Quién puede ser miembro de quién</h2>
+      <h3>3.3. Cómo se combinan</h3>
+      <p>El patrón habitual es <strong>AGDLP</strong>: las cuentas (A) van en grupos globales (G), los globales van en grupos domain local (DL) y el permiso (P) se da al domain local.</p>
+      <p>Aprovecha lo que hace cada ámbito: el global junta a las personas de un domain, y el domain local, que acepta miembros de cualquier domain, recibe el permiso sobre un recurso de su domain.</p>
+
+      <h3>3.4. Ejemplo</h3>
+      <p>El forest tiene dos domains, <code>techcorp.local</code> y <code>labcorp.local</code>. En un servidor de <code>techcorp.local</code> hay una carpeta compartida de Finanzas, que tienen que poder leer los usuarios de Finanzas de <code>techcorp.local</code> y los auditores de <code>labcorp.local</code>.</p>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 346" role="img" aria-labelledby="ejemplo-agdlp-titulo ejemplo-agdlp-desc">
+        <title id="ejemplo-agdlp-titulo">Ejemplo de AGDLP con dos domains</title>
+        <desc id="ejemplo-agdlp-desc">Dos recuadros punteados representan los domains techcorp.local y labcorp.local. En techcorp.local, las cuentas de Finanzas son miembros del grupo global Finanzas. En labcorp.local, las cuentas de auditoría son miembros del grupo global Auditoría. Los dos grupos globales son miembros del grupo domain local Carpeta-Finanzas-Lectura, que está en techcorp.local. Ese grupo recibe el permiso sobre la carpeta de Finanzas.</desc>
+        <rect class="diagram__box diagram__box--off" x="1" y="1" width="130" height="170" rx="4"/>
+        <text class="diagram__label" x="66" y="22" text-anchor="middle">techcorp.local</text>
+        <text class="diagram__boxlabel" x="66" y="48" text-anchor="middle">Cuentas de</text>
+        <text class="diagram__boxlabel" x="66" y="66" text-anchor="middle">Finanzas</text>
+        <line class="diagram__msg" x1="66" y1="74" x2="66" y2="100"/>
+        <polyline class="diagram__head" points="61,92 66,100 71,92"/>
+        <rect class="diagram__box" x="11" y="104" width="110" height="52" rx="4"/>
+        <text class="diagram__label" x="66" y="126" text-anchor="middle">Finanzas</text>
+        <text class="diagram__boxlabel" x="66" y="146" text-anchor="middle">global</text>
+        <rect class="diagram__box diagram__box--off" x="141" y="1" width="130" height="170" rx="4"/>
+        <text class="diagram__label" x="206" y="22" text-anchor="middle">labcorp.local</text>
+        <text class="diagram__boxlabel" x="206" y="48" text-anchor="middle">Cuentas de</text>
+        <text class="diagram__boxlabel" x="206" y="66" text-anchor="middle">auditoría</text>
+        <line class="diagram__msg" x1="206" y1="74" x2="206" y2="100"/>
+        <polyline class="diagram__head" points="201,92 206,100 211,92"/>
+        <rect class="diagram__box" x="151" y="104" width="110" height="52" rx="4"/>
+        <text class="diagram__label" x="206" y="126" text-anchor="middle">Auditoría</text>
+        <text class="diagram__boxlabel" x="206" y="146" text-anchor="middle">global</text>
+        <line class="diagram__msg" x1="66" y1="156" x2="66" y2="190"/>
+        <line class="diagram__msg" x1="206" y1="156" x2="206" y2="190"/>
+        <line class="diagram__msg" x1="66" y1="190" x2="206" y2="190"/>
+        <line class="diagram__msg" x1="136" y1="190" x2="136" y2="214"/>
+        <polyline class="diagram__head" points="131,206 136,214 141,206"/>
+        <text class="diagram__boxlabel" x="144" y="208" text-anchor="start">miembros de</text>
+        <rect class="diagram__box" x="1" y="218" width="270" height="52" rx="4"/>
+        <text class="diagram__label" x="136" y="240" text-anchor="middle">Carpeta-Finanzas-Lectura</text>
+        <text class="diagram__boxlabel" x="136" y="260" text-anchor="middle">domain local, en techcorp.local</text>
+        <line class="diagram__msg" x1="136" y1="270" x2="136" y2="304"/>
+        <polyline class="diagram__head" points="131,296 136,304 141,296"/>
+        <text class="diagram__boxlabel" x="144" y="292" text-anchor="start">permiso</text>
+        <rect class="diagram__box" x="36" y="308" width="200" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="136" y="331" text-anchor="middle">Carpeta de Finanzas</text>
+      </svg>
+      <figcaption>Recuadros punteados: los domains. Las flechas significan “es miembro de”, salvo la última, que es el permiso.</figcaption>
+      </figure>
+
       <ul>
-        <li>Un grupo <strong>global</strong> puede estar en otro global del mismo domain, en un universal de cualquier domain del forest, o en un domain local.</li>
-        <li>Un grupo <strong>domain local</strong> puede estar en otro domain local del mismo domain. No puede estar en un grupo global ni en uno universal.</li>
-        <li>Un grupo <strong>universal</strong> puede estar en otro universal o en un domain local.</li>
-        <li><strong>Patrón habitual:</strong> cuentas en grupos globales, estos en grupos domain local, y los permisos se dan al domain local (AGDLP).</li>
+        <li><strong>Cuentas en grupos globales:</strong> en <code>techcorp.local</code>, el grupo global <code>Finanzas</code> reúne a los usuarios de Finanzas. En <code>labcorp.local</code>, el grupo global <code>Auditoría</code> reúne a los auditores. Cada global solo puede tener cuentas de su propio domain.</li>
+        <li><strong>Globales en un domain local:</strong> en <code>techcorp.local</code>, el grupo domain local <code>Carpeta-Finanzas-Lectura</code> tiene como miembros a <code>Finanzas</code> y a <code>Auditoría</code>. Puede aceptar a <code>Auditoría</code> aunque sea de otro domain, porque un domain local acepta globales de cualquier domain del forest.</li>
+        <li><strong>Permiso al domain local:</strong> el permiso de lectura sobre la carpeta se da una sola vez, a <code>Carpeta-Finanzas-Lectura</code>. Un domain local solo da permisos en su domain, y la carpeta está en <code>techcorp.local</code>.</li>
+        <li><strong>El resultado:</strong> los usuarios de Finanzas y los auditores pueden leer la carpeta, porque heredan el permiso a través de los grupos. Si llega un auditor nuevo, alcanza con sumarlo a <code>Auditoría</code>; la carpeta no se toca.</li>
+      </ul>
+
+      <p>Ahora supongamos que también hay auditores en <code>techcorp.local</code>, con su propio grupo global <code>Auditoría</code>, y que los auditores de los dos domains tienen que leer una carpeta en cada domain. Un domain local no alcanza, porque solo da permisos en su domain. Ahí sirve un grupo universal:</p>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 308" role="img" aria-labelledby="ejemplo-universal-titulo ejemplo-universal-desc">
+        <title id="ejemplo-universal-titulo">Ejemplo de grupo universal con dos domains</title>
+        <desc id="ejemplo-universal-desc">Dos recuadros punteados representan los domains techcorp.local y labcorp.local; cada uno tiene un grupo global llamado Auditoría. Los dos grupos globales son miembros del grupo universal Auditoría-General. Ese grupo recibe permiso sobre una carpeta en techcorp.local y sobre otra en labcorp.local.</desc>
+        <rect class="diagram__box diagram__box--off" x="1" y="1" width="130" height="100" rx="4"/>
+        <text class="diagram__label" x="66" y="22" text-anchor="middle">techcorp.local</text>
+        <rect class="diagram__box" x="11" y="34" width="110" height="52" rx="4"/>
+        <text class="diagram__label" x="66" y="56" text-anchor="middle">Auditoría</text>
+        <text class="diagram__boxlabel" x="66" y="76" text-anchor="middle">global</text>
+        <rect class="diagram__box diagram__box--off" x="141" y="1" width="130" height="100" rx="4"/>
+        <text class="diagram__label" x="206" y="22" text-anchor="middle">labcorp.local</text>
+        <rect class="diagram__box" x="151" y="34" width="110" height="52" rx="4"/>
+        <text class="diagram__label" x="206" y="56" text-anchor="middle">Auditoría</text>
+        <text class="diagram__boxlabel" x="206" y="76" text-anchor="middle">global</text>
+        <line class="diagram__msg" x1="66" y1="86" x2="66" y2="122"/>
+        <line class="diagram__msg" x1="206" y1="86" x2="206" y2="122"/>
+        <line class="diagram__msg" x1="66" y1="122" x2="206" y2="122"/>
+        <line class="diagram__msg" x1="136" y1="122" x2="136" y2="146"/>
+        <polyline class="diagram__head" points="131,138 136,146 141,138"/>
+        <text class="diagram__boxlabel" x="144" y="140" text-anchor="start">miembros de</text>
+        <rect class="diagram__box" x="1" y="150" width="270" height="52" rx="4"/>
+        <text class="diagram__label" x="136" y="172" text-anchor="middle">Auditoría-General</text>
+        <text class="diagram__boxlabel" x="136" y="192" text-anchor="middle">universal</text>
+        <line class="diagram__msg" x1="136" y1="202" x2="136" y2="222"/>
+        <line class="diagram__msg" x1="66" y1="222" x2="206" y2="222"/>
+        <line class="diagram__msg" x1="66" y1="222" x2="66" y2="250"/>
+        <polyline class="diagram__head" points="61,242 66,250 71,242"/>
+        <line class="diagram__msg" x1="206" y1="222" x2="206" y2="250"/>
+        <polyline class="diagram__head" points="201,242 206,250 211,242"/>
+        <text class="diagram__boxlabel" x="74" y="242" text-anchor="start">permiso</text>
+        <text class="diagram__boxlabel" x="214" y="242" text-anchor="start">permiso</text>
+        <rect class="diagram__box" x="1" y="254" width="130" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="66" y="276" text-anchor="middle">Carpeta en</text>
+        <text class="diagram__label" x="66" y="296" text-anchor="middle">techcorp.local</text>
+        <rect class="diagram__box" x="141" y="254" width="130" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="206" y="276" text-anchor="middle">Carpeta en</text>
+        <text class="diagram__label" x="206" y="296" text-anchor="middle">labcorp.local</text>
+      </svg>
+      <figcaption>Recuadros punteados: los domains. Las flechas significan “es miembro de”, salvo las dos últimas, que son permisos.</figcaption>
+      </figure>
+
+      <ul>
+        <li><strong>Globales en un universal:</strong> el grupo universal <code>Auditoría-General</code> tiene como miembros a los dos grupos <code>Auditoría</code>, uno de cada domain, porque un universal acepta globales de cualquier domain del forest.</li>
+        <li><strong>Permisos al universal:</strong> <code>Auditoría-General</code> recibe permiso sobre una carpeta en cada domain, porque un universal puede dar permisos en cualquier domain del forest.</li>
+        <li><strong>La diferencia con el ejemplo anterior:</strong> el domain local sirvió porque la carpeta estaba en su mismo domain. Cuando los recursos están en varios domains del forest, el universal permite usar un solo grupo para todos.</li>
       </ul>
     </section>
 
     <section>
-      <h2>5. Grupos universales y el Global Catalog</h2>
+      <h2>4. Grupos universales y el Global Catalog</h2>
       <ul>
         <li>Los grupos universales, y sus miembros, se listan en el Global Catalog (ver 02.3). Los globales y domain local también figuran, pero sin sus miembros.</li>
         <li>Cada cambio de membresía de un universal se replica al Global Catalog.</li>
@@ -102,7 +250,7 @@
     </section>
 
     <section>
-      <h2>6. Cambiar el ámbito</h2>
+      <h2>5. Cambiar el ámbito</h2>
       <dl class="term-list">
         <div>
           <dt>Global → Universal</dt>
@@ -124,7 +272,7 @@
     </section>
 
     <section>
-      <h2>7. Grupos integrados y personalizados</h2>
+      <h2>6. Grupos integrados y personalizados</h2>
       <ul>
         <li>Los grupos integrados están en los contenedores Builtin y Users.</li>
         <li>Los de Builtin tienen ámbito domain local; Microsoft lo llama <em>Builtin Local</em> y no se puede cambiar.</li>
@@ -137,7 +285,7 @@
     </section>
 
     <section>
-      <h2>8. Grupos anidados</h2>
+      <h2>7. Grupos anidados</h2>
       <ul>
         <li>Un usuario hereda lo que tiene el grupo que contiene a su grupo, aunque no se lo hayan dado directamente.</li>
         <li><strong class="highlight">Riesgo:</strong> esto puede dar privilegios que nadie previó, difíciles de ver sin revisar toda la cadena (ver 02.8).</li>
@@ -146,7 +294,7 @@
     </section>
 
     <section>
-      <h2>9. Atributos importantes</h2>
+      <h2>8. Atributos importantes</h2>
       <dl class="term-list">
         <div>
           <dt><code>cn</code></dt>
@@ -172,7 +320,7 @@
     </section>
 
     <section>
-      <h2>10. Para no confundirse</h2>
+      <h2>9. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un grupo de distribución sirve para dar permisos</span>: no. No se puede usar en una DACL.</li>
         <li><span class="error-mark">Un grupo domain local solo tiene miembros de su domain</span>: no. Puede tener cuentas y grupos globales de cualquier domain, o de uno en trust.</li>
