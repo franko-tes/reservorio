@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Usuarios y grupos en los logs</title>
+<meta name="description" content="Los eventos de seguridad de cuentas y grupos en Active Directory: qué subcategorías de auditoría hacen falta, los eventos de cuentas de usuario y de equipo, los de grupos según su ámbito, cómo leer un 4732, el 4672 y qué conviene mirar.">
+<meta name="keywords" content="active directory, logs, eventos de seguridad, auditoría, 4720, 4724, 4728, 4732, 4756, 4741, 4672, Subject, Logon ID, membresía de grupos">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Usuarios y grupos en los logs">
+<meta property="og:description" content="Qué eventos dejan las cuentas y los grupos en el log de Seguridad, cómo leerlos y cuáles conviene mirar.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Usuarios y grupos en los logs",
+  "description": "Qué eventos dejan las cuentas y los grupos en el log de Seguridad, cómo leerlos y cuáles conviene mirar.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Cuentas y accesos"
+  },
+  "position": 5
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Usuarios y grupos en los logs</h1>
+      <p class="ficha__subtitle">Cuentas y accesos</p>
+    </header>
+
+    <section>
+      <h2>1. De qué trata</h2>
+      <p>Cada vez que se crea una cuenta, se cambia una password o alguien entra a un grupo privilegiado, Windows puede dejar un evento en el log de Seguridad. Estos eventos son la huella de todo lo que vimos en 04.1 a 04.4.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Casi todos estos eventos responden dos preguntas. La primera es quién lo hizo (campo Subject). La segunda, sobre quién o qué (la cuenta nueva, el miembro agregado o el grupo). Confundir las dos es el error más común al leerlos.</p>
+    </section>
+
+    <section>
+      <h2>2. Qué tiene que estar activado</h2>
+      <p>Los eventos solo existen si está habilitada la auditoría de su subcategoría:</p>
+      <dl class="term-list">
+        <div>
+          <dt>Audit User Account Management</dt>
+          <dd>Eventos de cuentas de usuario (4720, 4722, 4725…).</dd>
+        </div>
+        <div>
+          <dt>Audit Computer Account Management</dt>
+          <dd>Eventos de cuentas de equipo (4741, 4742, 4743).</dd>
+        </div>
+        <div>
+          <dt>Audit Security Group Management</dt>
+          <dd>Eventos de grupos (4728, 4732, 4756…).</dd>
+        </div>
+        <div>
+          <dt>Audit Special Logon</dt>
+          <dd>Evento 4672.</dd>
+        </div>
+        <div>
+          <dt>Audit Sensitive Privilege Use</dt>
+          <dd>Eventos 4673 y 4674.</dd>
+        </div>
+      </dl>
+      <ul>
+        <li><strong class="highlight">Relevante:</strong> el evento se genera en el equipo donde ocurre el cambio. Los de cuentas y grupos del domain se generan en el DC que procesó el cambio; para verlos todos hay que revisar los logs de cada DC. Los de cuentas y grupos locales, en el propio equipo.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Eventos de cuentas de usuario</h2>
+
+      <h3>3.1. Ciclo de vida</h3>
+      <dl class="term-list">
+        <div>
+          <dt>4720</dt>
+          <dd>Se creó una cuenta de usuario. Se genera cada vez que se crea un objeto usuario, en DC, servidores y estaciones.</dd>
+        </div>
+        <div>
+          <dt>4722</dt>
+          <dd>Se habilitó una cuenta.</dd>
+        </div>
+        <div>
+          <dt>4725</dt>
+          <dd>Se deshabilitó una cuenta.</dd>
+        </div>
+        <div>
+          <dt>4726</dt>
+          <dd>Se eliminó una cuenta.</dd>
+        </div>
+        <div>
+          <dt>4738</dt>
+          <dd>Se modificó una cuenta.</dd>
+        </div>
+        <div>
+          <dt>4781</dt>
+          <dd>Se cambió el nombre de una cuenta.</dd>
+        </div>
+      </dl>
+
+      <h3>3.2. Passwords y bloqueos</h3>
+      <dl class="term-list">
+        <div>
+          <dt>4723</dt>
+          <dd>Un usuario intentó cambiar su propia password.</dd>
+        </div>
+        <div>
+          <dt>4724</dt>
+          <dd>Una cuenta intentó restablecer la password de otra cuenta.</dd>
+        </div>
+        <div>
+          <dt>4740</dt>
+          <dd>Se bloqueó una cuenta.</dd>
+        </div>
+        <div>
+          <dt>4767</dt>
+          <dd>Se desbloqueó una cuenta.</dd>
+        </div>
+      </dl>
+      <ul>
+        <li><strong class="highlight">Relevante:</strong> cambiar y restablecer no son lo mismo. El cambio lo hace el dueño de la cuenta; el restablecimiento lo hace otra cuenta con permisos.</li>
+      </ul>
+
+      <h3>3.3. Cambios que merecen atención</h3>
+      <ul>
+        <li>4765: se agregó SID History a una cuenta. 4766: el intento falló (ver 02.5).</li>
+        <li>4780: se estableció una ACL en cuentas que son miembros de grupos de administradores (ver 02.5).</li>
+        <li><strong class="highlight">Riesgo:</strong> la creación de una cuenta nueva (4720) fuera de un proceso de alta conocido es una señal para revisar. Microsoft sugiere mirar las cuentas creadas con valores atípicos: grupo primario distinto de 513 (Domain Users, ver 02.2), SID History cargado o delegación de Kerberos configurada.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Eventos de cuentas de equipo</h2>
+      <dl class="term-list">
+        <div>
+          <dt>4741</dt>
+          <dd>Se creó una cuenta de equipo.</dd>
+        </div>
+        <div>
+          <dt>4742</dt>
+          <dd>Se cambió una cuenta de equipo.</dd>
+        </div>
+        <div>
+          <dt>4743</dt>
+          <dd>Se eliminó una cuenta de equipo.</dd>
+        </div>
+      </dl>
+      <ul>
+        <li><strong class="highlight">Relevante:</strong> el 4741 se genera solo en los DC. Estas cuentas son las de los equipos unidos al domain (ver 04.1).</li>
+        <li><strong class="highlight">Relevante:</strong> para cuentas de equipo, el 4722 también se genera solo en los DC.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Eventos de grupos</h2>
+      <p>Microsoft los separa según el ámbito del grupo (ver 04.2):</p>
+      <ul>
+        <li><strong>Grupos globales:</strong> 4727 (creación), 4737 (cambio), 4728 (miembro agregado), 4729 (miembro quitado), 4730 (eliminación).</li>
+        <li><strong>Grupos locales:</strong> 4731 (creación), 4735 (cambio), 4732 (miembro agregado), 4733 (miembro quitado), 4734 (eliminación).</li>
+        <li><strong>Grupos universales:</strong> 4754 (creación), 4755 (cambio), 4756 (miembro agregado), 4757 (miembro quitado), 4758 (eliminación).</li>
+        <li>4764: se cambió el tipo de un grupo.</li>
+        <li>Enumeración de membresía: 4798 (de un usuario) y 4799 (de un grupo local).</li>
+        <li><strong class="highlight">Relevante:</strong> los tres eventos clave son los de miembro agregado: 4728 (global), 4732 (local) y 4756 (universal). El que se genera depende del ámbito del grupo.</li>
+        <li>Los grupos integrados del contenedor Builtin (como <code>Administrators</code>) usan los eventos de grupos locales (ver 04.2 y 04.4).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Cómo leer un evento de membresía</h2>
+      <p>Tomamos el 4732 como modelo. Tiene tres bloques:</p>
+      <ul>
+        <li><strong>Subject:</strong> la cuenta que hizo la operación. Trae su SID, nombre, domain y Logon ID.</li>
+        <li><strong>Member:</strong> la cuenta que se agregó al grupo. Su Account Name es un DN, como este:
+          <pre class="code-block" tabindex="0"><code>CN=bjones,CN=Users,DC=techcorp,DC=local</code></pre>
+        </li>
+        <li>En grupos locales, el Account Name del miembro suele venir con <code>-</code>, incluso si el miembro es una cuenta del domain. Aun así, el Security ID del miembro identifica a la cuenta agregada.</li>
+        <li><strong>Group:</strong> el grupo al que se agregó. Para grupos integrados, el Group Domain es <code>Builtin</code>.</li>
+        <li>Por cada miembro agregado se genera un evento aparte.</li>
+        <li>Es normal ver antes un 4735 (grupo modificado) sin cambios.</li>
+        <li><strong class="highlight">Relevante:</strong> el Logon ID (no es el Logon GUID de la 03.3) sirve para correlacionar con el 4624 del mismo inicio de sesión y saber desde dónde y cómo entró quien hizo el cambio (ver 03.3).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Privilegios en los logs</h2>
+      <ul>
+        <li>4672: se asignaron privilegios especiales a un nuevo inicio de sesión. Se genera cuando el inicio de sesión recibe alguno de los privilegios sensibles (ver 04.3), por ejemplo <code>SeDebugPrivilege</code>, <code>SeBackupPrivilege</code>, <code>SeRestorePrivilege</code>, <code>SeImpersonatePrivilege</code>, <code>SeLoadDriverPrivilege</code> o <code>SeTakeOwnershipPrivilege</code>.</li>
+        <li><strong class="highlight">Relevante:</strong> se ven muchos 4672 porque cada inicio de sesión de SYSTEM lo genera.</li>
+        <li>Microsoft recomienda mirar los 4672 donde el Subject no sea LOCAL SYSTEM, NETWORK SERVICE ni LOCAL SERVICE y no sea una cuenta de administración que se espera que tenga esos privilegios.</li>
+        <li>Si hay un privilegio que casi nadie debería tener (por ejemplo <code>SeDebugPrivilege</code>), se puede buscar ese privilegio en el campo Privileges.</li>
+        <li>4673: se llamó a un servicio privilegiado. 4674: se intentó una operación sobre un objeto privilegiado. Pertenecen a la subcategoría Audit Sensitive Privilege Use.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. Qué conviene mirar</h2>
+      <dl class="term-list">
+        <div>
+          <dt>Altas en grupos privilegiados</dt>
+          <dd><strong class="highlight">Riesgo:</strong> un miembro nuevo en un grupo privilegiado (ver 04.4), sobre todo fuera de horario o agregado por una cuenta que no es de administración. El evento depende del ámbito: <code>Domain Admins</code> genera 4728 (global), <code>Enterprise Admins</code> genera 4756 (universal), y <code>Backup Operators</code> y <code>Print Operators</code> generan 4732 (Builtin, local).</dd>
+        </div>
+        <div>
+          <dt>Lista de grupos críticos</dt>
+          <dd><strong class="highlight">Relevante:</strong> Microsoft sugiere definir una lista de grupos críticos y monitorear cada alta de miembros con el nombre del grupo.</dd>
+        </div>
+        <div>
+          <dt>Cuentas que no deberían usarse</dt>
+          <dd><strong class="highlight">Relevante:</strong> también conviene vigilar cuentas que no deberían usarse (deshabilitadas, invitado) y revisar el Subject contra una lista de cuentas autorizadas.</dd>
+        </div>
+        <div>
+          <dt>Cuenta nueva con privilegios</dt>
+          <dd><strong class="highlight">Relevante:</strong> un 4720 seguido de un 4728 o 4732 sobre un grupo privilegiado, con el mismo Logon ID en el Subject, cuenta una historia: alguien creó una cuenta y le dio privilegios.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>9. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">El Subject es la cuenta que cambió</span>: no. El Subject es quien hizo la operación. La cuenta afectada está en New Account, Target Account o Member, según el evento.</li>
+        <li><span class="error-mark">Un 4672 significa que alguien abusó de un privilegio</span>: no. Solo indica que el inicio de sesión recibió privilegios sensibles. Los de SYSTEM son habituales.</li>
+        <li><span class="error-mark">4723 y 4724 son lo mismo</span>: no. El primero es un usuario cambiando su password; el segundo, una cuenta restableciendo la de otra.</li>
+        <li><span class="error-mark">4732 aparece cuando se agrega alguien a Domain Admins</span>: no. <code>Domain Admins</code> es global, así que genera 4728.</li>
+        <li><span class="error-mark">Basta con tener el log activado</span>: no. Cada evento depende de que su subcategoría de auditoría esté habilitada.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>logs</li>
+      <li>eventos de seguridad</li>
+      <li>4720</li>
+      <li>4728</li>
+      <li>4732</li>
+      <li>4756</li>
+      <li>4672</li>
+      <li>auditoría</li>
+      <li>membresía de grupos</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="04.4-ad-grupos-privilegiados.html">← 04.4 - Grupos integrados con privilegios</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
