@@ -115,12 +115,24 @@
 
     <section>
       <h2>5. Qué conviene revisar</h2>
-      <ul>
-        <li><strong class="highlight">Relevante:</strong> los grupos de las secciones 2 y 3 deberían tener pocos miembros y justificados. Que <code>Account Operators</code>, <code>Backup Operators</code>, <code>Print Operators</code> o <code>Server Operators</code> tengan miembros es una señal para mirar.</li>
-        <li><strong class="highlight">Relevante:</strong> estos grupos están protegidos por AdminSDHolder, y dsHeuristics puede excluir a los de operadores (ver 02.5).</li>
-        <li><strong class="highlight">Riesgo:</strong> una cuenta de servicio o de un usuario común en uno de estos grupos tiene derechos de administración sobre los DC sin ser Domain Admin.</li>
-        <li><strong class="highlight">Relevante:</strong> la membresía puede ser indirecta (grupos anidados, ver 04.2). Hay que revisar la cadena, no solo los miembros directos.</li>
-      </ul>
+      <dl class="term-list">
+        <div>
+          <dt>Pocos miembros y justificados</dt>
+          <dd><strong class="highlight">Relevante:</strong> los grupos de las secciones 2 y 3 deberían tener pocos miembros y justificados. Que <code>Account Operators</code>, <code>Backup Operators</code>, <code>Print Operators</code> o <code>Server Operators</code> tengan miembros es una señal para mirar.</dd>
+        </div>
+        <div>
+          <dt>Protección por AdminSDHolder</dt>
+          <dd><strong class="highlight">Relevante:</strong> estos grupos están protegidos por AdminSDHolder, y dsHeuristics puede excluir a los de operadores (ver 02.5).</dd>
+        </div>
+        <div>
+          <dt>Cuentas que no deberían estar</dt>
+          <dd><strong class="highlight">Riesgo:</strong> una cuenta de servicio o de un usuario común en uno de estos grupos tiene derechos de administración sobre los DC sin ser Domain Admin.</dd>
+        </div>
+        <div>
+          <dt>Membresía indirecta</dt>
+          <dd><strong class="highlight">Relevante:</strong> la membresía puede ser indirecta (grupos anidados, ver 04.2). Hay que revisar la cadena, no solo los miembros directos.</dd>
+        </div>
+      </dl>
     </section>
 
     <section>
