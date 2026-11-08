@@ -161,12 +161,24 @@
 
     <section>
       <h2>6. Riesgos</h2>
-      <ul>
-        <li><strong class="highlight">Riesgo:</strong> los trusts armados por comodidad rara vez se revisan después.</li>
-        <li><strong class="highlight">Riesgo:</strong> las fusiones y adquisiciones pueden dejar trusts bidireccionales con la empresa adquirida, y con eso se incorpora su nivel de seguridad al domain principal sin que nadie lo note.</li>
-        <li><strong class="highlight">Riesgo:</strong> es posible hacer Kerberoasting contra un domain externo y terminar con una cuenta que tiene permisos administrativos en el domain principal.</li>
-        <li>SID filtering es la defensa contra el abuso de sIDHistory entre domains (ver 02.5).</li>
-      </ul>
+      <dl class="term-list">
+        <div>
+          <dt>Trusts sin revisar</dt>
+          <dd><strong class="highlight">Riesgo:</strong> los trusts armados por comodidad rara vez se revisan después.</dd>
+        </div>
+        <div>
+          <dt>Fusiones y adquisiciones</dt>
+          <dd><strong class="highlight">Riesgo:</strong> las fusiones y adquisiciones pueden dejar trusts bidireccionales con la empresa adquirida, y con eso se incorpora su nivel de seguridad al domain principal sin que nadie lo note.</dd>
+        </div>
+        <div>
+          <dt>Kerberoasting entre domains</dt>
+          <dd><strong class="highlight">Riesgo:</strong> es posible hacer Kerberoasting contra un domain externo y terminar con una cuenta que tiene permisos administrativos en el domain principal.</dd>
+        </div>
+        <div>
+          <dt>SID filtering</dt>
+          <dd><strong class="highlight">Relevante:</strong> SID filtering es la defensa contra el abuso de sIDHistory entre domains (ver 02.5).</dd>
+        </div>
+      </dl>
     </section>
 
     <section>
