@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Derechos y privilegios</title>
+<meta name="description" content="Derechos y privilegios en Windows y Active Directory: la diferencia entre permisos, privilegios y derechos de inicio de sesión, el token de acceso, UAC, dónde se asignan y qué privilegios importan para la seguridad.">
+<meta name="keywords" content="active directory, privilegios, derechos de inicio de sesión, token de acceso, UAC, User Rights Assignment, whoami /priv, SeDebugPrivilege, SeBackupPrivilege, SeImpersonatePrivilege, SeLoadDriverPrivilege, SeTakeOwnershipPrivilege">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Derechos y privilegios">
+<meta property="og:description" content="Permisos, privilegios y derechos de inicio de sesión: en qué se diferencian, cómo llegan al token y cuáles importan para la seguridad.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Derechos y privilegios",
+  "description": "Permisos, privilegios y derechos de inicio de sesión: en qué se diferencian, cómo llegan al token y cuáles importan para la seguridad.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Cuentas y accesos"
+  },
+  "position": 3
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Derechos y privilegios</h1>
+      <p class="ficha__subtitle">Cuentas y accesos</p>
+    </header>
+
+    <section>
+      <h2>1. De qué trata</h2>
+      <p>Una cuenta puede hacer dos cosas distintas con un equipo: acceder a objetos (archivos, carpetas, claves) y realizar operaciones del sistema (hacer un backup, depurar un proceso, cargar un driver). Lo primero lo controlan los permisos (DACL, ver 02.4). Lo segundo, los privilegios. Aparte hay un tercer grupo, los derechos de inicio de sesión, que dicen cómo puede entrar una cuenta a un equipo.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Un permiso responde “¿qué puede hacer esta cuenta con este objeto?”. Un privilegio responde “¿qué operación del sistema puede hacer esta cuenta?”. Un derecho de inicio de sesión responde “¿cómo puede entrar a este equipo?”.</p>
+    </section>
+
+    <section>
+      <h2>2. El token de acceso</h2>
+      <ul>
+        <li>Al iniciar sesión, el sistema crea un token de acceso con el SID del usuario, los SID de sus grupos y la lista de privilegios que tiene.</li>
+        <li>Cada proceso que se ejecuta en nombre del usuario tiene una copia del token.</li>
+        <li>Los privilegios que figuran en el token están, en su mayoría, deshabilitados por defecto. Que figuren no significa que estén en uso.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Privilegios</h2>
+      <ul>
+        <li>Permiten realizar operaciones del sistema, no acceder a un objeto concreto.</li>
+        <li>Son locales: cada equipo los guarda en su base de cuentas y, al iniciar sesión, se copian al token (ver 2).</li>
+        <li>Un administrador los asigna a cuentas o a grupos.</li>
+        <li>Ejemplos: <code>SeBackupPrivilege</code>, <code>SeDebugPrivilege</code>, <code>SeImpersonatePrivilege</code>, <code>SeLoadDriverPrivilege</code>, <code>SeTakeOwnershipPrivilege</code>. Otros son comunes, como <code>SeChangeNotifyPrivilege</code>, que tienen todas las cuentas.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Derechos de inicio de sesión</h2>
+      <p>No son privilegios: controlan cómo puede entrar una cuenta. Estos derechos se corresponden con algunos Logon Types de los eventos 4624 y 4625 (ver 03.3).</p>
+      <dl class="term-list">
+        <div>
+          <dt><code>SeInteractiveLogonRight</code></dt>
+          <dd>Allow log on locally. Inicio de sesión en la consola del equipo.</dd>
+        </div>
+        <div>
+          <dt><code>SeNetworkLogonRight</code></dt>
+          <dd>Access this computer from the network. Inicio de sesión desde la red.</dd>
+        </div>
+        <div>
+          <dt><code>SeRemoteInteractiveLogonRight</code></dt>
+          <dd>Allow log on through Remote Desktop Services. Inicio de sesión por escritorio remoto.</dd>
+        </div>
+      </dl>
+      <ul>
+        <li>Cada uno tiene su versión de denegación, <code>SeDeny…LogonRight</code>: Deny log on locally, Deny access to this computer from the network y Deny log on through Remote Desktop Services.</li>
+        <li>Los derechos <code>SeDeny…</code> prevalecen: negar un tipo de inicio de sesión anula lo que la cuenta tenga por pertenecer a un grupo.</li>
+        <li>Quién puede iniciar sesión en los DC por defecto se explica en 04.1.</li>
+        <li><strong class="highlight">Riesgo:</strong> una cuenta con <code>SeRemoteInteractiveLogonRight</code> puede conectarse por escritorio remoto. Si es una cuenta comprometida, tiene una forma cómoda de entrar al equipo.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Dónde se asignan</h2>
+      <ul>
+        <li>En el editor de GPO: Computer Configuration → Windows Settings → Security Settings → Local Policies → User Rights Assignment.</li>
+        <li>Ahí se ven los nombres de las políticas (por ejemplo, Debug programs), no las constantes.</li>
+        <li>Como son locales, se aplican equipo por equipo. Una GPO puede asignarlos a muchos equipos a la vez.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. UAC y el token</h2>
+      <ul>
+        <li>Con UAC, un administrador tiene dos tokens: uno estándar, al que se le quitaron los privilegios y los SID de administrador, y otro de administrador.</li>
+        <li><code>explorer.exe</code> y lo que se lanza desde ahí usan el token estándar. El token de administrador se usa recién cuando se eleva (el aviso de UAC).</li>
+        <li><strong class="highlight">Relevante:</strong> lo que ve una cuenta con <code>whoami /priv</code> depende del token del proceso desde el que se ejecuta.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Ver los privilegios de una cuenta</h2>
+      <ul>
+        <li><code>whoami /priv</code> lista los privilegios del token del proceso y su estado (Enabled o Disabled).</li>
+        <li>Que aparezca un privilegio deshabilitado no significa que no se pueda usar: el proceso puede habilitarlo.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. Privilegios que importan para la seguridad</h2>
+
+      <h3>8.1. <code>SeDebugPrivilege</code></h3>
+      <ul>
+        <li>Política: Debug programs. Permite acceder a la memoria de cualquier proceso, sin importar su DACL.</li>
+        <li>Por defecto, Administrators.</li>
+        <li><strong class="highlight">Riesgo:</strong> herramientas como Mimikatz lo aprovechan para leer credenciales en memoria.</li>
+      </ul>
+
+      <h3>8.2. <code>SeBackupPrivilege</code></h3>
+      <ul>
+        <li>Política: Back up files and directories. Permite leer cualquier archivo sin importar su ACL.</li>
+        <li><strong class="highlight">Riesgo:</strong> permite leer archivos sensibles del sistema, como los subárboles del registro. En un DC permitiría copiar <code>NTDS.dit</code>. Eso requiere acceso al propio DC y no es lo mismo que DCSync (ver 03.6).</li>
+      </ul>
+
+      <h3>8.3. <code>SeImpersonatePrivilege</code></h3>
+      <ul>
+        <li>Política: Impersonate a client after authentication. Permite a un programa actuar con la identidad de otra cuenta.</li>
+        <li>Por defecto: Administrators, Local Service, Network Service y Service.</li>
+        <li><strong class="highlight">Riesgo:</strong> quien lo tiene puede engañar a un cliente para que se conecte a un servicio propio y suplantarlo. Por eso las cuentas de servicio comprometidas son tan interesantes para un atacante. Herramientas como PrintSpoofer lo aprovechan.</li>
+      </ul>
+
+      <h3>8.4. <code>SeLoadDriverPrivilege</code></h3>
+      <ul>
+        <li>Política: Load and unload device drivers. Permite cargar y descargar drivers.</li>
+        <li>Por defecto, en un DC lo tienen Administrators y Print Operators.</li>
+        <li><strong class="highlight">Riesgo:</strong> los drivers corren con muchos privilegios. Quien lo tenga podría instalar malware que se hace pasar por driver.</li>
+      </ul>
+
+      <h3>8.5. <code>SeTakeOwnershipPrivilege</code></h3>
+      <ul>
+        <li>Política: Take ownership of files or other objects. Permite tomar posesión de cualquier objeto, sin importar sus permisos.</li>
+        <li>Por defecto, Administrators.</li>
+        <li><strong class="highlight">Riesgo:</strong> el owner puede reescribir la DACL (ver 02.4).</li>
+      </ul>
+
+      <h3>8.6. Asignación por GPO</h3>
+      <ul>
+        <li><strong class="highlight">Riesgo:</strong> quien puede asignar derechos por GPO puede dárselos a una cuenta propia en muchos equipos. SharpGPOAbuse automatiza esa idea.</li>
+        <li><strong class="highlight">Relevante:</strong> Microsoft recomienda quitar estos derechos a las cuentas que no los necesiten.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>9. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Un privilegio es lo mismo que un permiso</span>: no. El permiso es sobre un objeto; el privilegio, sobre una operación del sistema.</li>
+        <li><span class="error-mark">Un derecho de inicio de sesión es un privilegio</span>: no. Controla cómo se entra, no qué se hace.</li>
+        <li><span class="error-mark">Si un privilegio está Disabled, no se puede usar</span>: no. El proceso puede habilitarlo.</li>
+        <li><span class="error-mark">Un privilegio de una cuenta del domain vale en todos los equipos al mismo tiempo</span>: no. Se aplica equipo por equipo, y una GPO puede asignarlo a muchos a la vez.</li>
+        <li><span class="error-mark">Un administrador con UAC siempre tiene sus privilegios completos</span>: no. El token estándar los quita hasta que se eleva.</li>
+        <li><span class="error-mark">Un derecho de inicio de sesión que da un grupo siempre vale</span>: no. Un derecho <code>SeDeny…</code> lo anula.</li>
+        <li><span class="error-mark"><code>SeBackupPrivilege</code> sirve para saltar cualquier control</span>: no. Da lectura sin importar la ACL, pero sigue haciendo falta acceso al equipo.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>privilegios</li>
+      <li>derechos de inicio de sesión</li>
+      <li>token de acceso</li>
+      <li>UAC</li>
+      <li>User Rights Assignment</li>
+      <li>SeDebugPrivilege</li>
+      <li>SeBackupPrivilege</li>
+      <li>SeImpersonatePrivilege</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="04.2-ad-grupos.html">← 04.2 - Grupos</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
