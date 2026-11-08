@@ -46,7 +46,21 @@
 
     <section>
       <h2>1. De qué trata</h2>
-      <p>Una cuenta puede hacer dos cosas distintas con un equipo: acceder a objetos (archivos, carpetas, claves) y realizar operaciones del sistema (hacer un backup, depurar un proceso, cargar un driver). Lo primero lo controlan los permisos (DACL, ver 02.4). Lo segundo, los privilegios. Aparte hay un tercer grupo, los derechos de inicio de sesión, que dicen cómo puede entrar una cuenta a un equipo.</p>
+      <p>En un equipo, lo que puede hacer una cuenta lo controlan tres cosas distintas:</p>
+      <dl class="term-list">
+        <div>
+          <dt>Permisos</dt>
+          <dd>Qué puede hacer la cuenta con un objeto concreto, como un archivo, una carpeta o una clave del registro: leerlo, modificarlo o borrarlo, no solo si puede acceder. Están en la DACL del objeto (ver 02.4).</dd>
+        </div>
+        <div>
+          <dt>Privilegios</dt>
+          <dd>Qué operaciones del sistema puede hacer en el equipo, como hacer un backup, depurar un proceso o cargar un driver.</dd>
+        </div>
+        <div>
+          <dt>Derechos de inicio de sesión</dt>
+          <dd>Cómo puede entrar al equipo: en la consola, por la red o por escritorio remoto.</dd>
+        </div>
+      </dl>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>Un permiso responde “¿qué puede hacer esta cuenta con este objeto?”. Un privilegio responde “¿qué operación del sistema puede hacer esta cuenta?”. Un derecho de inicio de sesión responde “¿cómo puede entrar a este equipo?”.</p>
     </section>
@@ -75,16 +89,16 @@
       <p>No son privilegios: controlan cómo puede entrar una cuenta. Estos derechos se corresponden con algunos Logon Types de los eventos 4624 y 4625 (ver 03.3).</p>
       <dl class="term-list">
         <div>
-          <dt><code>SeInteractiveLogonRight</code></dt>
-          <dd>Allow log on locally. Inicio de sesión en la consola del equipo.</dd>
+          <dt>Allow log on locally</dt>
+          <dd><code>SeInteractiveLogonRight</code>. Inicio de sesión en la consola del equipo.</dd>
         </div>
         <div>
-          <dt><code>SeNetworkLogonRight</code></dt>
-          <dd>Access this computer from the network. Inicio de sesión desde la red.</dd>
+          <dt>Access this computer from the network</dt>
+          <dd><code>SeNetworkLogonRight</code>. Inicio de sesión desde la red.</dd>
         </div>
         <div>
-          <dt><code>SeRemoteInteractiveLogonRight</code></dt>
-          <dd>Allow log on through Remote Desktop Services. Inicio de sesión por escritorio remoto.</dd>
+          <dt>Allow log on through Remote Desktop Services</dt>
+          <dd><code>SeRemoteInteractiveLogonRight</code>. Inicio de sesión por escritorio remoto.</dd>
         </div>
       </dl>
       <ul>
