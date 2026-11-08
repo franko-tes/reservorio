@@ -177,12 +177,24 @@
       <p>Escenario típico: un acceso a un share con NTLM deja un 4776 en el DC y un 4624 tipo 3 en el servidor, con Package Name <code>NTLM V2</code>.</p>
 
       <h3>6.3. Señales</h3>
-      <ul>
-        <li><strong class="highlight">Riesgo:</strong> ráfagas de 4776 con <code>0xC000006A</code> (posible fuerza bruta) o con <code>0xC0000064</code> (posible enumeración de cuentas).</li>
-        <li><strong class="highlight">Riesgo:</strong> Package Name <code>NTLM V1</code> o <code>LM</code> en un 4624.</li>
-        <li><strong class="highlight">Riesgo:</strong> NTLM para cuentas o sistemas que no deberían usarlo.</li>
-        <li><strong class="highlight">Relevante:</strong> el 4776 no registra el destino. Para saber a qué equipo se accedió, hay que mirar el 4624.</li>
-      </ul>
+      <dl class="term-list">
+        <div>
+          <dt>Fuerza bruta o enumeración</dt>
+          <dd><strong class="highlight">Riesgo:</strong> ráfagas de 4776 con <code>0xC000006A</code> (posible fuerza bruta) o con <code>0xC0000064</code> (posible enumeración de cuentas).</dd>
+        </div>
+        <div>
+          <dt>NTLMv1 o LM</dt>
+          <dd><strong class="highlight">Riesgo:</strong> Package Name <code>NTLM V1</code> o <code>LM</code> en un 4624.</dd>
+        </div>
+        <div>
+          <dt>NTLM donde no debería usarse</dt>
+          <dd><strong class="highlight">Riesgo:</strong> NTLM para cuentas o sistemas que no deberían usarlo.</dd>
+        </div>
+        <div>
+          <dt>El 4776 no registra el destino</dt>
+          <dd><strong class="highlight">Relevante:</strong> el 4776 no registra el destino. Para saber a qué equipo se accedió, hay que mirar el 4624.</dd>
+        </div>
+      </dl>
     </section>
 
     <section>
