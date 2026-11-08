@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Grupos integrados con privilegios</title>
+<meta name="description" content="Grupos integrados con privilegios en Active Directory: Administrators, Domain Admins, Enterprise Admins, Schema Admins, los grupos de operadores, DnsAdmins, Group Policy Creator Owners, Remote Desktop Users, Event Log Readers y Protected Users, y qué conviene revisar.">
+<meta name="keywords" content="active directory, grupos integrados, Administrators, Domain Admins, Enterprise Admins, Schema Admins, Account Operators, Backup Operators, Print Operators, Server Operators, DnsAdmins, Group Policy Creator Owners, Remote Desktop Users, Protected Users">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Grupos integrados con privilegios">
+<meta property="og:description" content="Los grupos integrados que dan poder sobre los DC sin ser Domain Admin, qué derechos traen y qué conviene revisar.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Grupos integrados con privilegios",
+  "description": "Los grupos integrados que dan poder sobre los DC sin ser Domain Admin, qué derechos traen y qué conviene revisar.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Cuentas y accesos"
+  },
+  "position": 4
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Grupos integrados con privilegios</h1>
+      <p class="ficha__subtitle">Cuentas y accesos</p>
+    </header>
+
+    <section>
+      <h2>1. De qué trata</h2>
+      <p>En la 04.2 vimos que Active Directory trae grupos integrados. Acá vemos los que dan acceso fuerte a los DC, porque cada cuenta que se agrega a uno hereda sus derechos (ver 04.3).</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>No hace falta ser Domain Admin para tener mucho poder sobre un DC. Varios grupos “de operadores” dan derechos como hacer backup de cualquier archivo, cargar drivers o iniciar sesión en la consola. Microsoft indica que no es seguro delegar la administración de estos grupos a quien no sea administrador de servicio.</p>
+    </section>
+
+    <section>
+      <h2>2. Grupos de administración total</h2>
+      <ul>
+        <li><strong><code>Administrators</code>:</strong> acceso completo e irrestricto al equipo. En un DC, acceso irrestricto al domain. Entre sus derechos por defecto están <code>SeBackupPrivilege</code>, <code>SeRestorePrivilege</code>, <code>SeDebugPrivilege</code>, <code>SeTakeOwnershipPrivilege</code> y <code>SeLoadDriverPrivilege</code> (ver 04.3).</li>
+        <li><strong><code>Domain Admins</code>:</strong> autorizado para administrar el domain. Miembro por defecto: <code>Administrator</code>. Tiene los derechos de <code>Administrators</code> porque, por defecto, es miembro de <code>Administrators</code> en todos los equipos unidos al domain, incluidos los DC (ver 04.2).</li>
+        <li><strong><code>Enterprise Admins</code>:</strong> autorizado para hacer cambios en todo el forest, como agregar domains hijos. Miembro por defecto: la cuenta <code>Administrator</code> del domain raíz.</li>
+        <li><strong><code>Schema Admins</code>:</strong> puede modificar el schema de AD. Miembro por defecto: la cuenta <code>Administrator</code> del domain raíz.</li>
+        <li><code>Enterprise Admins</code> y <code>Schema Admins</code> existen solo en el domain raíz del forest (ver 04.2).</li>
+        <li><strong class="highlight">Relevante:</strong> Microsoft considera a estos cuatro grupos cuentas de administrador de servicio.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Grupos de operadores</h2>
+      <p>Los cuatro vienen sin miembros por defecto.</p>
+
+      <h3>3.1. Account Operators</h3>
+      <ul>
+        <li>Qué hace: crea y modifica la mayoría de las cuentas (usuarios, grupos locales y globales) e inicia sesión localmente en los DC. No puede modificar derechos de usuario ni administrar a <code>Administrator</code>, a cuentas de administradores ni a los grupos <code>Administrators</code>, <code>Server Operators</code>, <code>Account Operators</code>, <code>Backup Operators</code> y <code>Print Operators</code>.</li>
+        <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>).</li>
+        <li><strong class="highlight">Riesgo:</strong> puede crear y modificar cuentas y entrar a la consola de un DC.</li>
+      </ul>
+
+      <h3>3.2. Backup Operators</h3>
+      <ul>
+        <li>Qué hace: hace backup y restaura todos los archivos de un equipo sin importar los permisos que los protegen. También inicia sesión y apaga el equipo.</li>
+        <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>), Back up files and directories (<code>SeBackupPrivilege</code>) y Restore files and directories (<code>SeRestorePrivilege</code>). <code>SeRestorePrivilege</code> es el que permite restaurar, y por lo tanto escribir, archivos sin importar su ACL. También puede iniciar sesión como batch job y apagar el equipo.</li>
+        <li><strong class="highlight">Riesgo:</strong> no cambia la configuración del directorio, pero puede reemplazar archivos, incluidos los del sistema operativo, en los DC. Por eso Microsoft lo considera administrador de servicio.</li>
+      </ul>
+
+      <h3>3.3. Print Operators</h3>
+      <ul>
+        <li>Qué hace: administra las impresoras conectadas a los DC y los objetos de impresora de AD. Inicia sesión localmente en los DC y los apaga.</li>
+        <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>) y Load and unload device drivers (<code>SeLoadDriverPrivilege</code>). También puede apagar el equipo.</li>
+        <li><strong class="highlight">Riesgo:</strong> puede cargar drivers en todos los DC. Microsoft advierte que hay que agregar usuarios con cuidado (ver 04.3).</li>
+      </ul>
+
+      <h3>3.4. Server Operators</h3>
+      <ul>
+        <li>Qué hace: administra los DC. Existe solo en los DC. Inicia sesión en forma interactiva, crea y borra recursos compartidos, detiene e inicia servicios, hace backup y restaura archivos, formatea discos y apaga el equipo.</li>
+        <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>), Back up files and directories (<code>SeBackupPrivilege</code>) y Restore files and directories (<code>SeRestorePrivilege</code>). También puede cambiar la hora y la zona horaria y apagar el equipo, incluso de forma remota.</li>
+        <li><strong class="highlight">Riesgo:</strong> tiene los mismos derechos de backup y restore que Backup Operators, y además puede detener e iniciar servicios en los DC.</li>
+        <li><strong class="highlight">Relevante:</strong> Microsoft lo considera administrador de servicio porque sus miembros tienen acceso físico a los DC.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Otros grupos que conviene conocer</h2>
+      <ul>
+        <li><strong><code>DnsAdmins</code>:</strong> acceso a la información DNS de la red. Por defecto recibe permisos de lectura, escritura, creación y borrado de objetos hijos y permisos especiales. Existe solo si el rol DNS está o estuvo instalado en un DC del domain. Sin miembros ni derechos por defecto.</li>
+        <li><strong><code>Group Policy Creator Owners</code>:</strong> puede crear, editar y borrar GPO del domain. Único miembro por defecto: <code>Administrator</code>.
+          <ul>
+            <li><strong class="highlight">Riesgo:</strong> una GPO puede asignar derechos y configuraciones a muchos equipos a la vez (ver 04.3).</li>
+          </ul>
+        </li>
+        <li><strong><code>Remote Desktop Users</code>:</strong> da permiso para conectarse por escritorio remoto a un servidor RD Session Host. Sin miembros por defecto. Microsoft indica que en un DC solo los administradores deberían usar sesiones RDS, y solo en emergencias, y que el grupo debe quedar vacío.</li>
+        <li><strong><code>Event Log Readers</code>:</strong> puede leer los registros de eventos del equipo. Se crea cuando el servidor pasa a ser DC. Sin miembros ni derechos por defecto.</li>
+        <li><strong><code>Protected Users</code>:</strong> es protector, no de poder. Sus miembros no pueden autenticarse con NTLM, Digest ni CredSSP. Kerberos no usa DES ni RC4 en la preautenticación, y el TGT dura cuatro horas por defecto. La cuenta no se puede usar con la delegación de Kerberos (constrained o unconstrained). Solo se quita la protección sacando la cuenta del grupo.</li>
+        <li><strong class="highlight">Relevante:</strong> las protecciones de <code>Protected Users</code> aplican a equipos desde Windows 8.1 y Windows Server 2012 R2, y en domains con un DC primario con Windows Server 2012 R2 o posterior. Para lo de DES y RC4, el domain tiene que estar configurado para soportar al menos AES (ver 02.9).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Qué conviene revisar</h2>
+      <ul>
+        <li><strong class="highlight">Relevante:</strong> los grupos de las secciones 2 y 3 deberían tener pocos miembros y justificados. Que <code>Account Operators</code>, <code>Backup Operators</code>, <code>Print Operators</code> o <code>Server Operators</code> tengan miembros es una señal para mirar.</li>
+        <li><strong class="highlight">Relevante:</strong> estos grupos están protegidos por AdminSDHolder, y dsHeuristics puede excluir a los de operadores (ver 02.5).</li>
+        <li><strong class="highlight">Riesgo:</strong> una cuenta de servicio o de un usuario común en uno de estos grupos tiene derechos de administración sobre los DC sin ser Domain Admin.</li>
+        <li><strong class="highlight">Relevante:</strong> la membresía puede ser indirecta (grupos anidados, ver 04.2). Hay que revisar la cadena, no solo los miembros directos.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Solo Domain Admins puede dañar un DC</span>: no. Backup, Print y Server Operators también inician sesión en el DC con derechos que permiten leer o reemplazar archivos o cargar drivers.</li>
+        <li><span class="error-mark">Account Operators puede administrar cualquier cuenta</span>: no. No puede modificar a <code>Administrator</code>, a los administradores ni a ciertos grupos privilegiados.</li>
+        <li><span class="error-mark">Print Operators solo sirve para impresoras</span>: no. Tiene <code>SeLoadDriverPrivilege</code>.</li>
+        <li><span class="error-mark">Protected Users da más permisos</span>: no. Agrega protección, no poder.</li>
+        <li><span class="error-mark">Remote Desktop Users es un grupo de administración</span>: no. Da permiso de conexión remota y Microsoft recomienda dejarlo vacío en los DC.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>grupos integrados</li>
+      <li>Domain Admins</li>
+      <li>Backup Operators</li>
+      <li>Account Operators</li>
+      <li>Print Operators</li>
+      <li>Server Operators</li>
+      <li>DnsAdmins</li>
+      <li>Protected Users</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="04.3-ad-privilegios.html">← 04.3 - Derechos y privilegios</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
