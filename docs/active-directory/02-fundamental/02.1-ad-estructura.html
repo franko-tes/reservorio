@@ -103,7 +103,7 @@
           <h3>Attributes</h3>
         </div>
         <p>Características que definen a un objeto. Un equipo tiene, por ejemplo, hostname y DNS name; un usuario, nombre, apellido y mail.</p>
-        <p>Cada atributo tiene un <strong>nombre LDAP</strong>, y es ese el que se usa en las consultas, no el que se ve en la interfaz:</p>
+        <p>Cada atributo tiene un <strong>nombre LDAP</strong>, y <strong class="highlight">es ese el que se usa en las consultas, no el que se ve en la interfaz</strong>:</p>
         <dl class="term-list">
           <div>
             <dt><code>displayName</code></dt>
@@ -185,8 +185,8 @@
         </div>
         <p>Objeto que puede contener otros objetos y que ocupa un lugar en la jerarquía del directorio. El ejemplo típico es una OU.</p>
         <ul>
-          <li><strong class="highlight">Dos usos de la palabra.</strong> En sentido general, “container” es cualquier objeto que contiene otros. Pero también hay containers concretos que vienen por defecto en cada domain: <code>CN=Users</code>, <code>CN=Computers</code>, <code>CN=Builtin</code>, entre otros.</li>
-          <li>Esos containers por defecto <strong>no son OUs</strong>: no se les puede linkear una GPO.</li>
+          <li><strong>Dos usos de la palabra.</strong> En sentido general, “container” es cualquier objeto que contiene otros. Pero también hay containers concretos que vienen por defecto en cada domain: <code>CN=Users</code>, <code>CN=Computers</code>, <code>CN=Builtin</code>, entre otros.</li>
+          <li>Esos containers por defecto <strong class="highlight">no son OUs: no se les puede linkear una GPO</strong>.</li>
           <li>Un grupo también “contiene” objetos (sus miembros), pero lo hace por <strong>membresía</strong>, no por ubicación en el árbol.</li>
         </ul>
       </article>
