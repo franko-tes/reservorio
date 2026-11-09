@@ -79,7 +79,7 @@
           <dd>En el equipo donde se intentó el logon. Sesión rechazada. Subcategorías: <em>Audit Logon</em> y <em>Audit Account Lockout</em>.</dd>
         </div>
       </dl>
-      <p>Si la subcategoría no está activada, el evento no se genera.</p>
+      <p>Si la subcategoría no está activada, <strong class="highlight">el evento no se genera</strong>.</p>
     </section>
 
     <section>
@@ -95,7 +95,7 @@
         </div>
         <div>
           <dt>Mensajes 5 y 6 (AP)</dt>
-          <dd>Ningún evento de Kerberos en el DC, porque el KDC no participa. El rastro queda en el equipo o servidor al que se accede: un 4624 (o un 4625 si se rechaza).</dd>
+          <dd><strong class="highlight">Ningún evento de Kerberos en el DC</strong>, porque el KDC no participa. El rastro queda en el equipo o servidor al que se accede: un 4624 (o un 4625 si se rechaza).</dd>
         </div>
       </dl>
     </section>
@@ -141,7 +141,7 @@
           <dd>Se requiere preautenticación adicional.</dd>
         </div>
       </dl>
-      <p>El <code>0x18</code> no aparece acá: va en el 4771.</p>
+      <p>El <code>0x18</code> <strong class="highlight">no aparece acá: va en el 4771</strong>.</p>
     </section>
 
     <section>
@@ -156,7 +156,7 @@
           <dd>Password vencida.</dd>
         </div>
       </dl>
-      <p>No se genera para cuentas con “Do not require Kerberos preauthentication”.</p>
+      <p><strong class="highlight">No se genera</strong> para cuentas con “Do not require Kerberos preauthentication”.</p>
     </section>
 
     <section>
@@ -341,7 +341,7 @@
         </div>
         <div>
           <dt>Negotiate</dt>
-          <dd>Windows eligió entre Kerberos y NTLM, y el 4624 solo no siempre lo aclara. Si hay un 4768 o 4769 correspondiente en el DC, se usó Kerberos. Si no hay, no se puede asegurar, porque el ticket puede estar en caché.</dd>
+          <dd>Windows eligió entre Kerberos y NTLM, y el 4624 solo no siempre lo aclara. Si hay un 4768 o 4769 correspondiente en el DC, se usó Kerberos. <strong class="highlight">Si no hay, no se puede asegurar</strong>, porque el ticket puede estar en caché.</dd>
         </div>
       </dl>
     </section>

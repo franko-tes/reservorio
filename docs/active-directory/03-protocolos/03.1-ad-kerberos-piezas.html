@@ -69,7 +69,7 @@
         </div>
         <div>
           <dt>Servicio</dt>
-          <dd>Lo que el cliente quiere usar. Está asociado a una cuenta y a un SPN (ver 02.4). Un equipo del domain también es un servicio, con su propia cuenta de equipo.</dd>
+          <dd>Lo que el cliente quiere usar. Está asociado a una cuenta y a un SPN (ver 02.4). <strong class="highlight">Un equipo del domain también es un servicio</strong>, con su propia cuenta de equipo.</dd>
         </div>
       </dl>
     </section>
@@ -83,7 +83,7 @@
         </div>
         <div>
           <dt>Clave de <code>krbtgt</code></dt>
-          <dd>Se deriva de la password de la cuenta <code>krbtgt</code>. La conoce solo el KDC. Un RODC tiene la suya propia (ver 02.3).</dd>
+          <dd>Se deriva de la password de la cuenta <code>krbtgt</code>. <strong class="highlight">La conoce solo el KDC.</strong> Un RODC tiene la suya propia (ver 02.3).</dd>
         </div>
         <div>
           <dt>Clave del servicio</dt>
@@ -145,7 +145,7 @@
       <ul>
         <li><strong>Con un DC alcanzable:</strong> el inicio de sesión usa Kerberos. El equipo tiene que encontrar un DC por DNS y tener la hora sincronizada.</li>
         <li><strong>Sin DC alcanzable</strong> (por ejemplo, una notebook sin VPN): no se puede pedir el TGT. Windows permite entrar con las credenciales en caché (MSCache2).</li>
-        <li><strong>Sin Kerberos posible:</strong> por ejemplo, si se accede a un servicio por IP en vez de por nombre, o si el servicio no tiene SPN. En general se cae a NTLM.</li>
+        <li><strong>Sin Kerberos posible:</strong> por ejemplo, si se accede a un servicio <strong class="highlight">por IP en vez de por nombre</strong>, o si el servicio no tiene SPN. En general se cae a NTLM.</li>
       </ul>
     </section>
 

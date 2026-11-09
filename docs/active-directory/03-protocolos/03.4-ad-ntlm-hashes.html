@@ -62,7 +62,7 @@
       <h3>2.1. Hash NT</h3>
       <ul>
         <li>Es el resultado de aplicar el algoritmo MD4 a la password en UTF-16.</li>
-        <li>No usa salt: la misma password da el mismo hash en cualquier cuenta o equipo.</li>
+        <li>No usa salt: <strong class="highlight">la misma password da el mismo hash en cualquier cuenta o equipo</strong>.</li>
         <li>Con RC4, es la clave de Kerberos (ver 03.1).</li>
         <li><strong class="highlight">Riesgo:</strong> quien obtenga un hash NT puede autenticarse con NTLM sin conocer la password (<em>pass-the-hash</em>), porque la respuesta NTLM se calcula a partir del hash.</li>
       </ul>
@@ -100,7 +100,7 @@
         </div>
         <div>
           <dt>4. Validación</dt>
-          <dd>Si la cuenta es del domain, el servidor no puede verificarla solo, porque no tiene el hash. Envía el desafío y la respuesta al DC, que la comprueba con el hash guardado. Si la cuenta es local, se verifica contra la base local.</dd>
+          <dd>Si la cuenta es del domain, <strong class="highlight">el servidor no puede verificarla solo</strong>, porque no tiene el hash. Envía el desafío y la respuesta al DC, que la comprueba con el hash guardado. Si la cuenta es local, se verifica contra la base local.</dd>
         </div>
       </dl>
       <p>NTLM no usa tickets: cada autenticación repite el desafío y la respuesta. Y no tiene autenticación mutua: el servidor no prueba su identidad.</p>
@@ -157,7 +157,7 @@
           <dd><code>0x0</code> = éxito.</dd>
         </div>
       </dl>
-      <p>En el 4624 y el 4625, el campo Package Name indica <code>NTLM V1</code>, <code>NTLM V2</code> o <code>LM</code> (ver 03.3). Un 4624 con Negotiate más un 4776 correspondiente en el DC indican que se usó NTLM.</p>
+      <p>En el 4624 y el 4625, el campo Package Name indica <code>NTLM V1</code>, <code>NTLM V2</code> o <code>LM</code> (ver 03.3). <strong class="highlight">Un 4624 con Negotiate más un 4776 correspondiente en el DC indican que se usó NTLM.</strong></p>
 
       <h3>6.2. Códigos de interés del 4776</h3>
       <dl class="term-list">

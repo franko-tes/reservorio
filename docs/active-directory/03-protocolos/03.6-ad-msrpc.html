@@ -113,7 +113,7 @@
 
     <section>
       <h2>4. Autenticación</h2>
-      <p>Una llamada RPC se autentica, en general, con Kerberos o NTLM (ver 03.1 a 03.4). <code>netlogon</code> es la excepción: el equipo y el DC se autentican con la password de la cuenta del equipo, que conocen los dos. Que transporte validaciones NTLM no quiere decir que se autentique con NTLM.</p>
+      <p>Una llamada RPC se autentica, en general, con Kerberos o NTLM (ver 03.1 a 03.4). <code>netlogon</code> es la excepción: el equipo y el DC se autentican con la password de la cuenta del equipo, que conocen los dos. <span class="error-mark">Si transporta validaciones NTLM, se autentica con NTLM</span>: no.</p>
     </section>
 
     <section>
@@ -122,7 +122,7 @@
         <li>Un DC replica pidiendo los cambios a otro DC mediante <code>drsuapi</code>.</li>
         <li>Para pedir replicación hace falta tener sobre el domain los derechos <strong>Replicating Directory Changes</strong> y <strong>Replicating Directory Changes All</strong>. Este segundo permite obtener atributos sensibles, como los hashes de las passwords.</li>
         <li>Los DC de escritura tienen estos derechos. También los tienen algunas cuentas de servicio, como la que usa Microsoft Entra Connect para sincronizar passwords.</li>
-        <li><strong class="highlight">Riesgo:</strong> una cuenta que no es un DC pero tiene estos derechos puede pedir la replicación y obtener los hashes de cualquier cuenta. Esa técnica se llama DCSync.</li>
+        <li><strong class="highlight">Riesgo:</strong> una cuenta que no es un DC pero tiene estos derechos puede pedir la replicación y obtener los hashes de cualquier cuenta. Esa técnica se llama <strong class="highlight">DCSync</strong>.</li>
         <li>Si no se usa la sincronización de passwords, Microsoft recomienda quitarle estos permisos a la cuenta de Entra Connect.</li>
       </ul>
     </section>

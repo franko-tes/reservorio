@@ -103,7 +103,7 @@
       <dl class="term-list">
         <div>
           <dt>389</dt>
-          <dd>LDAP. Puede cifrarse con STARTTLS (<em>Start TLS</em>, iniciar TLS; TLS es <em>Transport Layer Security</em>): la conexión empieza sin cifrar y el cliente pide pasar a TLS dentro de la misma conexión.</dd>
+          <dd>LDAP. Puede cifrarse con STARTTLS (<em>Start TLS</em>, iniciar TLS; TLS es <em>Transport Layer Security</em>): <strong class="highlight">la conexión empieza sin cifrar</strong> y el cliente pide pasar a TLS dentro de la misma conexión.</dd>
         </div>
         <div>
           <dt>636</dt>
@@ -149,7 +149,7 @@
         </div>
         <div>
           <dt>Simple</dt>
-          <dd>El cliente envía usuario y password al DC en el propio mensaje, sin hash ni clave. Si la conexión no está cifrada, cualquiera que vea el tráfico puede leerlas. Con LDAPS, viajan dentro de un canal cifrado.</dd>
+          <dd>El cliente envía usuario y password al DC en el propio mensaje, sin hash ni clave. Si la conexión no está cifrada, <strong class="highlight">cualquiera que vea el tráfico puede leerlas</strong>. Con LDAPS, viajan dentro de un canal cifrado.</dd>
         </div>
         <div>
           <dt>SASL</dt>
@@ -167,7 +167,7 @@
         <li>Si el DC exige el firmado, rechaza los bind SASL que no piden firma y los bind simples por conexiones no cifradas.</li>
         <li><strong>Channel binding:</strong> liga la autenticación SASL a la sesión SSL/TLS. Importa sobre todo con NTLM, para evitar que la autenticación se reenvíe por otra sesión. No aplica al bind simple.</li>
         <li><strong>Opciones del channel binding:</strong> con “Never”, el DC no lo valida; con “When supported”, se lo exige a los clientes que lo soportan y sigue aceptando a los que no; con “Always”, rechaza a los clientes que no lo envían.</li>
-        <li><strong>Valores por defecto:</strong> el channel binding está en “Never” hasta Windows Server 2022, y el firmado es opcional hasta Windows Server 2019. En los despliegues nuevos de Windows Server 2025, el firmado se exige y el channel binding está en “When supported”. Las actualizaciones in situ mantienen la configuración que tenían.</li>
+        <li><strong>Valores por defecto:</strong> el channel binding está en “Never” hasta Windows Server 2022, y el firmado es opcional hasta Windows Server 2019. En los despliegues nuevos de Windows Server 2025, el firmado se exige y el channel binding está en “When supported”. <strong class="highlight">Las actualizaciones in situ mantienen la configuración que tenían.</strong></li>
       </ul>
     </section>
 

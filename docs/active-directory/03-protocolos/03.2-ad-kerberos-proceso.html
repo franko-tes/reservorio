@@ -167,7 +167,7 @@
           <dd>La conocen el cliente y el servicio (y el KDC, que la creó). Se usa entre cliente y servicio.</dd>
         </div>
       </dl>
-      <p>El cliente carga con dos tickets que no puede leer. Solo los transporta.</p>
+      <p>El cliente carga con dos tickets que no puede leer. <strong class="highlight">Solo los transporta.</strong></p>
     </section>
 
     <section>
@@ -180,7 +180,7 @@
 
     <section>
       <h2>8. La hora y los timestamps</h2>
-      <p>Los authenticators llevan timestamp y sirven también contra repeticiones: un mensaje copiado y reenviado lleva una hora vieja. Si la diferencia entre el reloj del cliente y el del DC supera la tolerancia, la autenticación falla. El valor por defecto es <strong>5 minutos</strong>. Por eso la hora de los equipos del domain se sincroniza con la jerarquía del domain, que parte del PDC Emulator (ver 02.3).</p>
+      <p>Los authenticators llevan timestamp y sirven también contra repeticiones: un mensaje copiado y reenviado lleva una hora vieja. Si la diferencia entre el reloj del cliente y el del DC supera la tolerancia, <strong class="highlight">la autenticación falla</strong>. El valor por defecto es <strong>5 minutos</strong>. Por eso la hora de los equipos del domain se sincroniza con la jerarquía del domain, que parte del PDC Emulator (ver 02.3).</p>
     </section>
 
     <section>
@@ -204,15 +204,21 @@
 
     <section>
       <h2>10. Los datos de autorización</h2>
-      <p>Los dos tickets llevan los datos de autorización del usuario, que el KDC copia del TGT al ticket de servicio. Con ellos el servicio sabe quién es el usuario y de qué grupos es miembro. Por eso un cambio de grupos se refleja recién cuando el usuario obtiene un TGT nuevo, por ejemplo al volver a iniciar sesión.</p>
+      <p>Los dos tickets llevan los datos de autorización del usuario, que el KDC copia del TGT al ticket de servicio. Con ellos el servicio sabe quién es el usuario y de qué grupos es miembro. Por eso <strong class="highlight">un cambio de grupos se refleja recién cuando el usuario obtiene un TGT nuevo</strong>, por ejemplo al volver a iniciar sesión.</p>
     </section>
 
     <section>
       <h2>11. Dónde encajan los ataques</h2>
-      <ul>
-        <li><strong class="highlight">Riesgo, Kerberoasting:</strong> se pide un ticket de servicio (mensaje 3) y el que llega en el mensaje 4 se intenta descifrar sin conexión, porque está cifrado con la clave de la cuenta del servicio (ver 02.4).</li>
-        <li><strong class="highlight">Riesgo, tickets falsificados:</strong> quien tenga la clave de <code>krbtgt</code> puede fabricar un TGT, y quien tenga la clave de un servicio, un ticket de servicio.</li>
-      </ul>
+      <dl class="term-list">
+        <div>
+          <dt>Kerberoasting</dt>
+          <dd><strong class="highlight">Riesgo:</strong> se pide un ticket de servicio (mensaje 3) y el que llega en el mensaje 4 se intenta descifrar sin conexión, porque está cifrado con la clave de la cuenta del servicio (ver 02.4).</dd>
+        </div>
+        <div>
+          <dt>Tickets falsificados</dt>
+          <dd><strong class="highlight">Riesgo:</strong> quien tenga la clave de <code>krbtgt</code> puede fabricar un TGT, y quien tenga la clave de un servicio, un ticket de servicio.</dd>
+        </div>
+      </dl>
     </section>
 
     <section>

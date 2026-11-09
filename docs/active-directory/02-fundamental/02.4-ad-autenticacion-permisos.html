@@ -115,7 +115,7 @@
             <dd>El usuario le entrega el ticket al servidor. Solo <code>svc_sql</code> puede abrirlo, y así el servicio sabe que el ticket es legítimo.</dd>
           </div>
         </dl>
-        <p><strong class="highlight">Riesgo, Kerberoasting:</strong> cualquier usuario autenticado del domain puede pedir un ticket para cualquier SPN, aunque no tenga permiso de usar ese servicio. Un atacante pide tickets de cuentas con SPN y crackea sus passwords offline: si la password de la cuenta de servicio es débil, la obtiene. Los objetivos reales son las cuentas de servicio con password elegida por una persona; las cuentas de equipo tienen passwords largas y aleatorias.</p>
+        <p><strong class="highlight">Riesgo:</strong> cualquier usuario autenticado del domain puede pedir un ticket para cualquier SPN, aunque no tenga permiso de usar ese servicio. Un atacante pide tickets de cuentas con SPN y crackea sus passwords offline: si la password de la cuenta de servicio es débil, la obtiene. Esa técnica se llama <strong class="highlight">Kerberoasting</strong>. Los objetivos reales son las cuentas de servicio con password elegida por una persona; las cuentas de equipo tienen passwords largas y aleatorias.</p>
       </article>
 
       <article class="concept" id="acl">
