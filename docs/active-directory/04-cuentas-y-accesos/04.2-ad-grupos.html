@@ -118,7 +118,7 @@
       <figcaption>Borde continuo: hasta dónde llega. Punteado: no llega. Trusts: domains y forests con los que hay una relación de confianza.</figcaption>
       </figure>
 
-      <p>El domain local y el global son opuestos: el domain local acepta miembros de cualquier domain o trust, pero da permisos solo en su domain; el global acepta miembros solo de su domain, pero da permisos en todo el forest y los trusts. El universal abarca todo el forest.</p>
+      <p><strong class="highlight">El domain local y el global son opuestos</strong>: el domain local acepta miembros de cualquier domain o trust, pero da permisos solo en su domain; el global acepta miembros solo de su domain, pero da permisos en todo el forest y los trusts. El universal abarca todo el forest.</p>
 
       <h3>3.2. Qué acepta cada uno</h3>
       <dl class="term-list">
@@ -135,7 +135,7 @@
           <dd><strong>Acepta:</strong> cuentas, grupos globales y otros universales de cualquier domain del forest. <strong>Da permisos en:</strong> cualquier domain del forest, y en forests que confíen.</dd>
         </div>
       </dl>
-      <p>Un grupo domain local no puede estar dentro de un global ni de un universal, porque ninguno de los dos lo acepta.</p>
+      <p><strong class="highlight">Un grupo domain local no puede estar dentro de un global ni de un universal</strong>, porque ninguno de los dos lo acepta.</p>
 
       <h3>3.3. Cómo se combinan</h3>
       <p>El patrón habitual es <strong>AGDLP</strong>: las cuentas (A) van en grupos globales (G), los globales van en grupos domain local (DL) y el permiso (P) se da al domain local.</p>

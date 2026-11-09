@@ -70,7 +70,7 @@
       <ul>
         <li>Al iniciar sesión, el sistema crea un token de acceso con el SID del usuario, los SID de sus grupos y la lista de privilegios que tiene.</li>
         <li>Cada proceso que se ejecuta en nombre del usuario tiene una copia del token.</li>
-        <li>Los privilegios que figuran en el token están, en su mayoría, deshabilitados por defecto. Que figuren no significa que estén en uso.</li>
+        <li>Los privilegios que figuran en el token están, en su mayoría, deshabilitados por defecto. <span class="error-mark">Si figura en el token, está en uso</span>: no.</li>
       </ul>
     </section>
 
@@ -78,7 +78,7 @@
       <h2>3. Privilegios</h2>
       <ul>
         <li>Permiten realizar operaciones del sistema, no acceder a un objeto concreto.</li>
-        <li>Son locales: cada equipo los guarda en su base de cuentas y, al iniciar sesión, se copian al token (ver 2).</li>
+        <li><strong class="highlight">Son locales</strong>: cada equipo los guarda en su base de cuentas y, al iniciar sesión, se copian al token (ver 2).</li>
         <li>Un administrador los asigna a cuentas o a grupos.</li>
         <li>Ejemplos: <code>SeBackupPrivilege</code>, <code>SeDebugPrivilege</code>, <code>SeImpersonatePrivilege</code>, <code>SeLoadDriverPrivilege</code>, <code>SeTakeOwnershipPrivilege</code>. Otros son comunes, como <code>SeChangeNotifyPrivilege</code>, que tienen todas las cuentas.</li>
       </ul>
@@ -103,7 +103,7 @@
       </dl>
       <ul>
         <li>Cada uno tiene su versión de denegación, <code>SeDeny…LogonRight</code>: Deny log on locally, Deny access to this computer from the network y Deny log on through Remote Desktop Services.</li>
-        <li>Los derechos <code>SeDeny…</code> prevalecen: negar un tipo de inicio de sesión anula lo que la cuenta tenga por pertenecer a un grupo.</li>
+        <li><strong class="highlight">Los derechos <code>SeDeny…</code> prevalecen</strong>: negar un tipo de inicio de sesión anula lo que la cuenta tenga por pertenecer a un grupo.</li>
         <li>Quién puede iniciar sesión en los DC por defecto se explica en 04.1.</li>
         <li><strong class="highlight">Riesgo:</strong> una cuenta con <code>SeRemoteInteractiveLogonRight</code> puede conectarse por escritorio remoto. Si es una cuenta comprometida, tiene una forma cómoda de entrar al equipo.</li>
       </ul>
