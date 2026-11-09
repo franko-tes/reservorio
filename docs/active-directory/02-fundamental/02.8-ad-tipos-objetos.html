@@ -92,7 +92,7 @@
         <li>Agrupa usuarios, equipos y otros grupos para asignar permisos a muchos a la vez. Ejemplo: en vez de dar permiso a una carpeta compartida a 20 usuarios de Finanzas, uno por uno, se le da el permiso al grupo <code>Finanzas</code>.</li>
         <li>Pueden ser de <strong>seguridad</strong> (dan permisos) o de <strong>distribución</strong> (solo para mail, no dan permisos).</li>
         <li>“Contiene” a sus miembros por <strong>membresía</strong>, no por ubicación en el árbol (ver <a href="02.1-ad-estructura.html#container">02.1</a>).</li>
-        <li><strong class="highlight">Grupos anidados</strong> (un grupo dentro de otro): un usuario puede terminar con derechos que nadie previó. BloodHound los muestra en un grafo y sirve para auditarlos.</li>
+        <li><strong>Grupos anidados</strong> (un grupo dentro de otro): <strong class="highlight">un usuario puede terminar con derechos que nadie previó</strong>. BloodHound los muestra en un grafo y sirve para auditarlos.</li>
         <li>Los grupos built-in (<code>Administrators</code>, <code>Backup Operators</code>, <code>Remote Management Users</code>…) viven en el container <code>CN=Builtin</code>. Otros, como <code>Domain Admins</code>, viven en <code>CN=Users</code>.</li>
       </ul>
     </section>
@@ -117,7 +117,7 @@
       </dl>
 
       <aside class="callout">
-        <p>El objeto Shared Folder es solo un <strong>puntero</strong>: el acceso real se controla en el share y en los permisos NTFS de la carpeta. Puede estar abierto a cualquiera, limitado a <code>Authenticated Users</code> (cualquier cuenta del domain o de equipo, incluso la de menos privilegios) o restringido a ciertos usuarios y grupos.</p>
+        <p>El objeto Shared Folder es solo un <strong>puntero</strong>: <strong class="highlight">el acceso real se controla en el share y en los permisos NTFS de la carpeta</strong>. Puede estar abierto a cualquiera, limitado a <code>Authenticated Users</code> (cualquier cuenta del domain o de equipo, incluso la de menos privilegios) o restringido a ciertos usuarios y grupos.</p>
       </aside>
     </section>
 
