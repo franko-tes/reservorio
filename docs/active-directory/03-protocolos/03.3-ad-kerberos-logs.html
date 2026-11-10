@@ -44,8 +44,45 @@
       <p class="ficha__subtitle">Protocolos</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Dónde se genera cada evento</a></li>
+          <li><a href="#seccion-3">3. Qué evento deja cada mensaje del proceso (ver 03.2)</a></li>
+          <li><a href="#seccion-4">4. Evento 4768: se pidió un TGT</a>
+            <ol>
+              <li><a href="#seccion-4-1">4.1. Campos clave</a></li>
+              <li><a href="#seccion-4-2">4.2. Códigos de resultado de interés</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-5">5. Evento 4771: falló la preautenticación</a></li>
+          <li><a href="#seccion-6">6. Evento 4769: se pidió un ticket de servicio</a>
+            <ol>
+              <li><a href="#seccion-6-1">6.1. Campos clave</a></li>
+              <li><a href="#seccion-6-2">6.2. Códigos de falla frecuentes</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-7">7. Tipos de cifrado en los eventos</a></li>
+          <li><a href="#seccion-8">8. Eventos 4624 y 4625: la sesión en el equipo</a>
+            <ol>
+              <li><a href="#seccion-8-1">8.1. Campos clave del 4624</a></li>
+              <li><a href="#seccion-8-2">8.2. Logon Type</a></li>
+              <li><a href="#seccion-8-3">8.3. Códigos de falla del 4625</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-9">9. ¿Kerberos o NTLM en un 4624?</a></li>
+          <li><a href="#seccion-10">10. Cómo se ve en los logs</a></li>
+          <li><a href="#seccion-11">11. Señales para vigilar</a></li>
+          <li><a href="#seccion-12">12. Nombres de campo en el XML</a></li>
+          <li><a href="#seccion-13">13. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Un inicio de sesión o un acceso a un servicio deja eventos en dos tipos de máquinas distintas:</p>
       <ul>
         <li><strong>En los DCs:</strong> el KDC registra los tickets que emite o rechaza (4768, 4769, 4771).</li>
@@ -56,7 +93,7 @@
     </section>
 
     <section>
-      <h2>2. Dónde se genera cada evento</h2>
+      <h2 id="seccion-2">2. Dónde se genera cada evento</h2>
       <dl class="term-list">
         <div>
           <dt>4768</dt>
@@ -83,7 +120,7 @@
     </section>
 
     <section>
-      <h2>3. Qué evento deja cada mensaje del proceso (ver 03.2)</h2>
+      <h2 id="seccion-3">3. Qué evento deja cada mensaje del proceso (ver 03.2)</h2>
       <dl class="term-list">
         <div>
           <dt>Mensajes 1 y 2 (AS)</dt>
@@ -101,8 +138,8 @@
     </section>
 
     <section>
-      <h2>4. Evento 4768: se pidió un TGT</h2>
-      <h3>4.1. Campos clave</h3>
+      <h2 id="seccion-4">4. Evento 4768: se pidió un TGT</h2>
+      <h3 id="seccion-4-1">4.1. Campos clave</h3>
       <dl class="term-list">
         <div>
           <dt>Account Name</dt>
@@ -126,7 +163,7 @@
         </div>
       </dl>
 
-      <h3>4.2. Códigos de resultado de interés</h3>
+      <h3 id="seccion-4-2">4.2. Códigos de resultado de interés</h3>
       <dl class="term-list">
         <div>
           <dt><code>0x6</code></dt>
@@ -145,7 +182,7 @@
     </section>
 
     <section>
-      <h2>5. Evento 4771: falló la preautenticación</h2>
+      <h2 id="seccion-5">5. Evento 4771: falló la preautenticación</h2>
       <dl class="term-list">
         <div>
           <dt>Failure Code <code>0x18</code></dt>
@@ -160,8 +197,8 @@
     </section>
 
     <section>
-      <h2>6. Evento 4769: se pidió un ticket de servicio</h2>
-      <h3>6.1. Campos clave</h3>
+      <h2 id="seccion-6">6. Evento 4769: se pidió un ticket de servicio</h2>
+      <h3 id="seccion-6-1">6.1. Campos clave</h3>
       <dl class="term-list">
         <div>
           <dt>Account Name</dt>
@@ -189,7 +226,7 @@
         </div>
       </dl>
 
-      <h3>6.2. Códigos de falla frecuentes</h3>
+      <h3 id="seccion-6-2">6.2. Códigos de falla frecuentes</h3>
       <dl class="term-list">
         <div>
           <dt><code>0x7</code></dt>
@@ -211,7 +248,7 @@
     </section>
 
     <section>
-      <h2>7. Tipos de cifrado en los eventos</h2>
+      <h2 id="seccion-7">7. Tipos de cifrado en los eventos</h2>
       <dl class="term-list">
         <div>
           <dt><code>0x12</code></dt>
@@ -236,8 +273,8 @@
     </section>
 
     <section>
-      <h2>8. Eventos 4624 y 4625: la sesión en el equipo</h2>
-      <h3>8.1. Campos clave del 4624</h3>
+      <h2 id="seccion-8">8. Eventos 4624 y 4625: la sesión en el equipo</h2>
+      <h3 id="seccion-8-1">8.1. Campos clave del 4624</h3>
       <dl class="term-list">
         <div>
           <dt>Logon Type</dt>
@@ -262,7 +299,7 @@
       </dl>
       <p>El 4625 tiene Logon Type, Authentication Package, Source Network Address, Workstation Name, y los códigos Status y Sub Status.</p>
 
-      <h3>8.2. Logon Type</h3>
+      <h3 id="seccion-8-2">8.2. Logon Type</h3>
       <dl class="term-list">
         <div>
           <dt>2, Interactive</dt>
@@ -302,7 +339,7 @@
         </div>
       </dl>
 
-      <h3>8.3. Códigos de falla del 4625</h3>
+      <h3 id="seccion-8-3">8.3. Códigos de falla del 4625</h3>
       <dl class="term-list">
         <div>
           <dt><code>0xC000006D</code></dt>
@@ -328,7 +365,7 @@
     </section>
 
     <section>
-      <h2>9. ¿Kerberos o NTLM en un 4624?</h2>
+      <h2 id="seccion-9">9. ¿Kerberos o NTLM en un 4624?</h2>
       <p>El campo Authentication Package dice qué paquete se usó. Con <code>Kerberos</code> o <code>NTLM</code> queda claro, pero con <code>Negotiate</code> no siempre se puede saber cuál de los dos se usó:</p>
       <dl class="term-list">
         <div>
@@ -347,7 +384,7 @@
     </section>
 
     <section>
-      <h2>10. Cómo se ve en los logs</h2>
+      <h2 id="seccion-10">10. Cómo se ve en los logs</h2>
       <p>Cada línea es un escenario típico, con el DC y el equipo:</p>
       <dl class="term-list">
         <div>
@@ -374,7 +411,7 @@
     </section>
 
     <section>
-      <h2>11. Señales para vigilar</h2>
+      <h2 id="seccion-11">11. Señales para vigilar</h2>
       <dl class="term-list">
         <div>
           <dt>Fuerza bruta</dt>
@@ -420,12 +457,12 @@
     </section>
 
     <section>
-      <h2>12. Nombres de campo en el XML</h2>
+      <h2 id="seccion-12">12. Nombres de campo en el XML</h2>
       <p>Para consultas en el SIEM, el XML usa otros nombres: <code>TargetUserName</code>, <code>ServiceName</code>, <code>IpAddress</code>, <code>IpPort</code>, <code>Status</code>, <code>SubStatus</code>, <code>TicketEncryptionType</code>, <code>PreAuthType</code>, <code>LogonType</code>, <code>AuthenticationPackageName</code>, <code>WorkstationName</code>.</p>
     </section>
 
     <section>
-      <h2>13. Para no confundirse</h2>
+      <h2 id="seccion-13">13. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un 4768 es un acceso a un recurso</span>: no. Es el pedido de un TGT, normalmente al iniciar sesión, y el TGT solo sirve para pedir tickets de servicio.</li>
         <li><span class="error-mark">Un 4769 exitoso significa que el servicio aceptó al usuario</span>: no. Significa que el KDC emitió el ticket. La decisión de acceso la toma el servicio (ver 03.2).</li>

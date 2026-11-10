@@ -44,15 +44,38 @@
       <p class="ficha__subtitle">Cuentas y accesos</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Qué tiene que estar activado</a></li>
+          <li><a href="#seccion-3">3. Eventos de cuentas de usuario</a>
+            <ol>
+              <li><a href="#seccion-3-1">3.1. Ciclo de vida</a></li>
+              <li><a href="#seccion-3-2">3.2. Passwords y bloqueos</a></li>
+              <li><a href="#seccion-3-3">3.3. Cambios que merecen atención</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-4">4. Eventos de cuentas de equipo</a></li>
+          <li><a href="#seccion-5">5. Eventos de grupos</a></li>
+          <li><a href="#seccion-6">6. Cómo leer un evento de membresía</a></li>
+          <li><a href="#seccion-7">7. Privilegios en los logs</a></li>
+          <li><a href="#seccion-8">8. Qué conviene mirar</a></li>
+          <li><a href="#seccion-9">9. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Cada vez que se crea una cuenta, se cambia una password o alguien entra a un grupo privilegiado, Windows puede dejar un evento en el log de Seguridad. Estos eventos son la huella de todo lo que vimos en 04.1 a 04.4.</p>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>Casi todos estos eventos responden dos preguntas. La primera es quién lo hizo (campo Subject). La segunda, sobre quién o qué (la cuenta nueva, el miembro agregado o el grupo). Confundir las dos es el error más común al leerlos.</p>
     </section>
 
     <section>
-      <h2>2. Qué tiene que estar activado</h2>
+      <h2 id="seccion-2">2. Qué tiene que estar activado</h2>
       <p>Los eventos solo existen si está habilitada la auditoría de su subcategoría:</p>
       <dl class="term-list">
         <div>
@@ -82,9 +105,9 @@
     </section>
 
     <section>
-      <h2>3. Eventos de cuentas de usuario</h2>
+      <h2 id="seccion-3">3. Eventos de cuentas de usuario</h2>
 
-      <h3>3.1. Ciclo de vida</h3>
+      <h3 id="seccion-3-1">3.1. Ciclo de vida</h3>
       <dl class="term-list">
         <div>
           <dt>4720</dt>
@@ -112,7 +135,7 @@
         </div>
       </dl>
 
-      <h3>3.2. Passwords y bloqueos</h3>
+      <h3 id="seccion-3-2">3.2. Passwords y bloqueos</h3>
       <dl class="term-list">
         <div>
           <dt>4723</dt>
@@ -135,7 +158,7 @@
         <li><strong class="highlight">Relevante:</strong> cambiar y restablecer no son lo mismo. El cambio lo hace el dueño de la cuenta; el restablecimiento lo hace otra cuenta con permisos.</li>
       </ul>
 
-      <h3>3.3. Cambios que merecen atención</h3>
+      <h3 id="seccion-3-3">3.3. Cambios que merecen atención</h3>
       <ul>
         <li>4765: se agregó SID History a una cuenta. 4766: el intento falló (ver 02.5).</li>
         <li>4780: se estableció una ACL en cuentas que son miembros de grupos de administradores (ver 02.5).</li>
@@ -144,7 +167,7 @@
     </section>
 
     <section>
-      <h2>4. Eventos de cuentas de equipo</h2>
+      <h2 id="seccion-4">4. Eventos de cuentas de equipo</h2>
       <dl class="term-list">
         <div>
           <dt>4741</dt>
@@ -166,7 +189,7 @@
     </section>
 
     <section>
-      <h2>5. Eventos de grupos</h2>
+      <h2 id="seccion-5">5. Eventos de grupos</h2>
       <p>Microsoft los separa según el ámbito del grupo (ver 04.2):</p>
       <ul>
         <li><strong>Grupos globales:</strong> 4727 (creación), 4737 (cambio), 4728 (miembro agregado), 4729 (miembro quitado), 4730 (eliminación).</li>
@@ -180,7 +203,7 @@
     </section>
 
     <section>
-      <h2>6. Cómo leer un evento de membresía</h2>
+      <h2 id="seccion-6">6. Cómo leer un evento de membresía</h2>
       <p>Tomamos el 4732 como modelo. Tiene tres bloques:</p>
       <ul>
         <li><strong>Subject:</strong> la cuenta que hizo la operación. Trae su SID, nombre, domain y Logon ID.</li>
@@ -196,7 +219,7 @@
     </section>
 
     <section>
-      <h2>7. Privilegios en los logs</h2>
+      <h2 id="seccion-7">7. Privilegios en los logs</h2>
       <ul>
         <li>4672: se asignaron privilegios especiales a un nuevo inicio de sesión. Se genera cuando el inicio de sesión recibe alguno de los privilegios sensibles (ver 04.3), por ejemplo <code>SeDebugPrivilege</code>, <code>SeBackupPrivilege</code>, <code>SeRestorePrivilege</code>, <code>SeImpersonatePrivilege</code>, <code>SeLoadDriverPrivilege</code> o <code>SeTakeOwnershipPrivilege</code>.</li>
         <li><strong class="highlight">Relevante:</strong> se ven muchos 4672 porque cada inicio de sesión de SYSTEM lo genera.</li>
@@ -207,7 +230,7 @@
     </section>
 
     <section>
-      <h2>8. Qué conviene mirar</h2>
+      <h2 id="seccion-8">8. Qué conviene mirar</h2>
       <dl class="term-list">
         <div>
           <dt>Altas en grupos privilegiados</dt>
@@ -229,7 +252,7 @@
     </section>
 
     <section>
-      <h2>9. Para no confundirse</h2>
+      <h2 id="seccion-9">9. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">El Subject es la cuenta que cambió</span>: no. El Subject es quien hizo la operación. La cuenta afectada está en New Account, Target Account o Member, según el evento.</li>
         <li><span class="error-mark">Un 4672 significa que alguien abusó de un privilegio</span>: no. Solo indica que el inicio de sesión recibió privilegios sensibles. Los de SYSTEM son habituales.</li>

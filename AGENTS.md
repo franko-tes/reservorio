@@ -111,13 +111,19 @@ BEM: `.ficha__header`, `.topic__summary`).
 - No se escriben estilos en el HTML (`<style>`, `style=`).
 - Se reutilizan las clases existentes. Un componente nuevo se consulta antes y se
   agrega al **final** del CSS, con su sección numerada.
-- **Glosario** (`.concept` / `.toc`): los conceptos se numeran con un entero
+- **Glosario** (`.concept`): los conceptos se numeran con un entero
   simple del 1 al N dentro de la ficha (sin prefijo de grupo, para no confundirlo
   con `01.3`). Debajo del título, el subtítulo del concepto
   (`.concept__subtitle`: una analogía o una aclaración corta) va en texto
   atenuado y cursiva; el naranja es de `strong.highlight`.
 - **Índice del área**: cada tema es un `<details class="topic">` **cerrado por
   defecto**, con `NN - Tema` y su contador de contenidos en el `<summary>`.
+- **Temario** (`.temario`): toda ficha lo lleva, justo después del `</header>`.
+  Es un `<details>` con los `h2` y sus `h3`, como enlaces a su `id`
+  (`seccion-4`, `seccion-4-1`). En los glosarios, los conceptos van como
+  subpuntos de "Conceptos", solo con su nombre, enlazados al `id` del
+  `.concept`. En celular es un desplegable cerrado; desde 1216 px, una columna
+  fija a la izquierda de la ficha centrada.
 - **Listas anidadas**: llevan sangría propia (ya resuelta en el CSS). En el HTML,
   2 espacios por nivel y el `</li>` del punto padre después del `</ul>` anidado.
 
@@ -133,6 +139,7 @@ BEM: `.ficha__header`, `.topic__summary`).
       <h1>  nombre del contenido  </h1>
       <p class="ficha__subtitle">  nombre del tema  </p>
     </header>
+    <details class="temario">…</details>
     … secciones …
     <nav class="ficha__pagination" aria-label="Paginación del contenido">…</nav>
   </article>
@@ -146,7 +153,7 @@ BEM: `.ficha__header`, `.topic__summary`).
   de su `h2` más el propio (`2.1.`), escritos en el HTML. En las fichas de
   glosario, el `h3` de cada concepto (`.concept`) no se numera: ya tiene el suyo
   en `.concept__id`. Si se agrega, quita o mueve una sección, se renumera lo que
-  sigue.
+  sigue, junto con su `id` y su entrada en el temario.
 - **Paginación:** `← 01.1 - Título` y `01.2 - Título →`. Cruza de un tema a otro,
   y en ese caso el enlace lleva el nombre del tema: `02.1 - Fundamental:
   Estructura jerárquica →`. El "siguiente" va siempre a la derecha.
@@ -205,7 +212,9 @@ los HTML siguen el mismo formato.
 
 ## 7. Calidad mínima
 
-- Contraste AA y áreas de toque de al menos 44 px (`--tap-size`).
+- Contraste AA y áreas de toque de al menos 44 px (`--tap-size`). Única
+  excepción: los enlaces de la columna del temario en escritorio (desde
+  1216 px), que miden 32 px; en el desplegable del celular siguen en 44 px.
 - Un solo `h1` por página y encabezados sin saltos de nivel.
 - Cada `<nav>` con su `aria-label`; `lang="es"`.
 - Sin scroll horizontal desde 320 px de ancho.
@@ -225,7 +234,8 @@ los HTML siguen el mismo formato.
 4. Portada: contadores del encabezado (`N áreas · N temas · N contenidos`) y de
    la entrada del área.
 5. Metadatos del nuevo: `<title>`, descripción, Open Graph y JSON-LD.
-6. Verificar (ver abajo).
+6. Temario: un `id` en cada `h2` y `h3` numerado, y su entrada en el temario.
+7. Verificar (ver abajo).
 
 **Un tema nuevo** suma además su carpeta `NN-<tema>` y un
 `<details class="topic">` en el índice del área, con los enlaces a su carpeta. **Un área nueva**, una carpeta con su `index.html` (copiando el de otra) y

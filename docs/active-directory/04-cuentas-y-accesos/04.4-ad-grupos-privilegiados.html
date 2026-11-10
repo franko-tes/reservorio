@@ -44,15 +44,36 @@
       <p class="ficha__subtitle">Cuentas y accesos</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Grupos de administración total</a></li>
+          <li><a href="#seccion-3">3. Grupos de operadores</a>
+            <ol>
+              <li><a href="#seccion-3-1">3.1. Account Operators</a></li>
+              <li><a href="#seccion-3-2">3.2. Backup Operators</a></li>
+              <li><a href="#seccion-3-3">3.3. Print Operators</a></li>
+              <li><a href="#seccion-3-4">3.4. Server Operators</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-4">4. Otros grupos que conviene conocer</a></li>
+          <li><a href="#seccion-5">5. Qué conviene revisar</a></li>
+          <li><a href="#seccion-6">6. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>En la 04.2 vimos que Active Directory trae grupos integrados. Acá vemos los que dan acceso fuerte a los DC, porque cada cuenta que se agrega a uno hereda sus derechos (ver 04.3).</p>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>No hace falta ser Domain Admin para tener mucho poder sobre un DC. Varios grupos “de operadores” dan derechos como hacer backup de cualquier archivo, cargar drivers o iniciar sesión en la consola. Microsoft indica que no es seguro delegar la administración de estos grupos a quien no sea administrador de servicio.</p>
     </section>
 
     <section>
-      <h2>2. Grupos de administración total</h2>
+      <h2 id="seccion-2">2. Grupos de administración total</h2>
       <ul>
         <li><strong><code>Administrators</code>:</strong> acceso completo e irrestricto al equipo. En un DC, acceso irrestricto al domain. Entre sus derechos por defecto están <code>SeBackupPrivilege</code>, <code>SeRestorePrivilege</code>, <code>SeDebugPrivilege</code>, <code>SeTakeOwnershipPrivilege</code> y <code>SeLoadDriverPrivilege</code> (ver 04.3).</li>
         <li><strong><code>Domain Admins</code>:</strong> autorizado para administrar el domain. Miembro por defecto: <code>Administrator</code>. Tiene los derechos de <code>Administrators</code> porque, por defecto, es miembro de <code>Administrators</code> en todos los equipos unidos al domain, incluidos los DC (ver 04.2).</li>
@@ -64,31 +85,31 @@
     </section>
 
     <section>
-      <h2>3. Grupos de operadores</h2>
+      <h2 id="seccion-3">3. Grupos de operadores</h2>
       <p>Los cuatro <strong class="highlight">vienen sin miembros por defecto</strong>.</p>
 
-      <h3>3.1. Account Operators</h3>
+      <h3 id="seccion-3-1">3.1. Account Operators</h3>
       <ul>
         <li>Qué hace: crea y modifica la mayoría de las cuentas (usuarios, grupos locales y globales) e inicia sesión localmente en los DC. No puede modificar derechos de usuario ni administrar a <code>Administrator</code>, a cuentas de administradores ni a los grupos <code>Administrators</code>, <code>Server Operators</code>, <code>Account Operators</code>, <code>Backup Operators</code> y <code>Print Operators</code>.</li>
         <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>).</li>
         <li><strong class="highlight">Riesgo:</strong> puede crear y modificar cuentas y entrar a la consola de un DC.</li>
       </ul>
 
-      <h3>3.2. Backup Operators</h3>
+      <h3 id="seccion-3-2">3.2. Backup Operators</h3>
       <ul>
         <li>Qué hace: hace backup y restaura todos los archivos de un equipo sin importar los permisos que los protegen. También inicia sesión y apaga el equipo.</li>
         <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>), Back up files and directories (<code>SeBackupPrivilege</code>) y Restore files and directories (<code>SeRestorePrivilege</code>). <code>SeRestorePrivilege</code> es el que permite restaurar, y por lo tanto escribir, archivos sin importar su ACL. También puede iniciar sesión como batch job y apagar el equipo.</li>
         <li><strong class="highlight">Riesgo:</strong> no cambia la configuración del directorio, pero puede reemplazar archivos, incluidos los del sistema operativo, en los DC. Por eso Microsoft lo considera administrador de servicio.</li>
       </ul>
 
-      <h3>3.3. Print Operators</h3>
+      <h3 id="seccion-3-3">3.3. Print Operators</h3>
       <ul>
         <li>Qué hace: administra las impresoras conectadas a los DC y los objetos de impresora de AD. Inicia sesión localmente en los DC y los apaga.</li>
         <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>) y Load and unload device drivers (<code>SeLoadDriverPrivilege</code>). También puede apagar el equipo.</li>
         <li><strong class="highlight">Riesgo:</strong> puede cargar drivers en todos los DC. Microsoft advierte que hay que agregar usuarios con cuidado (ver 04.3).</li>
       </ul>
 
-      <h3>3.4. Server Operators</h3>
+      <h3 id="seccion-3-4">3.4. Server Operators</h3>
       <ul>
         <li>Qué hace: administra los DC. Existe solo en los DC. Inicia sesión en forma interactiva, crea y borra recursos compartidos, detiene e inicia servicios, hace backup y restaura archivos, formatea discos y apaga el equipo.</li>
         <li>Derechos: Allow log on locally (<code>SeInteractiveLogonRight</code>), Back up files and directories (<code>SeBackupPrivilege</code>) y Restore files and directories (<code>SeRestorePrivilege</code>). También puede cambiar la hora y la zona horaria y apagar el equipo, incluso de forma remota.</li>
@@ -98,7 +119,7 @@
     </section>
 
     <section>
-      <h2>4. Otros grupos que conviene conocer</h2>
+      <h2 id="seccion-4">4. Otros grupos que conviene conocer</h2>
       <ul>
         <li><strong><code>DnsAdmins</code>:</strong> acceso a la información DNS de la red. Por defecto recibe permisos de lectura, escritura, creación y borrado de objetos hijos y permisos especiales. Existe solo si el rol DNS está o estuvo instalado en un DC del domain. Sin miembros ni derechos por defecto.</li>
         <li><strong><code>Group Policy Creator Owners</code>:</strong> puede crear, editar y borrar GPO del domain. Único miembro por defecto: <code>Administrator</code>.
@@ -114,7 +135,7 @@
     </section>
 
     <section>
-      <h2>5. Qué conviene revisar</h2>
+      <h2 id="seccion-5">5. Qué conviene revisar</h2>
       <dl class="term-list">
         <div>
           <dt>Pocos miembros y justificados</dt>
@@ -136,7 +157,7 @@
     </section>
 
     <section>
-      <h2>6. Para no confundirse</h2>
+      <h2 id="seccion-6">6. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Solo Domain Admins puede dañar un DC</span>: no. Backup, Print y Server Operators también inician sesión en el DC con derechos que permiten leer o reemplazar archivos o cargar drivers.</li>
         <li><span class="error-mark">Account Operators puede administrar cualquier cuenta</span>: no. No puede modificar a <code>Administrator</code>, a los administradores ni a ciertos grupos privilegiados.</li>

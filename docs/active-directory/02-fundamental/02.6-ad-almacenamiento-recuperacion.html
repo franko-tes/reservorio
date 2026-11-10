@@ -44,8 +44,28 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Conceptos</a>
+            <ol>
+              <li><a href="#sysvol">SYSVOL</a></li>
+              <li><a href="#ntds-dit">NTDS.DIT</a></li>
+              <li><a href="#tombstone">Tombstone</a></li>
+              <li><a href="#recycle-bin">AD Recycle Bin</a></li>
+              <li><a href="#aduc">ADUC</a></li>
+              <li><a href="#adsi-edit">ADSI Edit</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Tres preguntas prácticas sobre AD: dónde vive la información, qué pasa cuando algo se borra y con qué se administra todo.</p>
 
       <dl class="term-list">
@@ -64,21 +84,10 @@
       </dl>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>SYSVOL lo puede leer cualquier usuario autenticado; NTDS.DIT guarda los secretos. Un objeto borrado no desaparece al instante.</p>
-
-      <nav aria-label="Conceptos">
-        <ul class="toc">
-          <li><a href="#sysvol"><span class="toc__id">1</span>SYSVOL</a></li>
-          <li><a href="#ntds-dit"><span class="toc__id">2</span>NTDS.DIT</a></li>
-          <li><a href="#tombstone"><span class="toc__id">3</span>Tombstone</a></li>
-          <li><a href="#recycle-bin"><span class="toc__id">4</span>AD Recycle Bin</a></li>
-          <li><a href="#aduc"><span class="toc__id">5</span>ADUC</a></li>
-          <li><a href="#adsi-edit"><span class="toc__id">6</span>ADSI Edit</a></li>
-        </ul>
-      </nav>
     </section>
 
     <section>
-      <h2>2. Conceptos</h2>
+      <h2 id="seccion-2">2. Conceptos</h2>
 
       <article class="concept" id="sysvol">
         <div class="concept__head">
@@ -153,7 +162,7 @@
     </section>
 
     <section>
-      <h2>3. Para no confundirse</h2>
+      <h2 id="seccion-3">3. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un objeto borrado desaparece al instante</span>: no. Queda como tombstone, y si la Recycle Bin está habilitada, conserva casi todos sus atributos.</li>
         <li>SYSVOL y NTDS.DIT no son lo mismo: SYSVOL es una carpeta compartida con policies y scripts; NTDS.DIT es la base de datos con los hashes de todas las cuentas.</li>

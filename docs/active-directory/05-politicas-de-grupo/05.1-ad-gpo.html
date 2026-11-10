@@ -44,15 +44,34 @@
       <p class="ficha__subtitle">Políticas de grupo</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Cómo se compone una GPO</a></li>
+          <li><a href="#seccion-3">3. Configuración de equipo y de usuario</a></li>
+          <li><a href="#seccion-4">4. Dónde se vinculan y cómo se editan</a></li>
+          <li><a href="#seccion-5">5. Las GPO por defecto</a>
+            <ol>
+              <li><a href="#seccion-5-1">5.1. Default Domain Policy</a></li>
+              <li><a href="#seccion-5-2">5.2. Default Domain Controllers Policy</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-6">6. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Group Policy es la función de Windows que permite administrar de forma centralizada la configuración de sistemas operativos, aplicaciones y usuarios. Una <strong>GPO</strong> (Group Policy Object) reúne un conjunto de configuraciones, con sus permisos y su alcance, para aplicarlas a usuarios y equipos del domain. Qué es una GPO, su GUID y los riesgos de editarla o vincularla se explican en 02.5, y a qué se vincula, en 02.8. Acá vemos de qué se compone, cuándo se aplica cada tipo de configuración y cuáles son las dos GPO que existen desde el principio.</p>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>Una GPO se guarda en dos lugares (AD y SYSVOL) y cada una de sus configuraciones es de equipo o de usuario. Eso decide dónde vive y cuándo se aplica.</p>
     </section>
 
     <section>
-      <h2>2. Cómo se compone una GPO</h2>
+      <h2 id="seccion-2">2. Cómo se compone una GPO</h2>
       <ul>
         <li><strong>Group Policy container (GPC):</strong> está en AD. Guarda metadatos: cuándo se creó, la versión y el GUID. <strong class="highlight">No contiene las configuraciones.</strong></li>
         <li><strong>Group Policy template (GPT):</strong> está en la carpeta SYSVOL de cada DC. Son archivos y ahí están las configuraciones. Su carpeta lleva como nombre el GUID del container, y así se vinculan las dos partes:
@@ -64,7 +83,7 @@
     </section>
 
     <section>
-      <h2>3. Configuración de equipo y de usuario</h2>
+      <h2 id="seccion-3">3. Configuración de equipo y de usuario</h2>
       <ul>
         <li><strong>Configuración de equipo:</strong> afecta al equipo en su conjunto, por ejemplo la administración de energía o las reglas de firewall. Se aplica cuando el equipo inicia.</li>
         <li><strong>Configuración de usuario:</strong> afecta solo al usuario que inicia sesión, por ejemplo la redirección de carpetas. Se aplica cuando el usuario inicia sesión.</li>
@@ -77,7 +96,7 @@
     </section>
 
     <section>
-      <h2>4. Dónde se vinculan y cómo se editan</h2>
+      <h2 id="seccion-4">4. Dónde se vinculan y cómo se editan</h2>
       <ul>
         <li>Una GPO se vincula a un site, a un domain o a una OU (ver 02.8 y 02.9). No se vincula a un grupo (ver 02.8).</li>
         <li><strong class="highlight">Relevante:</strong> Microsoft indica que la mayoría de las GPO se asignan al nivel de OU, que algunas se aplican a nivel domain (en particular las políticas de password) y que pocas se aplican a nivel site.</li>
@@ -87,17 +106,17 @@
     </section>
 
     <section>
-      <h2>5. Las GPO por defecto</h2>
+      <h2 id="seccion-5">5. Las GPO por defecto</h2>
       <p>Cuando se instala AD DS, Windows Server crea dos GPO.</p>
 
-      <h3>5.1. Default Domain Policy</h3>
+      <h3 id="seccion-5-1">5.1. Default Domain Policy</h3>
       <ul>
         <li>Está vinculada al domain y afecta a todos los usuarios y equipos.</li>
         <li>Contiene las políticas de password, de bloqueo de cuenta y de Kerberos del domain.</li>
         <li><strong class="highlight">Relevante:</strong> Microsoft indica no agregarle configuraciones que no sean esas. Para otras configuraciones amplias, se crean GPO adicionales vinculadas al domain.</li>
       </ul>
 
-      <h3>5.2. Default Domain Controllers Policy</h3>
+      <h3 id="seccion-5-2">5.2. Default Domain Controllers Policy</h3>
       <ul>
         <li>Está vinculada a la OU Domain Controllers y afecta solo a los DC.</li>
         <li><strong class="highlight">Relevante:</strong> Microsoft indica usarla para las políticas de auditoría y para los derechos de usuario que hacen falta en los DC (ver 04.3 y 04.5).</li>
@@ -106,7 +125,7 @@
     </section>
 
     <section>
-      <h2>6. Para no confundirse</h2>
+      <h2 id="seccion-6">6. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Una GPO es un solo archivo</span>: no. Tiene una parte en AD (container) y otra en SYSVOL (template).</li>
         <li><span class="error-mark">Toda GPO aplica sus dos tipos de configuración a lo que está vinculado</span>: no. A un equipo le aplica la configuración de equipo y a un usuario, la de usuario.</li>

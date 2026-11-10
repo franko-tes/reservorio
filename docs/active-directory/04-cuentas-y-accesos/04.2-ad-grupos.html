@@ -44,15 +44,39 @@
       <p class="ficha__subtitle">Cuentas y accesos</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Tipos</a></li>
+          <li><a href="#seccion-3">3. Ámbitos</a>
+            <ol>
+              <li><a href="#seccion-3-1">3.1. Hasta dónde llega cada ámbito</a></li>
+              <li><a href="#seccion-3-2">3.2. Qué acepta cada uno</a></li>
+              <li><a href="#seccion-3-3">3.3. Cómo se combinan</a></li>
+              <li><a href="#seccion-3-4">3.4. Ejemplo</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-4">4. Grupos universales y el Global Catalog</a></li>
+          <li><a href="#seccion-5">5. Cambiar el ámbito</a></li>
+          <li><a href="#seccion-6">6. Grupos integrados y personalizados</a></li>
+          <li><a href="#seccion-7">7. Grupos anidados</a></li>
+          <li><a href="#seccion-8">8. Atributos importantes</a></li>
+          <li><a href="#seccion-9">9. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Un grupo reúne cuentas (y otros grupos) para asignar permisos y derechos en bloque, en lugar de uno por uno. Si un permiso cambia, se modifica el grupo y no cada cuenta. Todo grupo tiene dos características: <strong>tipo</strong> y <strong>ámbito</strong>.</p>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>El tipo dice para qué sirve el grupo. El ámbito dice quién puede ser miembro y dónde se pueden dar permisos.</p>
     </section>
 
     <section>
-      <h2>2. Tipos</h2>
+      <h2 id="seccion-2">2. Tipos</h2>
       <dl class="term-list">
         <div>
           <dt>Seguridad</dt>
@@ -66,9 +90,9 @@
     </section>
 
     <section>
-      <h2>3. Ámbitos</h2>
+      <h2 id="seccion-3">3. Ámbitos</h2>
 
-      <h3>3.1. Hasta dónde llega cada ámbito</h3>
+      <h3 id="seccion-3-1">3.1. Hasta dónde llega cada ámbito</h3>
       <figure class="diagram">
       <svg viewBox="0 0 272 490" role="img" aria-labelledby="ambitos-titulo ambitos-desc">
         <title id="ambitos-titulo">Alcance de cada ámbito de grupo</title>
@@ -120,7 +144,7 @@
 
       <p><strong class="highlight">El domain local y el global son opuestos</strong>: el domain local acepta miembros de cualquier domain o trust, pero da permisos solo en su domain; el global acepta miembros solo de su domain, pero da permisos en todo el forest y los trusts. El universal abarca todo el forest.</p>
 
-      <h3>3.2. Qué acepta cada uno</h3>
+      <h3 id="seccion-3-2">3.2. Qué acepta cada uno</h3>
       <dl class="term-list">
         <div>
           <dt>Domain local</dt>
@@ -137,11 +161,11 @@
       </dl>
       <p><strong class="highlight">Un grupo domain local no puede estar dentro de un global ni de un universal</strong>, porque ninguno de los dos lo acepta.</p>
 
-      <h3>3.3. Cómo se combinan</h3>
+      <h3 id="seccion-3-3">3.3. Cómo se combinan</h3>
       <p>El patrón habitual es <strong>AGDLP</strong>: las cuentas (A) van en grupos globales (G), los globales van en grupos domain local (DL) y el permiso (P) se da al domain local.</p>
       <p>Aprovecha lo que hace cada ámbito: el global junta a las personas de un domain, y el domain local, que acepta miembros de cualquier domain, recibe el permiso sobre un recurso de su domain.</p>
 
-      <h3>3.4. Ejemplo</h3>
+      <h3 id="seccion-3-4">3.4. Ejemplo</h3>
       <p>El forest tiene dos domains, <code>techcorp.local</code> y <code>labcorp.local</code>. En un servidor de <code>techcorp.local</code> hay una carpeta compartida de Finanzas, que tienen que poder leer los usuarios de Finanzas de <code>techcorp.local</code> y los auditores de <code>labcorp.local</code>.</p>
 
       <figure class="diagram">
@@ -242,7 +266,7 @@
     </section>
 
     <section>
-      <h2>4. Grupos universales y el Global Catalog</h2>
+      <h2 id="seccion-4">4. Grupos universales y el Global Catalog</h2>
       <ul>
         <li>Los grupos universales, y sus miembros, se listan en el Global Catalog (ver 02.3). Los globales y domain local también figuran, pero sin sus miembros.</li>
         <li>Cada cambio de membresía de un universal se replica al Global Catalog.</li>
@@ -250,7 +274,7 @@
     </section>
 
     <section>
-      <h2>5. Cambiar el ámbito</h2>
+      <h2 id="seccion-5">5. Cambiar el ámbito</h2>
       <dl class="term-list">
         <div>
           <dt>Global → Universal</dt>
@@ -272,7 +296,7 @@
     </section>
 
     <section>
-      <h2>6. Grupos integrados y personalizados</h2>
+      <h2 id="seccion-6">6. Grupos integrados y personalizados</h2>
       <ul>
         <li>Los grupos integrados están en los contenedores Builtin y Users.</li>
         <li>Los de Builtin tienen ámbito domain local; Microsoft lo llama <em>Builtin Local</em> y no se puede cambiar.</li>
@@ -285,7 +309,7 @@
     </section>
 
     <section>
-      <h2>7. Grupos anidados</h2>
+      <h2 id="seccion-7">7. Grupos anidados</h2>
       <ul>
         <li>Un usuario hereda lo que tiene el grupo que contiene a su grupo, aunque no se lo hayan dado directamente.</li>
         <li><strong class="highlight">Riesgo:</strong> esto puede dar privilegios que nadie previó, difíciles de ver sin revisar toda la cadena (ver 02.8).</li>
@@ -294,7 +318,7 @@
     </section>
 
     <section>
-      <h2>8. Atributos importantes</h2>
+      <h2 id="seccion-8">8. Atributos importantes</h2>
       <dl class="term-list">
         <div>
           <dt><code>cn</code></dt>
@@ -320,7 +344,7 @@
     </section>
 
     <section>
-      <h2>9. Para no confundirse</h2>
+      <h2 id="seccion-9">9. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un grupo de distribución sirve para dar permisos</span>: no. No se puede usar en una DACL.</li>
         <li><span class="error-mark">Un grupo domain local solo tiene miembros de su domain</span>: no. Puede tener cuentas y grupos globales de cualquier domain, o de uno en trust.</li>

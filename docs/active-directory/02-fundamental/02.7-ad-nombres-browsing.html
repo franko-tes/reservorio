@@ -44,8 +44,29 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Conceptos</a>
+            <ol>
+              <li><a href="#fqdn">FQDN</a></li>
+              <li><a href="#msbrowse">MSBROWSE</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Para no confundirse</a>
+            <ol>
+              <li><a href="#seccion-3-1">3.1. FQDN</a></li>
+              <li><a href="#seccion-3-2">3.2. DN</a></li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Dos conceptos de red sobre cómo se nombra y se encuentra un equipo: uno que se sigue usando todos los días y otro que quedó obsoleto.</p>
 
       <dl class="term-list">
@@ -60,17 +81,10 @@
       </dl>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>El FQDN ubica una máquina en la red, con DNS. El DN ubica un objeto en el directorio, con LDAP. Se parecen, pero no son lo mismo.</p>
-
-      <nav aria-label="Conceptos">
-        <ul class="toc">
-          <li><a href="#fqdn"><span class="toc__id">1</span>FQDN</a></li>
-          <li><a href="#msbrowse"><span class="toc__id">2</span>MSBROWSE</a></li>
-        </ul>
-      </nav>
     </section>
 
     <section>
-      <h2>2. Conceptos</h2>
+      <h2 id="seccion-2">2. Conceptos</h2>
 
       <article class="concept" id="fqdn">
         <div class="concept__head">
@@ -99,12 +113,12 @@
     </section>
 
     <section>
-      <h2>3. Para no confundirse</h2>
+      <h2 id="seccion-3">3. Para no confundirse</h2>
 
       <p>FQDN vs DN, que se confunden por su forma jerárquica parecida:</p>
       <div class="two-col">
         <div class="two-col__col">
-          <h3>3.1. FQDN</h3>
+          <h3 id="seccion-3-1">3.1. FQDN</h3>
           <ul>
             <li>Usa <strong>DNS</strong> y resuelve a una IP.</li>
             <li>Formato con <strong>puntos</strong>: <code>host.dominio.tld</code></li>
@@ -112,7 +126,7 @@
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>3.2. DN</h3>
+          <h3 id="seccion-3-2">3.2. DN</h3>
           <ul>
             <li>Usa <strong>LDAP</strong> y ubica un objeto en el árbol de AD.</li>
             <li>Formato con <strong>comas</strong>: <code>cn=x,ou=y,dc=z,dc=tld</code></li>

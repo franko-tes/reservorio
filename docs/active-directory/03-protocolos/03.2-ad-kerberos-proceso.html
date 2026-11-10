@@ -44,8 +44,29 @@
       <p class="ficha__subtitle">Protocolos</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Antes de empezar</a></li>
+          <li><a href="#seccion-3">3. Intercambio 1: AS (el TGT)</a></li>
+          <li><a href="#seccion-4">4. Intercambio 2: TGS (el ticket de servicio)</a></li>
+          <li><a href="#seccion-5">5. Intercambio 3: AP (el servicio)</a></li>
+          <li><a href="#seccion-6">6. Las dos session keys</a></li>
+          <li><a href="#seccion-7">7. Por qué hay preautenticación</a></li>
+          <li><a href="#seccion-8">8. La hora y los timestamps</a></li>
+          <li><a href="#seccion-9">9. Cuánto duran los tickets</a></li>
+          <li><a href="#seccion-10">10. Los datos de autorización</a></li>
+          <li><a href="#seccion-11">11. Dónde encajan los ataques</a></li>
+          <li><a href="#seccion-12">12. Qué deja en los logs</a></li>
+          <li><a href="#seccion-13">13. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Kerberos funciona en <strong>tres intercambios</strong>, cada uno con un pedido y una respuesta. En cada uno cambia quién habla con quién y con qué clave se cifra lo que viaja (ver 03.1 para las piezas).</p>
       <ul>
         <li><strong>AS (mensajes 1 y 2):</strong> el cliente prueba quién es y recibe un TGT.</li>
@@ -89,12 +110,12 @@
     </section>
 
     <section>
-      <h2>2. Antes de empezar</h2>
+      <h2 id="seccion-2">2. Antes de empezar</h2>
       <p>El usuario escribe su password al iniciar sesión. El equipo la convierte en una clave (la <strong>clave del usuario</strong>) y la guarda en memoria. Esa clave es la que se usa en el primer intercambio. La password en sí no se envía.</p>
     </section>
 
     <section>
-      <h2>3. Intercambio 1: AS (el TGT)</h2>
+      <h2 id="seccion-3">3. Intercambio 1: AS (el TGT)</h2>
       <dl class="term-list">
         <div>
           <dt>1. AS-REQ</dt>
@@ -116,7 +137,7 @@
     </section>
 
     <section>
-      <h2>4. Intercambio 2: TGS (el ticket de servicio)</h2>
+      <h2 id="seccion-4">4. Intercambio 2: TGS (el ticket de servicio)</h2>
       <dl class="term-list">
         <div>
           <dt>3. TGS-REQ</dt>
@@ -138,7 +159,7 @@
     </section>
 
     <section>
-      <h2>5. Intercambio 3: AP (el servicio)</h2>
+      <h2 id="seccion-5">5. Intercambio 3: AP (el servicio)</h2>
       <dl class="term-list">
         <div>
           <dt>5. AP-REQ</dt>
@@ -156,7 +177,7 @@
     </section>
 
     <section>
-      <h2>6. Las dos session keys</h2>
+      <h2 id="seccion-6">6. Las dos session keys</h2>
       <dl class="term-list">
         <div>
           <dt>Logon session key</dt>
@@ -171,7 +192,7 @@
     </section>
 
     <section>
-      <h2>7. Por qué hay preautenticación</h2>
+      <h2 id="seccion-7">7. Por qué hay preautenticación</h2>
       <p>Sin ella, cualquiera podría pedir al KDC una respuesta AS-REP para el usuario que quisiera, y esa respuesta ya vendría cifrada con la clave de ese usuario. Con eso se podría intentar adivinar la password sin conectarse más. Con preautenticación, el KDC solo responde si el pedido ya viene cifrado con esa clave.</p>
       <ul>
         <li><strong class="highlight">Riesgo:</strong> existe una opción de cuenta que la desactiva (“Do not require Kerberos preauthentication”). Una cuenta así deja de tener esa protección.</li>
@@ -179,12 +200,12 @@
     </section>
 
     <section>
-      <h2>8. La hora y los timestamps</h2>
+      <h2 id="seccion-8">8. La hora y los timestamps</h2>
       <p>Los authenticators llevan timestamp y sirven también contra repeticiones: un mensaje copiado y reenviado lleva una hora vieja. Si la diferencia entre el reloj del cliente y el del DC supera la tolerancia, <strong class="highlight">la autenticación falla</strong>. El valor por defecto es <strong>5 minutos</strong>. Por eso la hora de los equipos del domain se sincroniza con la jerarquía del domain, que parte del PDC Emulator (ver 02.3).</p>
     </section>
 
     <section>
-      <h2>9. Cuánto duran los tickets</h2>
+      <h2 id="seccion-9">9. Cuánto duran los tickets</h2>
       <p>Por defecto, en la política de Kerberos del domain:</p>
       <dl class="term-list">
         <div>
@@ -203,12 +224,12 @@
     </section>
 
     <section>
-      <h2>10. Los datos de autorización</h2>
+      <h2 id="seccion-10">10. Los datos de autorización</h2>
       <p>Los dos tickets llevan los datos de autorización del usuario, que el KDC copia del TGT al ticket de servicio. Con ellos el servicio sabe quién es el usuario y de qué grupos es miembro. Por eso <strong class="highlight">un cambio de grupos se refleja recién cuando el usuario obtiene un TGT nuevo</strong>, por ejemplo al volver a iniciar sesión.</p>
     </section>
 
     <section>
-      <h2>11. Dónde encajan los ataques</h2>
+      <h2 id="seccion-11">11. Dónde encajan los ataques</h2>
       <dl class="term-list">
         <div>
           <dt>Kerberoasting</dt>
@@ -222,12 +243,12 @@
     </section>
 
     <section>
-      <h2>12. Qué deja en los logs</h2>
+      <h2 id="seccion-12">12. Qué deja en los logs</h2>
       <p>Los intercambios AS y TGS dejan eventos en los DCs: uno cuando se pide un TGT y otro cuando se pide un ticket de servicio.</p>
     </section>
 
     <section>
-      <h2>13. Para no confundirse</h2>
+      <h2 id="seccion-13">13. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">El KDC decide si el usuario puede acceder al servicio</span>: en general, no. Autentica y entrega el ticket; la decisión de acceso la toma el servicio, con los permisos. Las authentication policies pueden hacer que el KDC niegue un ticket (ver 02.9).</li>
         <li><span class="error-mark">La session key viaja en claro</span>: no. Siempre viaja cifrada: una copia con una clave que lee el cliente y otra dentro de un ticket que no lee.</li>

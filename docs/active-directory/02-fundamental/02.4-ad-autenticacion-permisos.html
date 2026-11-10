@@ -44,11 +44,35 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a>
+            <ol>
+              <li><a href="#seccion-1-1">1.1. Cómo se arma el control de permisos de un objeto</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-2">2. Conceptos</a>
+            <ol>
+              <li><a href="#spn">SPN</a></li>
+              <li><a href="#acl">ACL</a></li>
+              <li><a href="#ace">ACE</a></li>
+              <li><a href="#dacl">DACL</a></li>
+              <li><a href="#sacl">SACL</a></li>
+              <li><a href="#security-descriptor">Security Descriptor</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Dos temas relacionados con la seguridad de los objetos: cómo Kerberos encuentra la <strong>cuenta que está detrás de un servicio</strong> (SPN), y cómo AD decide y registra <strong>quién puede hacer qué sobre un objeto</strong> (ACL, ACE, DACL, SACL y Security Descriptor).</p>
 
-      <h3>1.1. Cómo se arma el control de permisos de un objeto</h3>
+      <h3 id="seccion-1-1">1.1. Cómo se arma el control de permisos de un objeto</h3>
       <ul class="tree">
         <li>Security Descriptor <span class="muted-detail">— la estructura completa de seguridad del objeto</span>
           <ul>
@@ -69,21 +93,10 @@
       </ul>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>La DACL decide si podés entrar. La SACL decide si queda registrado que lo intentaste.</p>
-
-      <nav aria-label="Conceptos">
-        <ul class="toc">
-          <li><a href="#spn"><span class="toc__id">1</span>SPN</a></li>
-          <li><a href="#acl"><span class="toc__id">2</span>ACL</a></li>
-          <li><a href="#ace"><span class="toc__id">3</span>ACE</a></li>
-          <li><a href="#dacl"><span class="toc__id">4</span>DACL</a></li>
-          <li><a href="#sacl"><span class="toc__id">5</span>SACL</a></li>
-          <li><a href="#security-descriptor"><span class="toc__id">6</span>Security Descriptor</a></li>
-        </ul>
-      </nav>
     </section>
 
     <section>
-      <h2>2. Conceptos</h2>
+      <h2 id="seccion-2">2. Conceptos</h2>
 
       <article class="concept" id="spn">
         <div class="concept__head">
@@ -205,7 +218,7 @@
     </section>
 
     <section>
-      <h2>3. Para no confundirse</h2>
+      <h2 id="seccion-3">3. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un objeto tiene una ACL simple</span>: no. La ACL es el concepto general, y en la práctica siempre es una DACL, una SACL o ambas.</li>
         <li>Sin DACL y DACL vacía son casos opuestos: sin DACL, todos acceden; con una DACL vacía, nadie accede.</li>

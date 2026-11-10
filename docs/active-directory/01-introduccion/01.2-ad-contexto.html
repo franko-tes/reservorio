@@ -44,8 +44,24 @@
       <p class="ficha__subtitle">Introducción</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. Por qué importa en seguridad</a></li>
+          <li><a href="#seccion-2">2. AD on-premise vs Entra ID</a>
+            <ol>
+              <li><a href="#seccion-2-1">2.1. AD (on-premise)</a></li>
+              <li><a href="#seccion-2-2">2.2. Entra ID (antes Azure AD)</a></li>
+              <li><a href="#seccion-2-3">2.3. Dos piezas que conectan ambos mundos</a></li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. Por qué importa en seguridad</h2>
+      <h2 id="seccion-1">1. Por qué importa en seguridad</h2>
       <ul>
         <li>AD fue diseñado para ser <strong class="highlight">retrocompatible</strong> con versiones viejas de Windows → muchas funciones no son seguras por default → es fácil de malconfigurar.</li>
         <li>Es, en esencia, una base de datos de <strong class="highlight">solo lectura accesible por cualquier usuario autenticado</strong>, sin importar su nivel de privilegio → una cuenta de dominio básica puede enumerar la mayoría de los objetos.
@@ -66,11 +82,11 @@
     </section>
 
     <section>
-      <h2>2. AD on-premise vs Entra ID</h2>
+      <h2 id="seccion-2">2. AD on-premise vs Entra ID</h2>
 
       <div class="two-col">
         <div class="two-col__col">
-          <h3>2.1. AD (on-premise)</h3>
+          <h3 id="seccion-2-1">2.1. AD (on-premise)</h3>
           <ul>
             <li>DCs propios</li>
             <li>Kerberos, NTLM, LDAP</li>
@@ -78,7 +94,7 @@
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>2.2. Entra ID (antes Azure AD)</h3>
+          <h3 id="seccion-2-2">2.2. Entra ID (antes Azure AD)</h3>
           <ul>
             <li>Servicio de identidad en la nube</li>
             <li>OAuth, OIDC, SAML</li>
@@ -89,7 +105,7 @@
 
       <p><span class="error-mark">Entra ID no es "AD en la nube"</span>: es un servicio de identidad distinto, aunque cumple un rol equivalente.</p>
 
-      <h3>2.3. Dos piezas que conectan ambos mundos</h3>
+      <h3 id="seccion-2-3">2.3. Dos piezas que conectan ambos mundos</h3>
       <dl class="term-list">
         <div>
           <dt><code>ADFS</code></dt>

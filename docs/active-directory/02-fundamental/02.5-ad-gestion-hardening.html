@@ -44,8 +44,27 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Conceptos</a>
+            <ol>
+              <li><a href="#gpo">GPO</a></li>
+              <li><a href="#adminsdholder">AdminSDHolder</a></li>
+              <li><a href="#admincount">adminCount</a></li>
+              <li><a href="#dsheuristics">dsHeuristics</a></li>
+              <li><a href="#sidhistory">sIDHistory</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Mecanismos que sirven para <strong>administrar y proteger</strong> AD. Cada uno es útil para el administrador, pero también es un lugar donde un atacante puede ganar poder o persistencia.</p>
 
       <dl class="term-list">
@@ -68,20 +87,10 @@
       </dl>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>Para cada concepto, retené el mecanismo y el riesgo: qué hace para el administrador y qué puede hacer un atacante con él.</p>
-
-      <nav aria-label="Conceptos">
-        <ul class="toc">
-          <li><a href="#gpo"><span class="toc__id">1</span>GPO</a></li>
-          <li><a href="#adminsdholder"><span class="toc__id">2</span>AdminSDHolder</a></li>
-          <li><a href="#admincount"><span class="toc__id">3</span>adminCount</a></li>
-          <li><a href="#dsheuristics"><span class="toc__id">4</span>dsHeuristics</a></li>
-          <li><a href="#sidhistory"><span class="toc__id">5</span>sIDHistory</a></li>
-        </ul>
-      </nav>
     </section>
 
     <section>
-      <h2>2. Conceptos</h2>
+      <h2 id="seccion-2">2. Conceptos</h2>
 
       <article class="concept" id="gpo">
         <div class="concept__head">
@@ -155,7 +164,7 @@
     </section>
 
     <section>
-      <h2>3. Para no confundirse</h2>
+      <h2 id="seccion-3">3. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Puedo cambiar la DACL de una sola cuenta protegida y que el cambio quede</span>: no. SDProp la revierte, salvo que se modifique el AdminSDHolder, que afecta a todos por igual.</li>
         <li><code>adminCount=1</code> no significa que la cuenta sea admin hoy: puede ser un ex-miembro de un grupo privilegiado.</li>

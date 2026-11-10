@@ -44,8 +44,28 @@
       <p class="ficha__subtitle">Protocolos</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. DNS: cómo se encuentra un DC</a>
+            <ol>
+              <li><a href="#seccion-2-1">2.1. Campos de un registro SRV</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. LDAP: qué es</a></li>
+          <li><a href="#seccion-4">4. Puertos</a></li>
+          <li><a href="#seccion-5">5. Anatomía de una consulta</a></li>
+          <li><a href="#seccion-6">6. Cómo se autentica (bind)</a></li>
+          <li><a href="#seccion-7">7. Firmado y channel binding</a></li>
+          <li><a href="#seccion-8">8. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>DNS y LDAP no autentican al usuario como Kerberos o NTLM, pero AD no funciona sin ellos:</p>
       <ul>
         <li><strong>DNS:</strong> permite al equipo encontrar los DC.</li>
@@ -56,7 +76,7 @@
     </section>
 
     <section>
-      <h2>2. DNS: cómo se encuentra un DC</h2>
+      <h2 id="seccion-2">2. DNS: cómo se encuentra un DC</h2>
       <ul>
         <li>Puerto <strong>53</strong>, TCP y UDP.</li>
         <li>Los DC registran en DNS registros <strong>SRV</strong>, que asocian un servicio con los equipos que lo ofrecen.</li>
@@ -69,7 +89,7 @@
         <li><strong class="highlight">Relevante:</strong> si el equipo no resuelve estos registros, no encuentra un DC y no puede pedir el TGT (ver 03.1).</li>
       </ul>
 
-      <h3>2.1. Campos de un registro SRV</h3>
+      <h3 id="seccion-2-1">2.1. Campos de un registro SRV</h3>
       <dl class="term-list">
         <div>
           <dt>Priority</dt>
@@ -91,7 +111,7 @@
     </section>
 
     <section>
-      <h2>3. LDAP: qué es</h2>
+      <h2 id="seccion-3">3. LDAP: qué es</h2>
       <ul>
         <li>Es un protocolo estándar abierto (RFC 4511) para consultar y modificar un directorio. AD lo usa como protocolo de acceso.</li>
         <li>Lo usan las herramientas de administración, las aplicaciones y los propios equipos del domain.</li>
@@ -99,7 +119,7 @@
     </section>
 
     <section>
-      <h2>4. Puertos</h2>
+      <h2 id="seccion-4">4. Puertos</h2>
       <dl class="term-list">
         <div>
           <dt>389</dt>
@@ -121,7 +141,7 @@
     </section>
 
     <section>
-      <h2>5. Anatomía de una consulta</h2>
+      <h2 id="seccion-5">5. Anatomía de una consulta</h2>
       <p>Una consulta LDAP indica tres cosas:</p>
       <dl class="term-list">
         <div>
@@ -140,7 +160,7 @@
     </section>
 
     <section>
-      <h2>6. Cómo se autentica (bind)</h2>
+      <h2 id="seccion-6">6. Cómo se autentica (bind)</h2>
       <p>Antes de consultar, el cliente hace un <strong>bind</strong>: se autentica ante el DC, y las consultas de esa conexión se hacen con esa identidad y sus permisos. Hay tres clases de bind:</p>
       <dl class="term-list">
         <div>
@@ -159,7 +179,7 @@
     </section>
 
     <section>
-      <h2>7. Firmado y channel binding</h2>
+      <h2 id="seccion-7">7. Firmado y channel binding</h2>
       <p>Son protecciones que se suman a una conexión LDAP para que no se puedan alterar los mensajes, leerlos ni reenviar la autenticación por otra sesión:</p>
       <ul>
         <li><strong>LDAP signing:</strong> firma los mensajes para detectar que no fueron alterados.</li>
@@ -172,7 +192,7 @@
     </section>
 
     <section>
-      <h2>8. Para no confundirse</h2>
+      <h2 id="seccion-8">8. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">LDAP siempre viaja en claro</span>: no. Con LDAPS (o STARTTLS) o con sealing de SASL va cifrado. El firmado solo detecta alteraciones; no oculta el contenido.</li>
         <li><span class="error-mark">La password nunca viaja por la red en AD</span>: con Kerberos y NTLM, no. Con un bind simple de LDAP sí viaja, y solo está protegida si la conexión va cifrada.</li>

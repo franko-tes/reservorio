@@ -44,14 +44,30 @@
       <p class="ficha__subtitle">Introducción</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. Qué es</a></li>
+          <li><a href="#seccion-2">2. Para qué sirve</a></li>
+          <li><a href="#seccion-3">3. Cómo funciona</a></li>
+          <li><a href="#seccion-4">4. Estructura</a>
+            <ol>
+              <li><a href="#seccion-4-1">4.1. Ejemplo mental (TechCorp)</a></li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. Qué es</h2>
+      <h2 id="seccion-1">1. Qué es</h2>
       <p>Servicio de directorio de Microsoft, distribuido y jerárquico, que <strong class="highlight">centraliza la administración de identidades y recursos</strong> de una organización: usuarios, grupos, equipos, impresoras, dispositivos de red, políticas y relaciones de confianza (<em>trusts</em>) entre dominios.</p>
       <p>Toda esa información vive en una base de datos jerárquica (el directorio) que sirven los Domain Controllers.</p>
     </section>
 
     <section>
-      <h2>2. Para qué sirve</h2>
+      <h2 id="seccion-2">2. Para qué sirve</h2>
       <ul>
         <li><strong>Autenticación:</strong> verificar quién es cada usuario (un solo login válido en todo el dominio).</li>
         <li><strong>Autorización:</strong> decidir a qué puede acceder (grupos, permisos, ACLs).</li>
@@ -60,7 +76,7 @@
     </section>
 
     <section>
-      <h2>3. Cómo funciona</h2>
+      <h2 id="seccion-3">3. Cómo funciona</h2>
       <dl class="term-list">
         <div>
           <dt><code>Domain Controller (DC)</code></dt>
@@ -86,10 +102,10 @@
     </section>
 
     <section>
-      <h2>4. Estructura</h2>
+      <h2 id="seccion-4">4. Estructura</h2>
       <p><code>Forest &gt; Tree &gt; Domain &gt; OU (container) &gt; objetos (leaf)</code></p>
 
-      <h3>4.1. Ejemplo mental (TechCorp)</h3>
+      <h3 id="seccion-4-1">4.1. Ejemplo mental (TechCorp)</h3>
       <ul class="tree">
         <li>Forest: techcorp.local
           <ul>

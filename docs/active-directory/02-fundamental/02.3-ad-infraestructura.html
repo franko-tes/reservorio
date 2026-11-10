@@ -44,8 +44,26 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Conceptos</a>
+            <ol>
+              <li><a href="#fsmo">Roles FSMO</a></li>
+              <li><a href="#global-catalog">Global Catalog</a></li>
+              <li><a href="#rodc">RODC</a></li>
+              <li><a href="#replicacion">Replicación</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Con <strong>un solo Domain Controller (DC)</strong> no hay decisiones que tomar: todo vive en esa máquina. Estos conceptos cobran sentido cuando hay <strong>dos o más DCs</strong> y aparecen preguntas nuevas:</p>
 
       <dl class="term-list">
@@ -68,19 +86,10 @@
       </dl>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>Los DCs se reparten el trabajo y se copian la información entre ellos. Si uno cae, los otros siguen funcionando.</p>
-
-      <nav aria-label="Conceptos">
-        <ul class="toc">
-          <li><a href="#fsmo"><span class="toc__id">1</span>FSMO</a></li>
-          <li><a href="#global-catalog"><span class="toc__id">2</span>Global Catalog</a></li>
-          <li><a href="#rodc"><span class="toc__id">3</span>RODC</a></li>
-          <li><a href="#replicacion"><span class="toc__id">4</span>Replicación</a></li>
-        </ul>
-      </nav>
     </section>
 
     <section>
-      <h2>2. Conceptos</h2>
+      <h2 id="seccion-2">2. Conceptos</h2>
 
       <article class="concept" id="fsmo">
         <div class="concept__head">
@@ -183,7 +192,7 @@
     </section>
 
     <section>
-      <h2>3. Para no confundirse</h2>
+      <h2 id="seccion-3">3. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">El PDC Emulator procesa toda la autenticación</span>: no. Cualquier DC autentica. El PDC Emulator es la referencia prioritaria para cambios de password, lockouts, GPO y hora.</li>
         <li>Los roles FSMO no son un servidor aparte: son una etiqueta que lleva un DC, y un mismo DC puede llevar varias.</li>

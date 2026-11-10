@@ -528,40 +528,7 @@ nav.ficha__pagination a:last-child {
   margin: var(--space-2) 0 0;
 }
 
-/* ---------- 16. Índice de conceptos ----------
-   Lista de enlaces internos (anclas) a cada concepto de la ficha. */
-.toc {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: 0 0 var(--space-4);
-}
-
-.toc a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap-size);
-  padding: 0 0.75rem;
-  font-size: var(--fs-sm);
-  line-height: var(--lh-sm);
-  text-decoration: none;
-  background: var(--color-bg-subtle);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-}
-
-.toc a:hover {
-  border-color: var(--color-primary);
-}
-
-.toc__id {
-  margin-right: 0.35em;
-  font-family: var(--font-mono);
-  color: var(--color-text-muted);
-}
-
-/* ---------- 17. Tema desplegable ----------
+/* ---------- 16. Tema desplegable ----------
    Un tema del área con sus contenidos, plegado por defecto. Sin JavaScript.
    Estructura: details.topic > summary.topic__summary
    (span.topic__title + span.topic__count) + dl.term-list con los contenidos. */
@@ -628,7 +595,7 @@ nav.ficha__pagination a:last-child {
   border-bottom: none;
 }
 
-/* ---------- 18. Diagrama (figura con SVG en línea) ----------
+/* ---------- 17. Diagrama (figura con SVG en línea) ----------
    Uso: figure.diagram > svg + figcaption.
    El SVG se dibuja en un viewBox de 272 px de ancho (el ancho útil a
    320 px de pantalla) y no pasa de ese ancho (max-width: 17rem), así el
@@ -686,9 +653,9 @@ figure.diagram figcaption {
   font-weight: 600;
 }
 
-/* ---------- 19. Diagrama de alcances (recuadros anidados) ----------
-   Uso: dentro de un figure.diagram (sección 18), como en la 04.2.
-   Complementa la sección 18 con recuadros anidados (domain, forest, trusts).
+/* ---------- 18. Diagrama de alcances (recuadros anidados) ----------
+   Uso: dentro de un figure.diagram (sección 17), como en la 04.2.
+   Complementa la sección 17 con recuadros anidados (domain, forest, trusts).
    El recuadro hasta donde llega algo va con borde continuo y fondo; el que
    no alcanza, punteado y sin fondo, así no depende del color. */
 .diagram__box {
@@ -711,4 +678,136 @@ figure.diagram figcaption {
 
 .diagram__boxlabel--off {
   fill: var(--color-text-muted);
+}
+
+/* ---------- 19. Temario de la ficha ----------
+   Lista de enlaces a cada h2 y h3 de la ficha, después del header.
+   Estructura: details.temario > summary.temario__summary
+   + nav > ol.temario__list (los h3, en un ol anidado dentro de su h2).
+   Hasta 76rem (1216 px): desplegable, cerrado por defecto. Desde ahí:
+   columna fija en el margen izquierdo, con la ficha centrada como
+   siempre; queda abierta en los navegadores que soportan
+   ::details-content, y en los demás es un desplegable dentro de la
+   columna. Sin JavaScript. Cada h2 y h3
+   lleva un id con su número: seccion-4, seccion-4-1. */
+/* Arriba se apoya en el borde inferior del header de la ficha */
+.temario {
+  margin: calc(var(--space-5) * -1) 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.temario__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-size);
+  padding: var(--space-2) 0;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.temario__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Mismo chevron que el tema desplegable (sección 16) */
+.temario__summary::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-inline: 0.25rem;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  transform: rotate(-45deg);
+}
+
+.temario[open] > .temario__summary::before {
+  transform: rotate(45deg);
+}
+
+.temario__summary:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.temario__list,
+.temario__list ol {
+  list-style: none;
+}
+
+.temario__list {
+  padding-bottom: var(--space-2);
+}
+
+.temario__list ol {
+  padding-left: var(--space-4);
+}
+
+.temario__list a {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-size);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.temario__list a:hover {
+  text-decoration: underline;
+}
+
+/* Al saltar desde el temario, el título no queda pegado al borde */
+.ficha h2[id],
+.ficha h3[id],
+.ficha .concept[id] {
+  scroll-margin-top: var(--space-4);
+}
+
+@media (min-width: 76rem) {
+  /* La ficha sigue centrada. La columna ocupa el margen izquierdo: su borde
+     derecho toca la caja de la ficha, y el padding de la ficha deja el aire
+     con el texto. Desde 76rem (1216 px) el margen alcanza para 15rem. */
+  .temario {
+    --temario-ancho: 15rem;
+    position: fixed;
+    top: var(--space-5);
+    left: calc((100% - var(--max-width)) / 2 - var(--temario-ancho));
+    width: var(--temario-ancho);
+    max-height: calc(100vh - var(--space-5) * 2);
+    overflow-y: auto;
+    margin: 0;
+    border-bottom: none;
+  }
+
+  /* Con mouse, los puntos van más juntos: 32 px de alto (excepción a
+     --tap-size, que sigue valiendo en el desplegable del celular) */
+  .temario__list a {
+    min-height: 2rem;
+  }
+
+  /* Siempre abierto: el summary queda como título, sin chevron, y el
+     contenido se muestra aunque el details esté cerrado */
+  @supports selector(::details-content) {
+    .temario > .temario__summary {
+      cursor: default;
+    }
+
+    .temario > .temario__summary::before {
+      display: none;
+    }
+
+    .temario::details-content {
+      content-visibility: visible;
+    }
+  }
+}
+
+@media print {
+  .temario {
+    display: none;
+  }
 }

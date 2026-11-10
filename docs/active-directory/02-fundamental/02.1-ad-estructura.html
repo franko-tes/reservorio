@@ -44,11 +44,38 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a>
+            <ol>
+              <li><a href="#seccion-1-1">1.1. La jerarquía, de mayor a menor</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-2">2. Conceptos</a>
+            <ol>
+              <li><a href="#object">Object</a></li>
+              <li><a href="#attributes">Attributes</a></li>
+              <li><a href="#schema">Schema</a></li>
+              <li><a href="#domain">Domain</a></li>
+              <li><a href="#forest">Forest</a></li>
+              <li><a href="#tree">Tree</a></li>
+              <li><a href="#container">Container</a></li>
+              <li><a href="#ou">OU</a></li>
+              <li><a href="#leaf">Leaf</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Todo lo que AD administra es un <strong>objeto</strong>, y los objetos no están sueltos: viven dentro de una jerarquía. Acá respondemos dos preguntas: <em>qué puede existir</em> (Object, Attributes, Schema) y <em>dónde vive</em> (Forest, Tree, Domain, Container, OU, Leaf).</p>
 
-      <h3>1.1. La jerarquía, de mayor a menor</h3>
+      <h3 id="seccion-1-1">1.1. La jerarquía, de mayor a menor</h3>
       <ul class="tree">
         <li>Forest <span class="muted-detail">— el país: el contenedor más grande</span>
           <ul>
@@ -70,24 +97,10 @@
       </ul>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>El Schema atraviesa toda la jerarquía: define qué clases de objetos y qué atributos pueden existir en cualquier nivel.</p>
-
-      <nav aria-label="Conceptos">
-        <ul class="toc">
-          <li><a href="#object"><span class="toc__id">1</span>Object</a></li>
-          <li><a href="#attributes"><span class="toc__id">2</span>Attributes</a></li>
-          <li><a href="#schema"><span class="toc__id">3</span>Schema</a></li>
-          <li><a href="#domain"><span class="toc__id">4</span>Domain</a></li>
-          <li><a href="#forest"><span class="toc__id">5</span>Forest</a></li>
-          <li><a href="#tree"><span class="toc__id">6</span>Tree</a></li>
-          <li><a href="#container"><span class="toc__id">7</span>Container</a></li>
-          <li><a href="#ou"><span class="toc__id">8</span>OU</a></li>
-          <li><a href="#leaf"><span class="toc__id">9</span>Leaf</a></li>
-        </ul>
-      </nav>
     </section>
 
     <section>
-      <h2>2. Conceptos</h2>
+      <h2 id="seccion-2">2. Conceptos</h2>
 
       <article class="concept" id="object">
         <div class="concept__head">
@@ -219,7 +232,7 @@
     </section>
 
     <section>
-      <h2>3. Para no confundirse</h2>
+      <h2 id="seccion-3">3. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un domain tiene un solo DC</span>: no es así, un domain puede tener varios DCs. Cada DC guarda la copia completa de los datos de su propio domain y nada de los datos de los demás domains (salvo que sea Global Catalog, que guarda una copia parcial).</li>
         <li><span class="error-mark">Users y Computers son OUs</span>: no. Son containers por defecto. La única OU que viene creada en un domain es <code>Domain Controllers</code>.</li>

@@ -44,13 +44,37 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a>
+            <ol>
+              <li><a href="#seccion-1-1">1.1. Con SID y GUID</a></li>
+              <li><a href="#seccion-1-2">1.2. Solo GUID</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-2">2. Los que tienen SID</a>
+            <ol>
+              <li><a href="#seccion-2-1">2.1. User</a></li>
+              <li><a href="#seccion-2-2">2.2. Computer</a></li>
+              <li><a href="#seccion-2-3">2.3. Group</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Los que apuntan a algo (solo GUID)</a></li>
+          <li><a href="#seccion-4">4. OU, grupo, GPO y container</a></li>
+          <li><a href="#seccion-5">5. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Todo en AD es un objeto, pero no todos se comportan igual. Lo que más los distingue es si tienen <strong>SID</strong>: solo los que lo tienen son security principals, es decir, pueden recibir permisos; los usuarios y los equipos, además, pueden autenticarse.</p>
 
       <div class="two-col">
         <div class="two-col__col">
-          <h3>1.1. Con SID y GUID</h3>
+          <h3 id="seccion-1-1">1.1. Con SID y GUID</h3>
           <ul>
             <li>User: la cuenta de una persona o servicio</li>
             <li>Computer: un equipo unido al domain</li>
@@ -58,7 +82,7 @@
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>1.2. Solo GUID</h3>
+          <h3 id="seccion-1-2">1.2. Solo GUID</h3>
           <ul>
             <li>Contact: una persona externa</li>
             <li>Printer: apunta a una impresora</li>
@@ -71,23 +95,23 @@
     </section>
 
     <section>
-      <h2>2. Los que tienen SID</h2>
+      <h2 id="seccion-2">2. Los que tienen SID</h2>
 
-      <h3>2.1. User</h3>
+      <h3 id="seccion-2-1">2.1. User</h3>
       <ul>
         <li>Cuenta de una persona o de un servicio dentro del domain. Es leaf.</li>
         <li>Atributos típicos: nombre a mostrar, último logon, último cambio de password, mail, descripción, manager y dirección. Según la configuración, hay cientos de atributos posibles.</li>
         <li><strong class="highlight">Riesgo:</strong> cualquier cuenta, aunque no tenga privilegios, permite enumerar casi todo el domain (equipos, usuarios, grupos, OUs, GPOs, trusts, política de passwords). Por eso es el primer objetivo.</li>
       </ul>
 
-      <h3>2.2. Computer</h3>
+      <h3 id="seccion-2-2">2.2. Computer</h3>
       <ul>
         <li>Equipo unido al domain, ya sea estación de trabajo o servidor. Es leaf.</li>
         <li>Tiene su propia cuenta, con nombre terminado en <code>$</code>, por ejemplo <code>PC01$</code>.</li>
         <li><strong class="highlight">Riesgo:</strong> cuando un equipo sale a la red con su identidad local (<code>SYSTEM</code>), se autentica como esa cuenta de equipo. Esa cuenta alcanza para enumerar gran parte del domain, igual que un usuario común.</li>
       </ul>
 
-      <h3>2.3. Group</h3>
+      <h3 id="seccion-2-3">2.3. Group</h3>
       <ul>
         <li>Agrupa usuarios, equipos y otros grupos para asignar permisos a muchos a la vez. Ejemplo: en vez de dar permiso a una carpeta compartida a 20 usuarios de Finanzas, uno por uno, se le da el permiso al grupo <code>Finanzas</code>.</li>
         <li>Pueden ser de <strong>seguridad</strong> (dan permisos) o de <strong>distribución</strong> (solo para mail, no dan permisos).</li>
@@ -98,7 +122,7 @@
     </section>
 
     <section>
-      <h2>3. Los que apuntan a algo (solo GUID)</h2>
+      <h2 id="seccion-3">3. Los que apuntan a algo (solo GUID)</h2>
       <p>Contact, Printer y Shared Folder tienen en común que son leaf, no son security principals y representan algo que está en otro lado.</p>
 
       <dl class="term-list">
@@ -122,7 +146,7 @@
     </section>
 
     <section>
-      <h2>4. OU, grupo, GPO y container</h2>
+      <h2 id="seccion-4">4. OU, grupo, GPO y container</h2>
       <p>Los cuatro “agrupan” o “organizan” algo, y por eso se confunden. Cada uno responde una pregunta distinta:</p>
 
       <dl class="term-list">
@@ -148,7 +172,7 @@
     </section>
 
     <section>
-      <h2>5. Para no confundirse</h2>
+      <h2 id="seccion-5">5. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Estar en una OU da permisos</span>: no. La OU ubica al objeto; los permisos se asignan a usuarios o grupos.</li>
         <li><span class="error-mark">Una GPO se linkea a un grupo</span>: no. Se linkea a un domain, una OU o un site. Un grupo solo sirve para filtrar a quién se aplica.</li>

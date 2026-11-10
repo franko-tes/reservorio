@@ -44,8 +44,33 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Cómo se clasifican</a>
+            <ol>
+              <li><a href="#seccion-2-1">2.1. Transitividad</a></li>
+              <li><a href="#seccion-2-2">2.2. Dirección</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Tipos</a></li>
+          <li><a href="#seccion-4">4. Ejemplo con dos forests</a>
+            <ol>
+              <li><a href="#seccion-4-1">4.1. Forest 1</a></li>
+              <li><a href="#seccion-4-2">4.2. Forest 2</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-5">5. Foreign Security Principal</a></li>
+          <li><a href="#seccion-6">6. Riesgos</a></li>
+          <li><a href="#seccion-7">7. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Un <strong>trust</strong> es un vínculo entre los sistemas de autenticación de dos domains (o dos forests) que permite que los usuarios de uno accedan a recursos del otro, o los administren.</p>
       <p>Son comunes en empresas que absorben otras: crear un trust es más rápido que recrear todos los usuarios en el domain principal.</p>
 
@@ -53,19 +78,19 @@
     </section>
 
     <section>
-      <h2>2. Cómo se clasifican</h2>
+      <h2 id="seccion-2">2. Cómo se clasifican</h2>
       <p>Todo trust se describe con dos ejes:</p>
 
       <div class="two-col">
         <div class="two-col__col">
-          <h3>2.1. Transitividad</h3>
+          <h3 id="seccion-2-1">2.1. Transitividad</h3>
           <ul>
             <li><strong>Transitivo:</strong> si A confía en B y B confía en C, entonces A confía en C.</li>
             <li><strong>No transitivo:</strong> la confianza llega solo hasta el domain directamente vinculado.</li>
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>2.2. Dirección</h3>
+          <h3 id="seccion-2-2">2.2. Dirección</h3>
           <ul>
             <li><strong>Bidireccional:</strong> los usuarios de ambos domains acceden a recursos del otro.</li>
             <li><strong>Unidireccional:</strong> solo los usuarios del domain <em>trusted</em> acceden a recursos del domain <em>trusting</em>.</li>
@@ -77,7 +102,7 @@
     </section>
 
     <section>
-      <h2>3. Tipos</h2>
+      <h2 id="seccion-3">3. Tipos</h2>
 
       <dl class="term-list">
         <div>
@@ -108,12 +133,12 @@
     </section>
 
     <section>
-      <h2>4. Ejemplo con dos forests</h2>
+      <h2 id="seccion-4">4. Ejemplo con dos forests</h2>
       <p>Dos forests, <code>techcorp.local</code> y <code>labcorp.local</code>, con trust bidireccional entre sus raíces. Se quiere saber si un usuario de <code>admin.dev.labcorp.local</code> puede autenticarse contra equipos de <code>wh.corp.techcorp.local</code>.</p>
 
       <div class="two-col">
         <div class="two-col__col">
-          <h3>4.1. Forest 1</h3>
+          <h3 id="seccion-4-1">4.1. Forest 1</h3>
           <ul class="tree">
             <li>techcorp.local
               <ul>
@@ -127,7 +152,7 @@
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>4.2. Forest 2</h3>
+          <h3 id="seccion-4-2">4.2. Forest 2</h3>
           <ul class="tree">
             <li>labcorp.local
               <ul>
@@ -149,7 +174,7 @@
     </section>
 
     <section>
-      <h2>5. Foreign Security Principal</h2>
+      <h2 id="seccion-5">5. Foreign Security Principal</h2>
       <p>Un <strong>FSP</strong> es el objeto que representa, en un domain, a un security principal de otro forest.</p>
       <ul>
         <li>Se crea solo cuando ese principal (usuario, grupo o equipo) se agrega a un grupo del domain.</li>
@@ -160,7 +185,7 @@
     </section>
 
     <section>
-      <h2>6. Riesgos</h2>
+      <h2 id="seccion-6">6. Riesgos</h2>
       <dl class="term-list">
         <div>
           <dt>Trusts sin revisar</dt>
@@ -182,7 +207,7 @@
     </section>
 
     <section>
-      <h2>7. Para no confundirse</h2>
+      <h2 id="seccion-7">7. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Un trust bidireccional da acceso a todo</span>: no. Abre la autenticación; el acceso lo siguen decidiendo los permisos.</li>
         <li><span class="error-mark">Todos los trusts son transitivos</span>: no. El external no lo es.</li>

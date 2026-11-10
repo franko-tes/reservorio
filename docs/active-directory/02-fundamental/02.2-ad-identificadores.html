@@ -44,13 +44,40 @@
       <p class="ficha__subtitle">Fundamental</p>
     </header>
 
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a>
+            <ol>
+              <li><a href="#seccion-1-1">1.1. Para ubicar por nombre</a></li>
+              <li><a href="#seccion-1-2">1.2. Para confiar en la identidad</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-2">2. Conceptos</a>
+            <ol>
+              <li><a href="#guid">GUID</a></li>
+              <li><a href="#sid">SID</a></li>
+              <li><a href="#security-principal">Security Principal</a></li>
+              <li><a href="#dn">DN</a></li>
+              <li><a href="#rdn">RDN</a></li>
+              <li><a href="#samaccountname">sAMAccountName</a></li>
+              <li><a href="#upn">UPN</a></li>
+            </ol>
+          </li>
+          <li><a href="#seccion-3">3. Ejemplo</a></li>
+          <li><a href="#seccion-4">4. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
     <section>
-      <h2>1. De qué trata</h2>
+      <h2 id="seccion-1">1. De qué trata</h2>
       <p>Cada objeto de AD tiene varias “identidades”. Unas sirven para <strong>ubicarlo por nombre</strong> (cómodas para las personas, pero se pueden cambiar). Otras sirven para <strong>reconocerlo con certeza</strong> (las usa el sistema para permisos y autenticación, y no dependen del nombre).</p>
 
       <div class="two-col">
         <div class="two-col__col">
-          <h3>1.1. Para ubicar por nombre</h3>
+          <h3 id="seccion-1-1">1.1. Para ubicar por nombre</h3>
           <ul>
             <li>DN: la ruta completa</li>
             <li>RDN: el nombre en su nivel</li>
@@ -59,7 +86,7 @@
           </ul>
         </div>
         <div class="two-col__col">
-          <h3>1.2. Para confiar en la identidad</h3>
+          <h3 id="seccion-1-2">1.2. Para confiar en la identidad</h3>
           <ul>
             <li>GUID: identifica al objeto</li>
             <li>SID: identifica al security principal para permisos</li>
@@ -68,22 +95,10 @@
       </div>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>Los nombres se pueden cambiar y repetir en distintos lugares. El GUID y el SID no se pueden falsificar tan fácil, por eso el sistema confía en ellos.</p>
-
-      <nav aria-label="Conceptos">
-        <ul class="toc">
-          <li><a href="#guid"><span class="toc__id">1</span>GUID</a></li>
-          <li><a href="#sid"><span class="toc__id">2</span>SID</a></li>
-          <li><a href="#security-principal"><span class="toc__id">3</span>Security Principal</a></li>
-          <li><a href="#dn"><span class="toc__id">4</span>DN</a></li>
-          <li><a href="#rdn"><span class="toc__id">5</span>RDN</a></li>
-          <li><a href="#samaccountname"><span class="toc__id">6</span>sAMAccountName</a></li>
-          <li><a href="#upn"><span class="toc__id">7</span>UPN</a></li>
-        </ul>
-      </nav>
     </section>
 
     <section>
-      <h2>2. Conceptos</h2>
+      <h2 id="seccion-2">2. Conceptos</h2>
 
       <article class="concept" id="guid">
         <div class="concept__head">
@@ -232,7 +247,7 @@
     </section>
 
     <section>
-      <h2>3. Ejemplo</h2>
+      <h2 id="seccion-3">3. Ejemplo</h2>
       <p>Un mismo usuario, <code>bjones</code>, visto con cada identificador:</p>
       <pre class="code-block" tabindex="0"><code>GUID            3f2a9c4e-7b1d-4e68-9a52-c0d8e1f47b36
 SID             S-1-5-21-3623811015-3361044348-30300820-1013
@@ -243,7 +258,7 @@ UPN             bjones@techcorp.local</code></pre>
     </section>
 
     <section>
-      <h2>4. Para no confundirse</h2>
+      <h2 id="seccion-4">4. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">Si renombro o muevo un usuario, cambia su SID</span>: no. Dentro del mismo domain, cambian el DN (y el sAMAccountName o el UPN, si se los edita), pero el GUID y el SID siguen igual.</li>
         <li>El GUID y el SID se generan en el mismo momento y lugar (el DC que corre AD DS), pero el SID depende de un bloque de RIDs que le asignó antes el RID Master.</li>
