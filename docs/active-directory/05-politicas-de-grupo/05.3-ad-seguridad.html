@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Seguridad de las GPO</title>
+<meta name="description" content="Seguridad de las GPO en Active Directory: quién puede editar, crear y vincular una GPO, qué se puede cambiar con ellas (políticas y preferencias), hasta dónde llega un cambio y qué eventos quedan en los logs (5136, 5137, 5141 y 4739).">
+<meta name="keywords" content="active directory, GPO, group policy, seguridad, permisos, vincular GPO, Group Policy Preferences, MS14-025, SharpGPOAbuse, BloodHound, 5136, 4739, auditoría">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Seguridad de las GPO">
+<meta property="og:description" content="Quién puede modificar una GPO, qué se puede cambiar con ella, hasta dónde llega un cambio y qué queda registrado en los logs.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Seguridad de las GPO",
+  "description": "Quién puede modificar una GPO, qué se puede cambiar con ella, hasta dónde llega un cambio y qué queda registrado en los logs.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Políticas de grupo"
+  },
+  "position": 3
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Seguridad de las GPO</h1>
+      <p class="ficha__subtitle">Políticas de grupo</p>
+    </header>
+
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Quién puede modificar una GPO</a></li>
+          <li><a href="#seccion-3">3. Qué se puede cambiar con una GPO</a></li>
+          <li><a href="#seccion-4">4. Hasta dónde llega un cambio</a></li>
+          <li><a href="#seccion-5">5. Qué queda en los logs</a></li>
+          <li><a href="#seccion-6">6. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
+    <section>
+      <h2 id="seccion-1">1. De qué trata</h2>
+      <p>Una GPO es un punto de control: quien puede modificarla decide qué se configura en todos los usuarios y equipos a los que llega. Eso la vuelve útil para administrar y, a la vez, un objetivo interesante. Acá vemos quién puede modificar una GPO, qué se puede cambiar con ella, hasta dónde llega un cambio y qué queda registrado. Qué es una GPO se explica en 05.1, y el riesgo de editarla o vincularla, en 02.5.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>El riesgo de una GPO no está en lo que dice hoy, sino en quién puede cambiarla y a cuántos equipos llega el cambio.</p>
+    </section>
+
+    <section>
+      <h2 id="seccion-2">2. Quién puede modificar una GPO</h2>
+      <ul>
+        <li>Los permisos sobre una GPO se ven en la pestaña <em>Delegation</em> de la GPMC.</li>
+        <li><strong class="highlight">Son tres permisos distintos</strong>: <strong>editar</strong> (sobre la GPO), <strong>crear</strong> (en el domain) y <strong>vincular</strong> (sobre el site, el domain o la OU, no sobre la GPO).</li>
+        <li>Por defecto, solo <code>Domain Admins</code> y <code>Enterprise Admins</code> pueden vincular una GPO a un domain o a una OU.</li>
+        <li>Crear GPO lo puede hacer, entre otros, <code>Group Policy Creator Owners</code> (ver 04.4).</li>
+        <li><strong class="highlight">Relevante:</strong> los permisos pueden llegar a una cuenta por grupos anidados (ver 04.2), así que una cuenta común puede terminar pudiendo editar una GPO sin figurar directamente en ella. Herramientas como BloodHound muestran esas cadenas.</li>
+        <li>Por ejemplo, en techcorp.local, si el grupo Empleados tiene permiso de edición sobre una GPO vinculada a la OU Servidores, cualquier cuenta de ese grupo puede cambiar la configuración de esos servidores.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-3">3. Qué se puede cambiar con una GPO</h2>
+      <ul>
+        <li><strong>Políticas de seguridad:</strong> por ejemplo, los derechos de usuario (ver 04.3) o la política de cuentas del domain (ver 05.1).</li>
+        <li><strong>Preferencias (Group Policy Preferences):</strong> permiten crear, modificar o borrar usuarios y grupos locales, tareas programadas o inmediatas, archivos y claves del registro. Por defecto se aplican de nuevo en cada actualización de la política, así que un cambio que haga un usuario se revierte en la siguiente.</li>
+        <li><strong class="highlight">Riesgo:</strong> con permiso de edición sobre una GPO se puede, por ejemplo, agregar una cuenta al grupo de administradores locales de todos los equipos alcanzados, o crear una tarea que se ejecute en todos ellos. SharpGPOAbuse automatiza este abuso (ver 04.3).</li>
+        <li><strong class="highlight">Riesgo:</strong> distribuir passwords con Group Policy Preferences permitía recuperarlas y descifrarlas. La actualización MS14-025 (mayo de 2014) quitó esa posibilidad en varias extensiones de preferencias, pero no borra las GPO que ya las tenían: hay que quitarlas a mano.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-4">4. Hasta dónde llega un cambio</h2>
+      <ul>
+        <li>El alcance de un cambio es el de los vínculos de la GPO (ver 05.1 y 05.2). Una GPO vinculada al domain llega a todos los usuarios y equipos. Una vinculada a la OU Domain Controllers, a todos los DC.</li>
+        <li><strong class="highlight">Riesgo:</strong> el cambio no necesita acceso a cada equipo: llega con la próxima actualización de la política (ver 05.2).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-5">5. Qué queda en los logs</h2>
+      <ul>
+        <li>Una GPO tiene una parte en AD (el container, ver 05.1), así que sus cambios se registran con los eventos de la subcategoría <em>Audit Directory Service Changes</em>. Esa subcategoría solo registra en los DC y genera un volumen alto de eventos.</li>
+        <li><strong>5136:</strong> se modificó un objeto de AD. En el campo <em>Class</em>, el valor <code>groupPolicyContainer</code> indica que el objeto es una GPO. Un cambio suele generar dos eventos: <em>Value Deleted</em> (el valor anterior) y <em>Value Added</em> (el nuevo), unidos por el mismo <em>Correlation ID</em>. Microsoft recomienda monitorear los <em>Value Added</em>.</li>
+        <li><strong class="highlight">Relevante:</strong> el 5136 avisa que la GPO cambió, pero no qué configuración cambió: registra cambios en el container, y las configuraciones están en el template de SYSVOL (ver 05.1).</li>
+        <li><strong>5137:</strong> se creó un objeto. <strong>5141:</strong> se eliminó un objeto.</li>
+        <li><strong class="highlight">Relevante:</strong> para que el 5136 se genere, el objeto tiene que tener una entrada de auditoría (SACL) para la acción de escritura. Sin eso, el cambio no queda registrado.</li>
+        <li><strong class="highlight">Relevante:</strong> el <em>Subject</em> de estos eventos dice quién hizo el cambio, y su <em>Logon ID</em> sirve para correlacionar con el inicio de sesión (ver 04.5).</li>
+        <li><strong>4739:</strong> se modificaron las políticas de password o de bloqueo, u otros atributos del domain. Microsoft recomienda monitorear y alertar sobre estos cambios.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-6">6. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Solo un Domain Admin puede modificar una GPO</span>: no. Puede hacerlo cualquier cuenta con permiso de edición, directo o por grupos anidados.</li>
+        <li><span class="error-mark">Una GPO solo cambia configuraciones, no crea nada en el equipo</span>: no. Las preferencias pueden crear, modificar o borrar usuarios y grupos locales, tareas, archivos y claves del registro.</li>
+        <li><span class="error-mark">Toda modificación de una GPO deja un 5136</span>: no. Hace falta una SACL en el objeto, solo se registra en los DC, y el evento avisa que la GPO cambió pero no qué configuración.</li>
+        <li><span class="error-mark">Para que un cambio en una GPO llegue a un equipo hay que tener acceso al equipo</span>: no. Llega con la próxima actualización de la política.</li>
+        <li><span class="error-mark">Con la actualización MS14-025 ya no quedan passwords en las preferencias</span>: no. No borra las GPO que ya las tenían.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>GPO</li>
+      <li>seguridad</li>
+      <li>permisos</li>
+      <li>Group Policy Preferences</li>
+      <li>MS14-025</li>
+      <li>SharpGPOAbuse</li>
+      <li>BloodHound</li>
+      <li>5136</li>
+      <li>4739</li>
+      <li>auditoría</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="05.2-ad-precedencia.html">← 05.2 - Precedencia y aplicación</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
