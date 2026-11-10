@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Precedencia y aplicación</title>
+<meta name="description" content="Precedencia y aplicación de las GPO en Active Directory: el orden en que se aplican (local, site, domain y OU), el Link Order cuando hay varias GPO en un mismo contenedor, las opciones Enforced y Block Inheritance, cada cuánto se actualiza la política y cómo forzarla y verla con gpupdate y gpresult.">
+<meta name="keywords" content="active directory, GPO, group policy, precedencia, orden de aplicación, Link Order, Enforced, Block Inheritance, gpupdate, gpresult, RSoP, refresco">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Precedencia y aplicación">
+<meta property="og:description" content="En qué orden se aplican las GPO, qué hacen Link Order, Enforced y Block Inheritance, y cada cuánto se actualiza la política en los equipos.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Precedencia y aplicación",
+  "description": "En qué orden se aplican las GPO, qué hacen Link Order, Enforced y Block Inheritance, y cada cuánto se actualiza la política en los equipos.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Políticas de grupo"
+  },
+  "position": 2
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Precedencia y aplicación</h1>
+      <p class="ficha__subtitle">Políticas de grupo</p>
+    </header>
+
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Orden de aplicación</a></li>
+          <li><a href="#seccion-3">3. Varias GPO en un mismo contenedor</a></li>
+          <li><a href="#seccion-4">4. Enforced y Block Inheritance</a></li>
+          <li><a href="#seccion-5">5. Cuándo se actualiza la política</a></li>
+          <li><a href="#seccion-6">6. Forzar y ver qué se aplicó</a></li>
+          <li><a href="#seccion-7">7. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
+    <section>
+      <h2 id="seccion-1">1. De qué trata</h2>
+      <p>Un equipo o un usuario puede recibir varias GPO a la vez: la local, las del site, las del domain y las de sus OU. Si dos de ellas configuran lo mismo, hace falta una regla para saber cuál vale. Acá vemos ese orden, cómo se ordenan varias GPO en un mismo lugar, las opciones que lo alteran (Enforced y Block Inheritance) y cada cuánto se actualiza todo.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Por defecto, la última GPO que se aplica es la que vale. Enforced es la excepción: obliga a que una GPO de un nivel alto no pueda ser pisada por las de abajo.</p>
+    </section>
+
+    <section>
+      <h2 id="seccion-2">2. Orden de aplicación</h2>
+      <ul>
+        <li>Las GPO se aplican en este orden: la local, las vinculadas al site, las vinculadas al domain y las vinculadas a las OU.</li>
+      </ul>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 278" role="img" aria-labelledby="orden-titulo orden-desc">
+        <title id="orden-titulo">Orden de aplicación de las GPO en techcorp.local</title>
+        <desc id="orden-desc">Cinco recuadros de arriba hacia abajo, en el orden en que se aplican, unidos por flechas: 1, local; 2, site; 3, domain, que fija el bloqueo de pantalla en 15 minutos; 4, OU Empleados; 5, OU Finanzas, que lo fija en 5 minutos. Solo el último tiene borde continuo: se aplica último y es el que vale.</desc>
+        <rect class="diagram__box diagram__box--off" x="1" y="1" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="24" text-anchor="start">1. Local</text>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="259" y="24" text-anchor="end">—</text>
+        <line class="diagram__msg" x1="136" y1="41" x2="136" y2="57"/>
+        <polyline class="diagram__head" points="131,49 136,57 141,49"/>
+        <rect class="diagram__box diagram__box--off" x="1" y="61" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="84" text-anchor="start">2. Site</text>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="259" y="84" text-anchor="end">—</text>
+        <line class="diagram__msg" x1="136" y1="101" x2="136" y2="117"/>
+        <polyline class="diagram__head" points="131,109 136,117 141,109"/>
+        <rect class="diagram__box diagram__box--off" x="1" y="121" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="144" text-anchor="start">3. Domain</text>
+        <text class="diagram__label" x="259" y="144" text-anchor="end">15 min</text>
+        <line class="diagram__msg" x1="136" y1="161" x2="136" y2="177"/>
+        <polyline class="diagram__head" points="131,169 136,177 141,169"/>
+        <rect class="diagram__box diagram__box--off" x="1" y="181" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="204" text-anchor="start">4. OU Empleados</text>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="259" y="204" text-anchor="end">—</text>
+        <line class="diagram__msg" x1="136" y1="221" x2="136" y2="237"/>
+        <polyline class="diagram__head" points="131,229 136,237 141,229"/>
+        <rect class="diagram__box" x="1" y="241" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="264" text-anchor="start">5. OU Finanzas</text>
+        <text class="diagram__label" x="259" y="264" text-anchor="end">5 min</text>
+      </svg>
+      <figcaption>Bloqueo de pantalla en techcorp.local. «—»: esa GPO no lo configura. Borde continuo: la que vale.</figcaption>
+      </figure>
+
+      <ul>
+        <li>En OU anidadas, primero se aplican las de la OU padre y después las de la OU hija.</li>
+        <li>Cada GPO que se aplica después puede pisar lo que aplicaron las anteriores. Por eso, por defecto, <strong class="highlight">vale la que se aplica última</strong>, la del contenedor más cercano al equipo o al usuario.</li>
+        <li>La política de cuentas del domain es una excepción: no la pisan las GPO de las OU (ver 05.1).</li>
+        <li>Por ejemplo, en techcorp.local, una GPO vinculada al domain fija el bloqueo de pantalla en 15 minutos y otra, vinculada a la OU Finanzas, lo fija en 5. Los usuarios y equipos de Finanzas quedan con 5, porque la GPO de su OU se aplica después.</li>
+        <li>Si hubiera una OU Finanzas dentro de otra OU Empleados, se aplicaría primero la de Empleados y después la de Finanzas.</li>
+      </ul>
+
+      <ul class="tree">
+        <li>techcorp.local <span class="muted-detail">— su GPO fija el bloqueo en 15 min</span>
+          <ul>
+            <li>OU Empleados <span class="muted-detail">— no lo configura</span>
+              <ul>
+                <li>OU Finanzas <span class="muted-detail">— su GPO lo fija en 5 min: vale esta</span></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-3">3. Varias GPO en un mismo contenedor</h2>
+      <ul>
+        <li>Una GPO puede vincularse a más de un site, domain u OU, y un contenedor puede tener varias GPO vinculadas.</li>
+        <li>Cuando hay varias GPO en el mismo contenedor, el orden lo da el <strong>Link Order</strong>, que se ve en la lista de GPO vinculadas del contenedor.</li>
+        <li><strong class="highlight">Relevante:</strong> el link con el número más bajo tiene la mayor precedencia. Un link con orden 1 gana sobre todos los demás del mismo contenedor.</li>
+        <li>Por ejemplo, si en la OU Sistemas hay tres GPO vinculadas, la que tiene Link Order 1 es la que vale cuando dos de ellas configuran lo mismo.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-4">4. Enforced y Block Inheritance</h2>
+      <ul>
+        <li><strong>Enforced:</strong> es una propiedad del vínculo. Hace que las GPO de los contenedores de más abajo no puedan pisar la configuración de esa GPO.</li>
+        <li><strong>Block Inheritance:</strong> es una propiedad del contenedor (de un domain o una OU). Hace que el domain o la OU no reciba las GPO de los contenedores de más arriba.</li>
+        <li><strong class="highlight">Relevante:</strong> si las dos opciones se encuentran, <strong>Enforced gana</strong>. Una GPO en Enforced se aplica incluso a una OU que bloquea la herencia.</li>
+        <li>Por ejemplo, la OU Finanzas tiene Block Inheritance y no recibe las GPO del domain. Pero una GPO del domain marcada como Enforced sí le llega.</li>
+        <li>Si hay varios vínculos en Enforced en el mismo contenedor, gana el que está más arriba en la lista.</li>
+        <li><strong class="highlight">Relevante:</strong> Microsoft recomienda usar Block Inheritance con moderación.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-5">5. Cuándo se actualiza la política</h2>
+      <ul>
+        <li>Después de aplicarse al iniciar el equipo o la sesión, la política se actualiza en segundo plano cada 90 minutos más un tiempo aleatorio de hasta 30. Es decir, un cliente la revisa entre cada 90 y 120 minutos.</li>
+        <li>Los DC revisan los cambios de la política de equipo cada 5 minutos.</li>
+        <li>Por defecto, en cada actualización solo se reaplican las configuraciones de las GPO que cambiaron o cuya lista cambió.</li>
+        <li>No todo se procesa en segundo plano. La redirección de carpetas se procesa solo al iniciar sesión, y la instalación de software, solo al iniciar el equipo y al iniciar sesión. La extensión de scripts sí se procesa en segundo plano, pero cada script corre solo al iniciar y apagar el equipo y al iniciar y cerrar sesión.</li>
+        <li>Por eso una GPO recién vinculada puede tardar un rato en llegar a un equipo.</li>
+        <li>Los intervalos se cambian con las políticas <em>Group Policy Refresh Interval for Computers</em>, <em>for Domain Controllers</em> y <em>for Users</em>. Microsoft no recomienda acortarlos, porque aumentan el tráfico de red y la carga de los DC.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-6">6. Forzar y ver qué se aplicó</h2>
+      <ul>
+        <li><code>gpupdate</code>: actualiza la política de grupo.
+          <ul>
+            <li>Sin opciones, aplica solo lo que cambió.</li>
+            <li>Con <code>/force</code>, reaplica todas las configuraciones, hayan cambiado o no.</li>
+            <li><code>/target:computer</code> o <code>/target:user</code> actualiza solo una de las dos partes.</li>
+            <li><code>/logoff</code> y <code>/boot</code> cierran la sesión o reinician el equipo cuando alguna configuración lo necesita (por ejemplo, redirección de carpetas o instalación de software).</li>
+          </ul>
+        </li>
+        <li><code>gpresult</code>: muestra el resultado de las políticas (RSoP) que se aplicaron al equipo para un usuario cuando inició sesión. Con <code>/r</code> muestra un resumen, y con <code>/scope user</code> o <code>/scope computer</code> solo la parte de usuario o de equipo.</li>
+        <li><strong class="highlight">Relevante:</strong> <code>gpresult</code> sirve para saber qué GPO le llegó de verdad a un equipo o usuario, y no solo cuáles están vinculadas.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-7">7. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">La Default Domain Policy tiene la mayor precedencia de todas las GPO</span>: no. Está vinculada al domain, así que se aplica antes que las de las OU y estas la pueden pisar. La excepción es la política de cuentas, que se toma solo del domain (ver 05.1).</li>
+        <li><span class="error-mark">La GPO del domain gana porque está más arriba</span>: no. La más cercana al equipo o usuario se aplica después y es la que vale por defecto.</li>
+        <li><span class="error-mark">Block Inheritance gana sobre Enforced</span>: no. Enforced gana siempre.</li>
+        <li><span class="error-mark">El Link Order 1 es el que se aplica primero y el de menor peso</span>: no. Es el que tiene la mayor precedencia.</li>
+        <li><span class="error-mark"><code>gpupdate /force</code> solo aplica lo que cambió</span>: no. Reaplica todo. Sin <code>/force</code>, solo lo que cambió.</li>
+        <li><span class="error-mark">Una GPO nueva se aplica en el momento</span>: no. Espera a la próxima actualización (entre 90 y 120 minutos en los clientes) o a un <code>gpupdate</code>.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>GPO</li>
+      <li>precedencia</li>
+      <li>Link Order</li>
+      <li>Enforced</li>
+      <li>Block Inheritance</li>
+      <li>gpupdate</li>
+      <li>gpresult</li>
+      <li>RSoP</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="05.1-ad-gpo.html">← 05.1 - Qué es una GPO</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
