@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Qué es una GPO</title>
+<meta name="description" content="Qué es una GPO en Active Directory: de qué partes se compone (container en AD y template en SYSVOL), la diferencia entre configuración de equipo y de usuario, dónde se vincula y cómo se editan, y las dos GPO por defecto (Default Domain Policy y Default Domain Controllers Policy).">
+<meta name="keywords" content="active directory, GPO, group policy, Default Domain Policy, Default Domain Controllers Policy, GPC, GPT, SYSVOL, GPMC, configuración de equipo, configuración de usuario, dcgpofix">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Qué es una GPO">
+<meta property="og:description" content="De qué se compone una GPO, cuándo se aplica cada tipo de configuración y cuáles son las dos GPO que existen desde que se instala Active Directory.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Qué es una GPO",
+  "description": "De qué se compone una GPO, cuándo se aplica cada tipo de configuración y cuáles son las dos GPO que existen desde que se instala Active Directory.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Políticas de grupo"
+  },
+  "position": 1
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Qué es una GPO</h1>
+      <p class="ficha__subtitle">Políticas de grupo</p>
+    </header>
+
+    <section>
+      <h2>1. De qué trata</h2>
+      <p>Group Policy es la función de Windows que permite administrar de forma centralizada la configuración de sistemas operativos, aplicaciones y usuarios. Una <strong>GPO</strong> (Group Policy Object) reúne un conjunto de configuraciones, con sus permisos y su alcance, para aplicarlas a usuarios y equipos del domain. Qué es una GPO, su GUID y los riesgos de editarla o vincularla se explican en 02.5, y a qué se vincula, en 02.8. Acá vemos de qué se compone, cuándo se aplica cada tipo de configuración y cuáles son las dos GPO que existen desde el principio.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Una GPO se guarda en dos lugares (AD y SYSVOL) y cada una de sus configuraciones es de equipo o de usuario. Eso decide dónde vive y cuándo se aplica.</p>
+    </section>
+
+    <section>
+      <h2>2. Cómo se compone una GPO</h2>
+      <ul>
+        <li><strong>Group Policy container (GPC):</strong> está en AD. Guarda metadatos: cuándo se creó, la versión y el GUID. <strong class="highlight">No contiene las configuraciones.</strong></li>
+        <li><strong>Group Policy template (GPT):</strong> está en la carpeta SYSVOL de cada DC. Son archivos y ahí están las configuraciones. Su carpeta lleva como nombre el GUID del container, y así se vinculan las dos partes:
+          <pre class="code-block" tabindex="0"><code>%SystemRoot%\SYSVOL\Domain\Policies\&lt;GUID&gt;</code></pre>
+        </li>
+        <li>La versión se guarda en el container y en un archivo del template (<code>GPT.ini</code>). Los clientes la usan para saber si la GPO cambió.</li>
+        <li><strong class="highlight">Relevante:</strong> las dos partes se replican por separado, así que pueden quedar desfasadas por un tiempo. Microsoft indica que eso puede producir un error de procesamiento en el log de eventos.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Configuración de equipo y de usuario</h2>
+      <ul>
+        <li><strong>Configuración de equipo:</strong> afecta al equipo en su conjunto, por ejemplo la administración de energía o las reglas de firewall. Se aplica cuando el equipo inicia.</li>
+        <li><strong>Configuración de usuario:</strong> afecta solo al usuario que inicia sesión, por ejemplo la redirección de carpetas. Se aplica cuando el usuario inicia sesión.</li>
+        <li>Después de aplicarse al iniciar el equipo o la sesión, la política se actualiza cada cierto tiempo en segundo plano (ver 05.2).</li>
+        <li>Una misma GPO puede tener las dos.</li>
+        <li><strong class="highlight">Relevante:</strong> una GPO aplicada a un equipo procesa solo su configuración de equipo, y una aplicada a un usuario procesa solo su configuración de usuario. Hay un modo llamado <em>loopback</em> que cambia esto, pero no lo vemos acá.</li>
+        <li>Por ejemplo, en techcorp.local, una configuración de usuario dentro de una GPO vinculada a una OU Servidores que solo contiene equipos <strong class="highlight">no se aplica a nadie</strong>.</li>
+        <li>Cada equipo tiene además su política de grupo local, que se edita con el Local Group Policy Editor (<code>gpedit.msc</code>).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Dónde se vinculan y cómo se editan</h2>
+      <ul>
+        <li>Una GPO se vincula a un site, a un domain o a una OU (ver 02.8 y 02.9). No se vincula a un grupo (ver 02.8).</li>
+        <li><strong class="highlight">Relevante:</strong> Microsoft indica que la mayoría de las GPO se asignan al nivel de OU, que algunas se aplican a nivel domain (en particular las políticas de password) y que pocas se aplican a nivel site.</li>
+        <li>Se crean y se editan con la Group Policy Management Console (GPMC).</li>
+        <li>Por ejemplo, una GPO «Pantalla bloqueada» vinculada a la OU Finanzas de techcorp.local se aplica a los usuarios y equipos de esa OU.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Las GPO por defecto</h2>
+      <p>Cuando se instala AD DS, Windows Server crea dos GPO.</p>
+
+      <h3>5.1. Default Domain Policy</h3>
+      <ul>
+        <li>Está vinculada al domain y afecta a todos los usuarios y equipos.</li>
+        <li>Contiene las políticas de password, de bloqueo de cuenta y de Kerberos del domain.</li>
+        <li><strong class="highlight">Relevante:</strong> Microsoft indica no agregarle configuraciones que no sean esas. Para otras configuraciones amplias, se crean GPO adicionales vinculadas al domain.</li>
+      </ul>
+
+      <h3>5.2. Default Domain Controllers Policy</h3>
+      <ul>
+        <li>Está vinculada a la OU Domain Controllers y afecta solo a los DC.</li>
+        <li><strong class="highlight">Relevante:</strong> Microsoft indica usarla para las políticas de auditoría y para los derechos de usuario que hacen falta en los DC (ver 04.3 y 04.5).</li>
+        <li><strong class="highlight">Relevante:</strong> existe una herramienta, <code>dcgpofix</code>, que restaura solo las configuraciones de estas dos GPO. No restaura ninguna otra y está pensada para recuperación ante desastres.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Una GPO es un solo archivo</span>: no. Tiene una parte en AD (container) y otra en SYSVOL (template).</li>
+        <li><span class="error-mark">Toda GPO aplica sus dos tipos de configuración a lo que está vinculado</span>: no. A un equipo le aplica la configuración de equipo y a un usuario, la de usuario.</li>
+        <li><span class="error-mark">Para darle otra política de password a un grupo se crea una GPO y se vincula a su OU</span>: no. Cada domain tiene una sola política de cuentas (password, bloqueo y Kerberos). Se define en la Default Domain Policy o en una GPO vinculada a la raíz del domain. Si se vincula a una OU, solo afecta a la política local de los equipos de esa OU, no a las cuentas del domain. Para grupos existen las fine-grained password policies, que se aplican a usuarios y grupos globales, no a OU directamente.</li>
+        <li><span class="error-mark">La Default Domain Policy sirve para cualquier configuración del domain</span>: no. Microsoft indica dejarla para password, bloqueo y Kerberos, y crear otras GPO para el resto.</li>
+        <li><span class="error-mark">La Default Domain Controllers Policy afecta a todos los equipos</span>: no. Solo a los DC.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>GPO</li>
+      <li>Group Policy</li>
+      <li>Default Domain Policy</li>
+      <li>Default Domain Controllers Policy</li>
+      <li>GPC</li>
+      <li>GPT</li>
+      <li>SYSVOL</li>
+      <li>GPMC</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="../04-cuentas-y-accesos/04.5-ad-logs.html">← 04.5 - Cuentas y accesos: Usuarios y grupos en los logs</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
