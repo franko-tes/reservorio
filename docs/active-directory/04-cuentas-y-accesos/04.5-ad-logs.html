@@ -160,9 +160,9 @@
 
       <h3 id="seccion-3-3">3.3. Cambios que merecen atención</h3>
       <ul>
-        <li>4765: se agregó SID History a una cuenta. 4766: el intento falló (ver 02.5).</li>
+        <li>4765: se agregó SID History a una cuenta. 4766: falló un intento de agregarlo (ver 02.5).</li>
         <li>4780: se estableció una ACL en cuentas que son miembros de grupos de administradores (ver 02.5).</li>
-        <li><strong class="highlight">Riesgo:</strong> la creación de una cuenta nueva (4720) fuera de un proceso de alta conocido es una señal para revisar. Microsoft sugiere mirar las cuentas creadas con valores atípicos: grupo primario distinto de 513 (Domain Users, ver 02.2), SID History cargado o delegación de Kerberos configurada.</li>
+        <li><strong class="highlight">Riesgo:</strong> la creación de una cuenta nueva (4720) fuera de un proceso de alta conocido es una señal para revisar. Microsoft sugiere mirar las cuentas creadas con valores atípicos: grupo primario distinto de 513, SID History cargado o delegación de Kerberos configurada. Normalmente, una cuenta nueva tiene como grupo primario a Domain Users (RID 513, ver 02.2); otro valor, como 512 (Domain Admins), indica que alguien lo cambió.</li>
       </ul>
     </section>
 
