@@ -80,6 +80,41 @@
         <li>La versión se guarda en el container y en un archivo del template (<code>GPT.ini</code>). Los clientes la usan para saber si la GPO cambió.</li>
         <li><strong class="highlight">Relevante:</strong> las dos partes se replican por separado, así que pueden quedar desfasadas por un tiempo. Microsoft indica que eso puede producir un error de procesamiento en el log de eventos.</li>
       </ul>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 174" role="img" aria-labelledby="partes-titulo partes-desc">
+        <title id="partes-titulo">Las dos partes de una GPO</title>
+        <desc id="partes-desc">Arriba, un recuadro: Active Directory, con el Group Policy container, que guarda la versión y el GUID. Abajo, otro recuadro: SYSVOL de cada DC, con el Group Policy template, que guarda las configuraciones. Una línea los une con el rótulo mismo GUID.</desc>
+        <rect class="diagram__box" x="1" y="1" width="270" height="60" rx="4"/>
+        <text class="diagram__actor" x="136" y="25" text-anchor="middle">Active Directory</text>
+        <text class="diagram__boxlabel" x="136" y="47" text-anchor="middle">GPC: versión y GUID</text>
+        <line class="diagram__msg" x1="136" y1="61" x2="136" y2="113"/>
+        <text class="diagram__label" x="146" y="92" text-anchor="start">mismo GUID</text>
+        <rect class="diagram__box" x="1" y="113" width="270" height="60" rx="4"/>
+        <text class="diagram__actor" x="136" y="137" text-anchor="middle">SYSVOL de cada DC</text>
+        <text class="diagram__boxlabel" x="136" y="159" text-anchor="middle">GPT: las configuraciones</text>
+      </svg>
+      <figcaption>El container se llama como el GUID, y la carpeta del template también: así se unen.</figcaption>
+      </figure>
+
+      <p>Por ejemplo, la Default Domain Policy, que tiene el mismo GUID en todos los domains. En techcorp.local:</p>
+      <ul>
+        <li>Container, en AD:
+          <pre class="code-block" tabindex="0"><code>CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=Policies,CN=System,DC=techcorp,DC=local</code></pre>
+        </li>
+        <li>Template, en SYSVOL:
+          <pre class="code-block" tabindex="0"><code>\\techcorp.local\SYSVOL\techcorp.local\Policies\{31B2F340-016D-11D2-945F-00C04FB984F9}</code></pre>
+        </li>
+      </ul>
+      <ul class="tree">
+        <li><code>{31B2F340-016D-11D2-945F-00C04FB984F9}</code> <span class="muted-detail">— carpeta del template</span>
+          <ul>
+            <li><code>GPT.ini</code> <span class="muted-detail">— la versión</span></li>
+            <li><code>Machine</code> <span class="muted-detail">— configuración de equipo</span></li>
+            <li><code>User</code> <span class="muted-detail">— configuración de usuario</span></li>
+          </ul>
+        </li>
+      </ul>
     </section>
 
     <section>
