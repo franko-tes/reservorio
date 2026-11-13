@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Active Directory: Precedencia y aplicación</title>
-<meta name="description" content="Precedencia y aplicación de las GPO en Active Directory: el orden en que se aplican (local, site, domain y OU), el Link Order cuando hay varias GPO en un mismo contenedor, las opciones Enforced y Block Inheritance, cada cuánto se actualiza la política y cómo forzarla y verla con gpupdate y gpresult.">
-<meta name="keywords" content="active directory, GPO, group policy, precedencia, orden de aplicación, Link Order, Enforced, Block Inheritance, gpupdate, gpresult, RSoP, refresco">
+<meta name="description" content="Precedencia y aplicación de las GPO en Active Directory: el orden en que se aplican (local, site, domain y OU), el Link Order cuando hay varias GPO en un mismo contenedor, las opciones Enforced y Block Inheritance y cada cuánto se actualiza la política.">
+<meta name="keywords" content="active directory, GPO, group policy, precedencia, orden de aplicación, Link Order, Enforced, Block Inheritance, refresco">
 <meta name="robots" content="index, follow">
 
 <!-- Open Graph -->
@@ -53,8 +53,7 @@
           <li><a href="#seccion-3">3. Varias GPO en un mismo contenedor</a></li>
           <li><a href="#seccion-4">4. Enforced y Block Inheritance</a></li>
           <li><a href="#seccion-5">5. Cuándo se actualiza la política</a></li>
-          <li><a href="#seccion-6">6. Forzar y ver qué se aplicó</a></li>
-          <li><a href="#seccion-7">7. Para no confundirse</a></li>
+          <li><a href="#seccion-6">6. Para no confundirse</a></li>
         </ol>
       </nav>
     </details>
@@ -159,29 +158,12 @@
     </section>
 
     <section>
-      <h2 id="seccion-6">6. Forzar y ver qué se aplicó</h2>
-      <ul>
-        <li><code>gpupdate</code>: actualiza la política de grupo.
-          <ul>
-            <li>Sin opciones, aplica solo lo que cambió.</li>
-            <li>Con <code>/force</code>, reaplica todas las configuraciones, hayan cambiado o no.</li>
-            <li><code>/target:computer</code> o <code>/target:user</code> actualiza solo una de las dos partes.</li>
-            <li><code>/logoff</code> y <code>/boot</code> cierran la sesión o reinician el equipo cuando alguna configuración lo necesita (por ejemplo, redirección de carpetas o instalación de software).</li>
-          </ul>
-        </li>
-        <li><code>gpresult</code>: muestra el resultado de las políticas (RSoP) que se aplicaron al equipo para un usuario cuando inició sesión. Con <code>/r</code> muestra un resumen, y con <code>/scope user</code> o <code>/scope computer</code> solo la parte de usuario o de equipo.</li>
-        <li><strong class="highlight">Relevante:</strong> <code>gpresult</code> sirve para saber qué GPO le llegó de verdad a un equipo o usuario, y no solo cuáles están vinculadas.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2 id="seccion-7">7. Para no confundirse</h2>
+      <h2 id="seccion-6">6. Para no confundirse</h2>
       <ul>
         <li><span class="error-mark">La Default Domain Policy tiene la mayor precedencia de todas las GPO</span>: no. Está vinculada al domain, así que se aplica antes que las de las OU y estas la pueden pisar. La excepción es la política de cuentas, que se toma solo del domain (ver 05.1).</li>
         <li><span class="error-mark">La GPO del domain gana porque está más arriba</span>: no. La más cercana al equipo o usuario se aplica después y es la que vale por defecto.</li>
         <li><span class="error-mark">Block Inheritance gana sobre Enforced</span>: no. Enforced gana siempre.</li>
         <li><span class="error-mark">El Link Order 1 es el que se aplica primero y el de menor peso</span>: no. Es el que tiene la mayor precedencia.</li>
-        <li><span class="error-mark"><code>gpupdate /force</code> solo aplica lo que cambió</span>: no. Reaplica todo. Sin <code>/force</code>, solo lo que cambió.</li>
         <li><span class="error-mark">Una GPO nueva se aplica en el momento</span>: no. Espera a la próxima actualización (entre 90 y 120 minutos en los clientes) o a un <code>gpupdate</code>.</li>
       </ul>
     </section>
@@ -193,9 +175,6 @@
       <li>Link Order</li>
       <li>Enforced</li>
       <li>Block Inheritance</li>
-      <li>gpupdate</li>
-      <li>gpresult</li>
-      <li>RSoP</li>
     </ul>
 
     <nav class="ficha__pagination" aria-label="Paginación del contenido">
