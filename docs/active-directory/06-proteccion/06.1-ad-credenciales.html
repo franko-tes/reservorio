@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Cuentas y credenciales</title>
+<meta name="description" content="Medidas de protección sobre las cuentas en Active Directory: LAPS para la password del administrador local, gMSA para las cuentas de servicio y buenas prácticas para las cuentas privilegiadas (Domain Admins, cuenta diaria separada, equipos administrativos, membresía temporal y MFA).">
+<meta name="keywords" content="active directory, LAPS, Windows LAPS, gMSA, cuentas de servicio, cuentas privilegiadas, Domain Admins, MFA, pass-the-hash, medidas de protección">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Cuentas y credenciales">
+<meta property="og:description" content="LAPS, gMSA y buenas prácticas para las cuentas privilegiadas: tres medidas para que una cuenta comprometida no abra el resto del domain.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Cuentas y credenciales",
+  "description": "LAPS, gMSA y buenas prácticas para las cuentas privilegiadas: tres medidas para que una cuenta comprometida no abra el resto del domain.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Medidas de protección"
+  },
+  "position": 1
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Cuentas y credenciales</h1>
+      <p class="ficha__subtitle">Medidas de protección</p>
+    </header>
+
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. LAPS: la password del administrador local</a></li>
+          <li><a href="#seccion-3">3. gMSA: cuentas de servicio sin password manual</a></li>
+          <li><a href="#seccion-4">4. Cuentas privilegiadas</a></li>
+          <li><a href="#seccion-5">5. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
+    <section>
+      <h2 id="seccion-1">1. De qué trata</h2>
+      <p>Muchos ataques en un domain no rompen nada: usan cuentas que ya existen. Si la password del administrador local es igual en todos los equipos, o si una cuenta con mucho poder inicia sesión en cualquier equipo, uno solo comprometido abre el resto. Este contenido cubre tres medidas sobre las cuentas:</p>
+      <ul>
+        <li>LAPS</li>
+        <li>las gMSA</li>
+        <li>el uso cuidado de las cuentas privilegiadas</li>
+      </ul>
+      <p>Para los mecanismos de AD que también usa un atacante, ver 02.5.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>LAPS, las gMSA y el cuidado de las cuentas privilegiadas apuntan a lo mismo: que una cuenta comprometida no abra el resto del domain.</p>
+    </section>
+
+    <section>
+      <h2 id="seccion-2">2. LAPS: la password del administrador local</h2>
+      <ul>
+        <li><strong>Qué es:</strong> Windows LAPS (Local Administrator Password Solution) <strong class="highlight">administra y respalda automáticamente</strong> la password de una cuenta de administrador local en equipos unidos a Active Directory.</li>
+        <li><strong>Dónde se guarda:</strong> en Active Directory (en el objeto equipo, protegida con permisos y, si se activa, cifrada; Microsoft recomienda activarlo) o, para equipos unidos a Microsoft Entra, en Entra ID (siempre cifrada). En un equipo híbrido se elige uno de los dos, no ambos.</li>
+        <li><strong>Controladores de domain:</strong> también puede administrar la password de la cuenta DSRM (modo de restauración de servicios de directorio) de los DC.</li>
+        <li><strong>Disponibilidad:</strong> viene integrado en Windows y Windows Server desde la actualización de abril de 2023. No requiere instalar el LAPS legacy.</li>
+        <li><strong class="highlight">Riesgo:</strong> usar las mismas credenciales de administrador local en todos los equipos. Con la password de uno se entra a todos. Microsoft lista como beneficio de LAPS la protección contra pass-the-hash (ver 03.4) y contra el movimiento lateral.</li>
+        <li><strong class="highlight">Relevante:</strong> quién puede leer esa password en el objeto equipo se controla con permisos (ver 02.4).</li>
+      </ul>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 168" role="img" aria-labelledby="laps-titulo laps-desc">
+        <title id="laps-titulo">Sin LAPS y con LAPS</title>
+        <desc id="laps-desc">Dos filas de tres equipos. Sin LAPS: los tres tienen la misma password, pass A, y los tres tienen borde continuo: con la password del equipo 1 se entra a todos. Con LAPS: cada equipo tiene una password distinta, pass A, pass B y pass C; solo el equipo 1 tiene borde continuo, los otros dos, punteado.</desc>
+        <text class="diagram__actor" x="1" y="15" text-anchor="start">Sin LAPS</text>
+        <rect class="diagram__box" x="1" y="24" width="80" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="41" y="45" text-anchor="middle">Equipo 1</text>
+        <text class="diagram__label" x="41" y="66" text-anchor="middle">pass A</text>
+        <rect class="diagram__box" x="96" y="24" width="80" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="136" y="45" text-anchor="middle">Equipo 2</text>
+        <text class="diagram__label" x="136" y="66" text-anchor="middle">pass A</text>
+        <rect class="diagram__box" x="191" y="24" width="80" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="231" y="45" text-anchor="middle">Equipo 3</text>
+        <text class="diagram__label" x="231" y="66" text-anchor="middle">pass A</text>
+        <text class="diagram__actor" x="1" y="105" text-anchor="start">Con LAPS (respaldo en AD)</text>
+        <rect class="diagram__box" x="1" y="114" width="80" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="41" y="135" text-anchor="middle">Equipo 1</text>
+        <text class="diagram__label" x="41" y="156" text-anchor="middle">pass A</text>
+        <rect class="diagram__box diagram__box--off" x="96" y="114" width="80" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="136" y="135" text-anchor="middle">Equipo 2</text>
+        <text class="diagram__label" x="136" y="156" text-anchor="middle">pass B</text>
+        <rect class="diagram__box diagram__box--off" x="191" y="114" width="80" height="52" rx="4"/>
+        <text class="diagram__boxlabel" x="231" y="135" text-anchor="middle">Equipo 3</text>
+        <text class="diagram__label" x="231" y="156" text-anchor="middle">pass C</text>
+      </svg>
+      <figcaption>Borde continuo: equipos a los que se entra con la password del Equipo 1.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2 id="seccion-3">3. gMSA: cuentas de servicio sin password manual</h2>
+      <ul>
+        <li><strong>Qué es:</strong> una group Managed Service Account es una cuenta de servicio donde <strong class="highlight">Windows administra la password</strong>, en lugar de depender de un administrador.</li>
+        <li><strong>Cómo funciona:</strong> el DC calcula la password a partir de una clave del Key Distribution Service; los equipos autorizados la obtienen contactando un DC.</li>
+        <li><strong>Varios equipos:</strong> una misma gMSA sirve a un servicio que corre en varios servidores, sin sincronizar passwords entre ellos.</li>
+        <li><strong class="highlight">Relevante:</strong> nadie elige ni escribe la password, así que no queda una password débil o repetida en una cuenta de servicio. Para el ataque contra cuentas de servicio, ver 03.2.</li>
+        <li><strong class="highlight">Relevante:</strong> las gMSA no aplican a sistemas anteriores a Windows Server 2012.</li>
+      </ul>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 150" role="img" aria-labelledby="gmsa-titulo gmsa-desc">
+        <title id="gmsa-titulo">Cómo llega la password de una gMSA a los servidores</title>
+        <desc id="gmsa-desc">Arriba, un recuadro: DC, que calcula la password con la clave del KDS. Tres flechas bajan a tres recuadros: servidor 1, servidor 2 y servidor 3, que corren el mismo servicio con la misma gMSA.</desc>
+        <rect class="diagram__box" x="1" y="1" width="270" height="60" rx="4"/>
+        <text class="diagram__actor" x="136" y="25" text-anchor="middle">DC</text>
+        <text class="diagram__boxlabel" x="136" y="47" text-anchor="middle">calcula la password (KDS)</text>
+        <line class="diagram__msg" x1="41" y1="65" x2="41" y2="105"/>
+        <polyline class="diagram__head" points="36,97 41,105 46,97"/>
+        <line class="diagram__msg" x1="136" y1="65" x2="136" y2="105"/>
+        <polyline class="diagram__head" points="131,97 136,105 141,97"/>
+        <line class="diagram__msg" x1="231" y1="65" x2="231" y2="105"/>
+        <polyline class="diagram__head" points="226,97 231,105 236,97"/>
+        <rect class="diagram__box" x="1" y="109" width="80" height="40" rx="4"/>
+        <text class="diagram__boxlabel" x="41" y="134" text-anchor="middle">Servidor 1</text>
+        <rect class="diagram__box" x="96" y="109" width="80" height="40" rx="4"/>
+        <text class="diagram__boxlabel" x="136" y="134" text-anchor="middle">Servidor 2</text>
+        <rect class="diagram__box" x="191" y="109" width="80" height="40" rx="4"/>
+        <text class="diagram__boxlabel" x="231" y="134" text-anchor="middle">Servidor 3</text>
+      </svg>
+      <figcaption>Los servidores autorizados obtienen la misma password del DC; nadie la escribe.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2 id="seccion-4">4. Cuentas privilegiadas</h2>
+      <ul>
+        <li><strong>Qué cuentas proteger:</strong>
+          <ul>
+            <li><strong>Los tres grupos de más privilegio:</strong> por defecto son Enterprise Admins, Domain Admins y Administrators. Hay que protegerlos, y también a cualquier otro grupo con privilegios elevados (qué revisar, ver 04.2 y 04.4).</li>
+            <li><strong>Cuenta diaria y cuenta administrativa:</strong> Microsoft indica no usar cuentas de alto privilegio para tareas administrativas cotidianas y darles solo los privilegios que necesitan (ver 04.1).</li>
+          </ul>
+        </li>
+        <li><strong>Desde dónde se usan:</strong>
+          <ul>
+            <li><strong>Equipos administrativos seguros:</strong> esos equipos no corren correo, navegador ni ofimática, y <strong class="highlight">nunca se administra un sistema de confianza desde uno de menor confianza</strong>.</li>
+            <li><strong class="highlight">Riesgo:</strong> iniciar sesión con una cuenta privilegiada en equipos sin protección o navegando por internet. Microsoft lo señala como comportamiento que expone las credenciales. Para el acceso remoto, ver 04.3 y 04.4.</li>
+            <li><strong>Domain Admins fuera de servidores miembro y estaciones:</strong> la membresía en Domain Admins solo debería hacer falta para armar el domain o recuperarlo de un desastre, no para tareas diarias. Microsoft propone una GPO vinculada a las OU de servidores miembro y estaciones que le asigne a Domain Admins los derechos de denegar el inicio de sesión local, por red, por Remote Desktop, como servicio y como tarea programada (derechos de inicio de sesión, ver 04.3; GPO, ver 05.1).</li>
+          </ul>
+        </li>
+        <li><strong>Cuándo y cómo:</strong>
+          <ul>
+            <li><strong>Membresía temporal:</strong> eliminar la membresía permanente en grupos de alto privilegio y dar membresía temporal cuando se necesite.</li>
+            <li><strong>MFA:</strong> Microsoft recomienda exigir autenticación multifactor al usar cuentas privilegiadas o hacer tareas administrativas.</li>
+            <li><strong>Logs:</strong> los cambios en los grupos privilegiados quedan en los logs (ver 04.5).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="tree">
+        <li>techcorp.local
+          <ul>
+            <li>OU Domain Controllers <span class="muted-detail">— sin la GPO de denegación</span></li>
+            <li>OU Servidores <span class="muted-detail">— GPO: Domain Admins no puede iniciar sesión</span></li>
+            <li>OU Estaciones <span class="muted-detail">— GPO: Domain Admins no puede iniciar sesión</span></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-5">5. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Windows LAPS y el LAPS antiguo son lo mismo</span>: no. Windows LAPS viene integrado en Windows y no requiere el LAPS legacy.</li>
+        <li><span class="error-mark">Una gMSA es una cuenta de usuario con password larga</span>: no. La password la calcula el DC y los equipos autorizados la obtienen; nadie la tipea.</li>
+        <li><span class="error-mark">Con el grupo Domain Admins protegido alcanza</span>: no. Son tres los grupos de mayor privilegio, más los que la organización haya elevado.</li>
+        <li><span class="error-mark">La cuenta de admin puede usarse también para el día a día</span>: no. Se separa de la cuenta diaria.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>LAPS</li>
+      <li>gMSA</li>
+      <li>cuentas privilegiadas</li>
+      <li>MFA</li>
+      <li>Domain Admins</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="../05-politicas-de-grupo/05.3-ad-seguridad.html">← 05.3 - Políticas de grupo: Seguridad de las GPO</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
