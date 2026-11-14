@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Directory: Superficie de ataque y control de accesos</title>
+<meta name="description" content="Medidas de protección para reducir la superficie de ataque en Active Directory: parches con WSUS y Configuration Manager, Restricted Groups, control de aplicaciones (SRP, AppLocker y App Control for Business), controladores de domain, administradores locales, RDP y revisión periódica de permisos.">
+<meta name="keywords" content="active directory, parches, WSUS, Configuration Manager, Restricted Groups, SRP, AppLocker, App Control for Business, controladores de domain, administradores locales, RDP, revisión de permisos, medidas de protección">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active Directory: Superficie de ataque y control de accesos">
+<meta property="og:description" content="Parches, Restricted Groups, control de aplicaciones, administradores locales y revisión de permisos: medidas para reducir los puntos de entrada en un domain.">
+<meta property="og:locale" content="es_AR">
+<!-- Completar og:url y og:image cuando se publique en GitHub Pages -->
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../estilo.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Active Directory: Superficie de ataque y control de accesos",
+  "description": "Parches, Restricted Groups, control de aplicaciones, administradores locales y revisión de permisos: medidas para reducir los puntos de entrada en un domain.",
+  "inLanguage": "es",
+  "isPartOf": {
+    "@type": "CreativeWorkSeries",
+    "name": "Active Directory — Medidas de protección"
+  },
+  "position": 2
+}
+</script>
+<!-- Completar "author" y "datePublished" en el JSON-LD cuando se publique -->
+</head>
+<body>
+
+<main id="inicio">
+  <article class="ficha">
+    <header class="ficha__header">
+      <p class="ficha__kicker">Active Directory</p>
+      <h1>Superficie de ataque y control de accesos</h1>
+      <p class="ficha__subtitle">Medidas de protección</p>
+    </header>
+
+    <details class="temario">
+      <summary class="temario__summary">Temario</summary>
+      <nav aria-label="Temario">
+        <ol class="temario__list">
+          <li><a href="#seccion-1">1. De qué trata</a></li>
+          <li><a href="#seccion-2">2. Parches: WSUS y Configuration Manager</a></li>
+          <li><a href="#seccion-3">3. Restricted Groups</a></li>
+          <li><a href="#seccion-4">4. Control de aplicaciones: SRP y AppLocker</a></li>
+          <li><a href="#seccion-5">5. Servidores, administradores locales y RDP</a></li>
+          <li><a href="#seccion-6">6. Revisión periódica de permisos y membresías</a></li>
+          <li><a href="#seccion-7">7. Para no confundirse</a></li>
+        </ol>
+      </nav>
+    </details>
+
+    <section>
+      <h2 id="seccion-1">1. De qué trata</h2>
+      <p>Cada servicio, cada permiso de más y cada equipo sin parchear es un punto por donde un atacante puede entrar o avanzar. Este contenido cubre cómo reducir esos puntos de entrada:</p>
+      <ul>
+        <li>parches;</li>
+        <li>Restricted Groups;</li>
+        <li>control de aplicaciones;</li>
+        <li>servidores, administradores locales y RDP;</li>
+        <li>revisión periódica de permisos y membresías.</li>
+      </ul>
+      <p>Para las cuentas y credenciales, ver 06.1.</p>
+
+      <p class="callout--key"><span class="sr-only">Idea clave: </span>Cada medida de este contenido achica la superficie de ataque: menos puntos por donde un atacante puede entrar o avanzar.</p>
+    </section>
+
+    <section>
+      <h2 id="seccion-2">2. Parches: WSUS y Configuration Manager</h2>
+      <ul>
+        <li><strong>WSUS:</strong> es un rol de servidor de Windows Server que permite a los administradores desplegar las actualizaciones de productos Microsoft, y se administra desde una consola.</li>
+        <li><strong class="highlight">Relevante:</strong> WSUS está obsoleto (<em>deprecated</em>) y no recibe funciones nuevas, pero sigue soportado en producción y recibe actualizaciones de seguridad y calidad.</li>
+        <li><strong>Configuration Manager (SCCM):</strong> ayuda a rastrear y aplicar las actualizaciones de software en los clientes de la organización. Las actualizaciones se despliegan de forma manual o automática, con reglas de despliegue automático.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-3">3. Restricted Groups</h2>
+      <ul>
+        <li><strong>Qué es:</strong> una configuración de GPO (<em>Computer Configuration → Windows Settings → Security Settings → Restricted Groups</em>) que define dos propiedades para grupos sensibles: Members y Member Of.</li>
+        <li><strong>Members:</strong> define quién pertenece y quién no al grupo. Al aplicarse, <strong class="highlight">se quita a todo miembro actual que no figure en la lista</strong>, excepto el administrador en el grupo Administrators, y se agrega a quien falte. Por ejemplo, en una GPO vinculada a la OU Servidores de techcorp.local, con Members del grupo Administrators solo con el Administrator local y Domain Admins, cualquier otro miembro se quita en la siguiente actualización de la política (ver 05.2).</li>
+        <li><strong>Member Of:</strong> solo se refuerza la inclusión: el grupo no se quita de otros grupos.</li>
+        <li><strong class="highlight">Relevante:</strong> está pensado para grupos locales de estaciones y servidores miembro. Microsoft no soporta usarlo para administrar la membresía de grupos de domain, que se administran con las herramientas de AD. Se aplica con GPO (ver 05.1) y los grupos locales se explican en 04.4.</li>
+      </ul>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 174" role="img" aria-labelledby="rg-titulo rg-desc">
+        <title id="rg-titulo">El grupo Administrators antes y después de aplicar Restricted Groups</title>
+        <desc id="rg-desc">Dos recuadros del grupo Administrators de un servidor de la OU Servidores. Antes: Administrator, Domain Admins y Sistemas, los tres con borde continuo. Después de aplicar la GPO, cuya lista Members tiene Administrator y Domain Admins: esos dos siguen con borde continuo y Sistemas queda punteado, porque se quita.</desc>
+        <text class="diagram__actor" x="65" y="15" text-anchor="middle">Antes</text>
+        <rect class="diagram__box diagram__box--off" x="1" y="24" width="128" height="148" rx="4"/>
+        <text class="diagram__actor" x="65" y="48" text-anchor="middle">Administrators</text>
+        <rect class="diagram__box" x="13" y="60" width="104" height="28" rx="4"/>
+        <text class="diagram__boxlabel" x="65" y="79" text-anchor="middle">Administrator</text>
+        <rect class="diagram__box" x="13" y="96" width="104" height="28" rx="4"/>
+        <text class="diagram__boxlabel" x="65" y="115" text-anchor="middle">Domain Admins</text>
+        <rect class="diagram__box" x="13" y="132" width="104" height="28" rx="4"/>
+        <text class="diagram__boxlabel" x="65" y="151" text-anchor="middle">Sistemas</text>
+        <text class="diagram__actor" x="207" y="15" text-anchor="middle">Después</text>
+        <rect class="diagram__box diagram__box--off" x="143" y="24" width="128" height="148" rx="4"/>
+        <text class="diagram__actor" x="207" y="48" text-anchor="middle">Administrators</text>
+        <rect class="diagram__box" x="155" y="60" width="104" height="28" rx="4"/>
+        <text class="diagram__boxlabel" x="207" y="79" text-anchor="middle">Administrator</text>
+        <rect class="diagram__box" x="155" y="96" width="104" height="28" rx="4"/>
+        <text class="diagram__boxlabel" x="207" y="115" text-anchor="middle">Domain Admins</text>
+        <rect class="diagram__box diagram__box--off" x="155" y="132" width="104" height="28" rx="4"/>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="207" y="151" text-anchor="middle">Sistemas</text>
+      </svg>
+      <figcaption>Members en la GPO: Administrator y Domain Admins. Punteado: el miembro que la GPO quita.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2 id="seccion-4">4. Control de aplicaciones: SRP y AppLocker</h2>
+      <ul>
+        <li><strong>Software Restriction Policies (SRP):</strong> un mecanismo basado en Group Policy para identificar software y controlar si puede ejecutarse en el equipo.</li>
+        <li><strong>AppLocker:</strong> ayuda a los administradores a controlar qué aplicaciones y archivos pueden ejecutar los usuarios.</li>
+        <li><strong class="highlight">Relevante:</strong> AppLocker permite aplicar su política en modo solo auditoría: se permite toda ejecución, pero queda registrada en los logs de eventos.</li>
+        <li><strong>Estado actual:</strong> SRP está obsoleta (<em>deprecated</em>) desde Windows 10 versión 1803. AppLocker ya no recibe funciones nuevas, solo correcciones de seguridad. <strong class="highlight">Microsoft recomienda App Control for Business</strong>.</li>
+        <li><strong class="highlight">Riesgo:</strong> AppLocker es una función de defensa en profundidad (<em>defense-in-depth</em>), no una barrera de seguridad defendible: ayuda a evitar que los usuarios ejecuten aplicaciones no aprobadas, pero no hay que tratarlo como un límite infranqueable.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-5">5. Servidores, administradores locales y RDP</h2>
+      <ul>
+        <li><strong>Controladores de domain:</strong> <strong class="highlight">no se usa un navegador web en un DC</strong>, y el acceso a internet desde y hacia los DC debe estar estrictamente controlado. En organizaciones que mantienen Active Directory solo on-premises, Microsoft recomienda restringirlo por completo.</li>
+        <li><strong>Administradores locales:</strong> Microsoft recomienda restringir las cuentas Administrator locales de servidores miembro y estaciones de la misma manera que las del domain.</li>
+        <li><strong>Remisiones:</strong> los derechos de inicio de sesión se explican en 04.3, el grupo Remote Desktop Users en 04.4, y la restricción de Domain Admins en 06.1.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-6">6. Revisión periódica de permisos y membresías</h2>
+      <ul>
+        <li><strong>Qué revisar:</strong> los administradores locales, la cantidad de Domain Admins y de Enterprise Admins, el acceso a recursos compartidos y la membresía en grupos privilegiados (qué mirar, ver 04.2 y 04.4).</li>
+        <li><strong>Por qué:</strong> Microsoft señala que los ataques de robo de credenciales dependen de que se den privilegios excesivos a cuentas y de asignar demasiados usuarios a grupos privilegiados.</li>
+        <li><strong>Alertas:</strong> Microsoft indica configurar auditoría para enviar alertas ante cambios en las propiedades o la membresía de Enterprise Admins y Domain Admins (ver 04.5).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 id="seccion-7">7. Para no confundirse</h2>
+      <ul>
+        <li><span class="error-mark">Restricted Groups solo agrega miembros</span>: no. Con Members, quita a todo el que no figure en la lista.</li>
+        <li><span class="error-mark">Restricted Groups sirve para controlar los grupos del domain</span>: no. Microsoft no lo soporta para eso.</li>
+        <li><span class="error-mark">AppLocker es lo que Microsoft recomienda hoy para controlar aplicaciones</span>: no. Recomienda App Control for Business; AppLocker solo recibe correcciones de seguridad.</li>
+      </ul>
+    </section>
+
+    <ul class="tags" aria-label="Palabras clave">
+      <li>active directory</li>
+      <li>parches</li>
+      <li>WSUS</li>
+      <li>Restricted Groups</li>
+      <li>SRP</li>
+      <li>AppLocker</li>
+      <li>App Control for Business</li>
+      <li>administradores locales</li>
+      <li>RDP</li>
+      <li>revisión de permisos</li>
+    </ul>
+
+    <nav class="ficha__pagination" aria-label="Paginación del contenido">
+      <a href="06.1-ad-credenciales.html">← 06.1 - Cuentas y credenciales</a>
+      <span></span>
+    </nav>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p><a href="../index.html">← Active Directory</a> · <a href="#inicio">↑ Volver arriba</a></p>
+</footer>
+
+</body>
+</html>
