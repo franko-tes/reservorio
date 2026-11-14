@@ -60,7 +60,14 @@
 
     <section>
       <h2 id="seccion-1">1. De qué trata</h2>
-      <p>Una GPO es un punto de control: quien puede modificarla decide qué se configura en todos los usuarios y equipos a los que llega. Eso la vuelve útil para administrar y, a la vez, un objetivo interesante. Acá vemos quién puede modificar una GPO, qué se puede cambiar con ella, hasta dónde llega un cambio y qué queda registrado. Qué es una GPO se explica en 05.1, y el riesgo de editarla o vincularla, en 02.5.</p>
+      <p>Una GPO es un punto de control: quien puede modificarla decide qué se configura en todos los usuarios y equipos a los que llega. Eso la vuelve útil para administrar y, a la vez, un objetivo interesante. Acá vemos:</p>
+      <ul>
+        <li>quién puede modificar una GPO</li>
+        <li>qué se puede cambiar con ella</li>
+        <li>hasta dónde llega un cambio</li>
+        <li>qué queda registrado</li>
+      </ul>
+      <p>Qué es una GPO se explica en 05.1, y el riesgo de editarla o vincularla, en 02.5.</p>
 
       <p class="callout--key"><span class="sr-only">Idea clave: </span>El riesgo de una GPO no está en lo que dice hoy, sino en quién puede cambiarla y a cuántos equipos llega el cambio.</p>
     </section>
@@ -69,12 +76,55 @@
       <h2 id="seccion-2">2. Quién puede modificar una GPO</h2>
       <ul>
         <li>Los permisos sobre una GPO se ven en la pestaña <em>Delegation</em> de la GPMC.</li>
-        <li><strong class="highlight">Son tres permisos distintos</strong>: <strong>editar</strong> (sobre la GPO), <strong>crear</strong> (en el domain) y <strong>vincular</strong> (sobre el site, el domain o la OU, no sobre la GPO).</li>
+        <li><strong class="highlight">Son tres permisos distintos</strong>:
+          <ul>
+            <li><strong>editar</strong>: sobre la GPO</li>
+            <li><strong>crear</strong>: en el domain</li>
+            <li><strong>vincular</strong>: sobre el site, el domain o la OU, no sobre la GPO</li>
+          </ul>
+        </li>
         <li>Por defecto, solo <code>Domain Admins</code> y <code>Enterprise Admins</code> pueden vincular una GPO a un domain o a una OU.</li>
         <li>Crear GPO lo puede hacer, entre otros, <code>Group Policy Creator Owners</code> (ver 04.4).</li>
         <li><strong class="highlight">Relevante:</strong> los permisos pueden llegar a una cuenta por grupos anidados (ver 04.2), así que una cuenta común puede terminar pudiendo editar una GPO sin figurar directamente en ella. Herramientas como BloodHound muestran esas cadenas.</li>
-        <li>Por ejemplo, en techcorp.local, si el grupo Empleados tiene permiso de edición sobre una GPO vinculada a la OU Servidores, cualquier cuenta de ese grupo puede cambiar la configuración de esos servidores.</li>
+        <li>Por ejemplo, en techcorp.local, si el grupo Empleados es miembro del grupo Sistemas, y Sistemas tiene permiso de edición sobre una GPO vinculada a la OU Servidores, cualquier cuenta de Empleados puede cambiar la configuración de esos servidores, aunque Empleados no figure en la GPO.</li>
       </ul>
+
+      <figure class="diagram">
+      <svg viewBox="0 0 272 378" role="img" aria-labelledby="cadena-titulo cadena-desc">
+        <title id="cadena-titulo">De una cuenta de Empleados a los servidores, en techcorp.local</title>
+        <desc id="cadena-desc">Seis recuadros de arriba hacia abajo, unidos por flechas: cualquier cuenta de Empleados, miembro de; grupo Empleados, que no figura en la GPO, miembro de; grupo Sistemas, que figura en la GPO, puede editar; GPO, vinculada a; OU Servidores, se aplica a; servidores de la OU.</desc>
+        <rect class="diagram__box" x="1" y="1" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="24" text-anchor="start">Cualquier cuenta de Empleados</text>
+        <line class="diagram__msg" x1="24" y1="41" x2="24" y2="65"/>
+        <polyline class="diagram__head" points="19,57 24,65 29,57"/>
+        <text class="diagram__label" x="36" y="58" text-anchor="start">miembro de</text>
+        <rect class="diagram__box" x="1" y="69" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="92" text-anchor="start">Grupo Empleados</text>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="259" y="92" text-anchor="end">no figura</text>
+        <line class="diagram__msg" x1="24" y1="109" x2="24" y2="133"/>
+        <polyline class="diagram__head" points="19,125 24,133 29,125"/>
+        <text class="diagram__label" x="36" y="126" text-anchor="start">miembro de</text>
+        <rect class="diagram__box" x="1" y="137" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="160" text-anchor="start">Grupo Sistemas</text>
+        <text class="diagram__boxlabel diagram__boxlabel--off" x="259" y="160" text-anchor="end">figura en la GPO</text>
+        <line class="diagram__msg" x1="24" y1="177" x2="24" y2="201"/>
+        <polyline class="diagram__head" points="19,193 24,201 29,193"/>
+        <text class="diagram__label" x="36" y="194" text-anchor="start">puede editar</text>
+        <rect class="diagram__box" x="1" y="205" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="228" text-anchor="start">GPO</text>
+        <line class="diagram__msg" x1="24" y1="245" x2="24" y2="269"/>
+        <polyline class="diagram__head" points="19,261 24,269 29,261"/>
+        <text class="diagram__label" x="36" y="262" text-anchor="start">vinculada a</text>
+        <rect class="diagram__box" x="1" y="273" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="296" text-anchor="start">OU Servidores</text>
+        <line class="diagram__msg" x1="24" y1="313" x2="24" y2="337"/>
+        <polyline class="diagram__head" points="19,329 24,337 29,329"/>
+        <text class="diagram__label" x="36" y="330" text-anchor="start">se aplica a</text>
+        <rect class="diagram__box" x="1" y="341" width="270" height="36" rx="4"/>
+        <text class="diagram__boxlabel" x="13" y="364" text-anchor="start">Servidores de la OU</text>
+      </svg>
+      <figcaption>Empleados no figura en la GPO, pero sus cuentas pueden editarla porque el grupo es miembro de Sistemas.</figcaption>
+      </figure>
     </section>
 
     <section>
