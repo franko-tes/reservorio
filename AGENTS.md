@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Instrucciones de trabajo para agentes de IA (y para cualquiera) que construya o
-mantenga este repositorio. Última revisión: octubre de 2026.
+mantenga este repositorio. Última revisión: noviembre de 2026.
 
 ---
 
@@ -54,9 +54,23 @@ Jerarquía: **área** (carpeta) → **tema** (primer número) → **contenido**
 ## 3. Cómo se trabaja
 
 - **Proponer antes de cambiar.** Ante la duda se pregunta, con opciones y una
-  recomendación. Si el autor pide "analicemos", no se toca ningún archivo.
+  recomendación. Si el autor pide "analicemos" o "mostrame cómo quedaría", no
+  se toca ningún archivo.
+- **Decisiones de a una.** Se plantea un punto, se espera la respuesta y recién
+  después se pasa al siguiente. Las opciones van en una tabla corta (a favor /
+  en contra) con la recomendada y su porqué; las modificaciones, en una lista
+  numerada que se confirma punto por punto.
 - **`git add`, `git commit` y `git push` los hace siempre el autor.** El agente
-  pasa los comandos y muestra el diff si se lo piden.
+  pasa los comandos, uno por bloque, y muestra el diff si se lo piden. Un
+  "¿commiteamos?" es un pedido de comandos. Mensajes en español, con `feat:`
+  (contenido nuevo) o `docs:` (ajuste de uno existente) y sin `Co-Authored-By`.
+- **Varios equipos.** El autor trabaja desde más de una PC; lo que viaja es el
+  repositorio. Al empezar se le recuerda `git pull` y, al terminar, commit y
+  `git push`. Las reglas y decisiones van en este archivo; los detalles
+  (pendientes, historial) quedan en la memoria local de cada sesión.
+- **Material de referencia.** Los HTML y CSS que pasa el autor se adaptan al
+  sistema: nunca reemplazan a `estilo.css`, y antes que sumar CSS se renombra
+  o se reutiliza.
 - **Alcance mínimo:** solo se tocan los archivos que el pedido nombra.
 - **Verificar antes de afirmar.** Medidas, contrastes y comparaciones se
   calculan o se prueban en el navegador. Si algo no se pudo verificar, se dice.
@@ -126,6 +140,12 @@ BEM: `.ficha__header`, `.topic__summary`).
   fija a la izquierda de la ficha centrada.
 - **Listas anidadas**: llevan sangría propia (ya resuelta en el CSS). En el HTML,
   2 espacios por nivel y el `</li>` del punto padre después del `</ul>` anidado.
+- **Títulos por punto**: una lista con varios puntos "Riesgo:" o "Relevante:"
+  puede pasar a `dl.term-list`, con un título corto en texto plano en el `dt`.
+  Se ofrece en cada contenido; no se aplica por defecto.
+- **Cadenas largas** sin espacios (SPN, DN, GUID, rutas): se miden a 320 px
+  (272 px útiles). Si desbordan, van en un `pre.code-block` con `tabindex="0"`
+  debajo de la oración.
 
 ## 5. Convenciones del HTML
 
@@ -171,6 +191,15 @@ BEM: `.ficha__header`, `.topic__summary`).
   el nombre de la clase.
 - Etiquetas en `strong.highlight` al inicio de un punto: **"Riesgo:"** solo para
   problemas de seguridad y **"Relevante:"** para el resto.
+- **Resaltado en naranja** (`strong.highlight`): solo la idea que conviene
+  retener (lo irreversible, lo contraintuitivo o la regla que ordena un
+  concepto), como máximo una por sección y en una frase corta. El nombre de una
+  técnica de ataque también puede ir resaltado.
+- **Rojo tachado** (`span.error-mark`): en "Para no confundirse", la frase
+  errónea va ahí, sin ❌ ni otros símbolos. Usarlo en otra sección se propone
+  antes.
+- **Referencias a otros contenidos:** como texto, "(ver 02.5)". El enlace lo
+  decide el autor en cada caso. No se citan contenidos que todavía no existen.
 - Idioma `es`; archivos en UTF-8 con `<meta charset>`. Las tildes y la ñ se
   escriben directamente; las entidades se reservan para `&`, `<` y `>`.
 
@@ -209,6 +238,11 @@ los HTML siguen el mismo formato.
   (`Domain Controllers`, `CN=Users`, `Domain Admins`, atributos, etiquetas de la
   interfaz).
 - No se generan datos técnicos con IA de imágenes.
+- **Contenido a partir de una fuente:** entra solo lo verificado y útil, sin
+  profundizar. En cada revisión se informan dos listas con su porqué: lo
+  agregado que no estaba en la fuente y lo de la fuente que quedó fuera.
+- **Sin laboratorio:** no se proponen pruebas de lab. Lo que no se pudo
+  verificar con una fuente oficial se señala y queda fuera.
 
 ## 7. Calidad mínima
 
@@ -237,6 +271,10 @@ los HTML siguen el mismo formato.
 6. Temario: un `id` en cada `h2` y `h3` numerado, y su entrada en el temario.
 7. Verificar (ver abajo).
 
+El autor genera los contenidos con otra IA, usando el HTML y CSS del sitio como
+referencia. Si un archivo llega con `../estilo.css` o con `index.html` en el
+pie, se pasa a las rutas de arriba, y los enlaces a otro tema llevan la carpeta.
+
 **Un tema nuevo** suma además su carpeta `NN-<tema>` y un
 `<details class="topic">` en el índice del área, con los enlaces a su carpeta. **Un área nueva**, una carpeta con su `index.html` (copiando el de otra) y
 su entrada en la portada.
@@ -248,9 +286,13 @@ su entrada en la portada.
 - Si el cambio es de CSS, comparar antes y después que las demás páginas no se
   mueven. El navegador puede servir el CSS viejo de caché: verificar en otro
   puerto o forzando la recarga.
+- Al terminar de verificar, se apaga el servidor y se avisa en una línea.
 
 ### Este archivo
 
-Tiene que reflejar el proyecto tal como está. Si el autor decide algo que lo
+Tiene que reflejar el proyecto tal como está, con las reglas y decisiones
+necesarias para trabajar desde cualquier equipo. Si el autor decide algo que lo
 contradice, se actualiza en la misma tarea y se avisa qué cambió. Los pendientes
-y el historial de decisiones no van acá.
+y el historial de decisiones no van acá: quedan en la memoria local.
+Cada decisión nueva que haga falta para trabajar se propone para este archivo
+en la misma tarea, con el texto y la sección donde iría.
